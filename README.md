@@ -1,2 +1,5 @@
-# My Personal Blog
-- Live version: [rosu's Blog](https://rosuh.me)
+# 道阻且长
+
+- - - - -
+
+因个人原因，博客内容全部删除并从此（2017-7-14）暂停更新。
