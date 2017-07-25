@@ -75,7 +75,7 @@ auto_dir_categorize:
         enable: true
         force: false
 ## Themes: https://hexo.io/themes/
-theme: material
+theme: Material
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
