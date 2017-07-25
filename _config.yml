@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: rosu's Blog
+title: 道阻且长
 subtitle: rosu's Personal Blog
 description: Share, Learn & Do
 author: rosuh
@@ -75,7 +75,7 @@ auto_dir_categorize:
         enable: true
         force: false
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: material
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
