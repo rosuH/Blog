@@ -28,12 +28,12 @@ url:
 # ---------------------------------------------------------------
 
 # Schemes
-scheme: Paradox
-#scheme: Isolation
+#scheme: Paradox
+scheme: Isolation
 
 # UI & UX: slogan, color, effect
 uiux:
-    slogan: "Hi, nice to meet you"
+    slogan: "溯游从之，宛在水中央"
     theme_color: "#0097A7"
     theme_sub_color: "#00838F"
     hyperlink_color: "#00838F"
@@ -63,7 +63,7 @@ thumbnail:
 #         type available value: A (animal), C (culture), N (nature), S (space), T (travel)
 background:
     purecolor: "#F5F5F5"
-    #bgimg: "/img/bg.png"
+    bgimg: "/img/bg.jpg"
     bing:
         enable: false
         parameter:
@@ -90,7 +90,7 @@ fonts:
     custom_font_host:
 
 # Card Elevation Level
-card_elevation: 2
+card_elevation: 5
 
 # Copyright
 # Specify the date when the site was setup.
@@ -121,9 +121,9 @@ toc:
 # SNS Menu
 sns:
     email: cc@rosu.me
-    facebook: ""
+    facebook:
     twitter: "https://twitter.com/rosu_h"
-    googleplus: ""
+    googleplus:
     weibo:
     instagram:
     tumblr:
@@ -140,7 +140,7 @@ sns_share:
     googleplus: false
     weibo: true
     linkedin: false
-    qq: false
+    qq: true
     telegram: true
 
 # Sidebar Customize
@@ -158,11 +158,16 @@ sidebar:
         icon: inbox
         divider: false
     categories:
-        use: false
+        use: true
         icon: chrome_reader_mode
         divider: false
     pages:
-        timeline:
+        标签云:
+            link: '/tags'
+            icon: cloud queue
+            divider: false
+
+        时间轴:
             link: '/timeline'
             icon: timeline
             divider: false
@@ -176,9 +181,9 @@ sidebar:
     footer:
         divider: true
         theme: true
-        support: false
-        feedback: false
-        material: false
+        support: true
+        feedback: true
+        material: true
 
 
 # ---------------------------------------------------------------
