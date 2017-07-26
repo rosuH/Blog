@@ -86,7 +86,7 @@ img:
 #       Available value of "host": google | baomitu | ustc | custom
 fonts:
     family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif
-    use: google
+    use: ustc
     custom_font_host:
 
 # Card Elevation Level
@@ -120,10 +120,10 @@ toc:
 
 # SNS Menu
 sns:
-    email: youremail@email.com
-    facebook: "https://www.facebook.com/facebook"
-    twitter: "https://twitter.com/twitter"
-    googleplus: "https://www.google.com/"
+    email: cc@rosu.me
+    facebook: ""
+    twitter: "https://twitter.com/rosu_h"
+    googleplus: ""
     weibo:
     instagram:
     tumblr:
@@ -131,23 +131,23 @@ sns:
     linkedin:
     zhihu:
     bilibili:
-    telegram:
+    telegram: "https://t.me/rosuh"
 
 # SNS Share Switch
 sns_share:
     twitter: true
-    facebook: true
-    googleplus: true
+    facebook: false
+    googleplus: false
     weibo: true
     linkedin: false
     qq: false
-    telegram: false
+    telegram: true
 
 # Sidebar Customize
 sidebar:
     dropdown:
         Email Me:
-            link: "#"
+            link: "mailto: cc@rosu.me"
             icon: email
     homepage:
         use: true
@@ -162,10 +162,14 @@ sidebar:
         icon: chrome_reader_mode
         divider: false
     pages:
-        #About:
-            #link: "/about"
-            #icon: person
-            #divider: false
+        About:
+            link: "/about"
+            icon: person
+            divider: false
+        timeline:
+            link: '/timeline'
+            icon: timeline
+            divider: false
     article_num:
         use: false
         divider: false
@@ -192,8 +196,8 @@ materialcdn:
 # Available value of "use":
 #     disqus | disqus_click | changyan | 163gentie
 comment:
-    use:
-    shortname: # duoshuo or disqus shortname
+    use: disqus_click
+    shortname: rosus-blog # duoshuo or disqus shortname
     changyan_appid:
     changyan_conf:
     changyan_thread_key_type: path
@@ -210,14 +214,14 @@ search:
 # Available value:
 #     baidu | google | cnzz
 analytics:
-    use:
-    site_id:
+    use: google
+    site_id: UA-82992902-3
 
 # Leancloud Views
 leancloud:
-    enable: false
-    app_id: #你的 app_id
-    app_key: #你的 app_key
+    enable: true
+    app_id: u8LRTUcTE326vpyCh4LexdQC-gzGzoHsz #你的 app_id
+    app_key: JPSo0bdOn499tmuPmhnD0rHn  #你的 app_key
     av_core_mini: "https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"
 
 # Busuanzi 不蒜子 Views

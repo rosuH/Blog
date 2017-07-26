@@ -1,5 +1,4 @@
-# Hexo Configuration
-## Docs: https://hexo.io/docs/configuration.html
+# Hexo Configuration ## Docs: https://hexo.io/docs/configuration.html
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
@@ -7,7 +6,7 @@ title: 道阻且长
 subtitle: rosu's Personal Blog
 description: Share, Learn & Do
 author: rosuh
-language: zh-cn
+language: zh-CN
 timezone: Asia/Shanghai
 
 # URL
@@ -38,7 +37,7 @@ post_asset_folder: false
 relative_link: false
 future: true
 highlight:
-  enable: true
+  enable: false
   line_number: true
   auto_detect: false
   tab_replace:
@@ -74,6 +73,12 @@ pagination_dir: page
 auto_dir_categorize:
         enable: true
         force: false
+
+prism_plugin:
+        mode: 'preprocess'    # realtime/preprocess 
+        theme: 'default'
+        line_number: false    # default false 
+
 ## Themes: https://hexo.io/themes/
 theme: Material
 
