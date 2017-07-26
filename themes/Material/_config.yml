@@ -162,14 +162,14 @@ sidebar:
         icon: chrome_reader_mode
         divider: false
     pages:
-        About:
-            link: "/about"
-            icon: person
-            divider: false
         timeline:
             link: '/timeline'
             icon: timeline
             divider: false
+        About:
+            link: "/about"
+            icon: person
+            divider: false 
     article_num:
         use: false
         divider: false
@@ -214,14 +214,14 @@ search:
 # Available value:
 #     baidu | google | cnzz
 analytics:
-    use: google
-    site_id: UA-82992902-3
+    use: 
+    site_id: 
 
 # Leancloud Views
 leancloud:
     enable: true
-    app_id: u8LRTUcTE326vpyCh4LexdQC-gzGzoHsz #你的 app_id
-    app_key: JPSo0bdOn499tmuPmhnD0rHn  #你的 app_key
+    app_id: 'u8LRTUcTE326vpyCh4LexdQC-gzGzoHsz'
+    app_key: 'JPSo0bdOn499tmuPmhnD0rHn' 
     av_core_mini: "https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"
 
 # Busuanzi 不蒜子 Views
