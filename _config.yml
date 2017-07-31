@@ -37,10 +37,10 @@ post_asset_folder: false
 relative_link: false
 future: true
 highlight:
-  enable: true
-  line_number: true
-  auto_detect: false
-  tab_replace:
+  enable: false
+#  line_number: false
+#  auto_detect: false
+#  tab_replace:
   
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
@@ -76,8 +76,8 @@ auto_dir_categorize:
 
 prism_plugin:
         mode: 'preprocess'    # realtime/preprocess 
-        theme: 'default'
-        line_number: false    # default false 
+        theme: 'solarizedlight'
+        line_number: true    # default false 
 
 ## Themes: https://hexo.io/themes/
 theme: Material
