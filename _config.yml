@@ -11,7 +11,7 @@ timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://rosuh.me
+url: https://blog.rosuh.me
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -78,7 +78,9 @@ prism_plugin:
         mode: 'preprocess'    # realtime/preprocess 
         theme: 'solarizedlight'
         line_number: true    # default false 
-
+search:
+  path: search.xml
+  field: post
 ## Themes: https://hexo.io/themes/
 theme: Material
 

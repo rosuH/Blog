@@ -127,7 +127,7 @@ sns:
     weibo:
     instagram:
     tumblr:
-    github:
+    github: "https://github.com/rosuH"
     linkedin:
     zhihu:
     bilibili:
@@ -162,19 +162,22 @@ sidebar:
         icon: chrome_reader_mode
         divider: false
     pages:
-        标签云:
-            link: '/tags'
-            icon: cloud queue
-            divider: false
-
         时间轴:
-            link: '/timeline'
+            link: "/timeline"
             icon: timeline
             divider: false
+        标签云:
+             link: "/tags"
+             icon: cloud queue
+             divider: false
+        Wiki:
+             link: "https://wiki.rosuh.me"
+             icon: library books
+             divider: false
         About:
-            link: "/about"
-            icon: person
-            divider: false 
+             link: "/about"
+             icon: person
+             divider: false
     article_num:
         use: false
         divider: false
@@ -212,7 +215,7 @@ comment:
 # Available value:
 #     swiftype | google | local
 search:
-    use: google
+    use: local
     swiftype_key:
 
 # Analytics Systems
