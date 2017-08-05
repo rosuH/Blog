@@ -31,6 +31,9 @@ TG: [@rosuh](https://t.me/rosuh)
 
 [![知识共享许可协议](https://i.creativecommons.org/l/by/4.0/88x31.png)](https://creativecommons.org/licenses/by/4.0/)
 
+-----
+- daily_pic: Photo by Nattu Adnan on Unsplash daily_pic
+- Siderbar_header: Photo by Tyler Gebhart on Unsplash
 
 
 
