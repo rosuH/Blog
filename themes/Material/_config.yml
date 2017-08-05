@@ -227,9 +227,9 @@ analytics:
 
 # Leancloud Views
 leancloud:
-    enable: true
-    app_id: u8LRTUcTE326vpyCh4LexdQC-gzGzoHsz
-    app_key: JPSo0bdOn499tmuPmhnD0rHn 
+    enable: false
+    app_id: 
+    app_key:  
     av_core_mini: "https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"
 
 # Busuanzi 不蒜子 Views
