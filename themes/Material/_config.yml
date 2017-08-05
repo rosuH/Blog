@@ -28,8 +28,8 @@ url:
 # ---------------------------------------------------------------
 
 # Schemes
-#scheme: Paradox
-scheme: Isolation
+scheme: Paradox
+#scheme: Isolation
 
 # UI & UX: slogan, color, effect
 uiux:
@@ -45,11 +45,11 @@ uiux:
 # JS Effect Switches
 js_effect:
     fade: true
-    smoothscroll: false
+    smoothscroll: true
 
 # Reading experience
 reading:
-    entry_excerpt: 80
+    entry_excerpt: 
 
 # Thumbnail Settings
 thumbnail:
@@ -62,8 +62,8 @@ thumbnail:
 #         color available value: black, blue, brown, green, multi, orange, pink, purple, red, white, yellow
 #         type available value: A (animal), C (culture), N (nature), S (space), T (travel)
 background:
-    purecolor: "#F5F5F5"
-    bgimg: "/img/bg.jpg"
+    purecolor: "#C2CCD0"
+    bgimg: # "/img/bg.jpg"
     bing:
         enable: false
         parameter:
@@ -90,12 +90,12 @@ fonts:
     custom_font_host:
 
 # Card Elevation Level
-card_elevation: 5
+card_elevation: 8
 
 # Copyright
 # Specify the date when the site was setup.
 #   For example, if you set it as 2015, then footer will show '© 2015 - 2017'
-copyright_since:
+copyright_since: 2015
 
 # Qrcode for redirect at other device
 #   use: choose which method to generate the qrcode for each posts.
@@ -168,11 +168,11 @@ sidebar:
             divider: false
         标签云:
              link: "/tags"
-             icon: cloud queue
-             divider: false
+             icon: "cloud"
+             divider: true
         Wiki:
              link: "https://wiki.rosuh.me"
-             icon: library books
+             icon: " books"
              divider: false
         About:
              link: "/about"
@@ -234,7 +234,7 @@ leancloud:
 
 # Busuanzi 不蒜子 Views
 busuanzi:
-    enable: false
-    all_site_uv: false
-    post_pv: false
+    enable: true
+    all_site_uv: true
+    post_pv: true
     busuanzi_pure_mini_js: "https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"
