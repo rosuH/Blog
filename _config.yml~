@@ -87,11 +87,13 @@ html_minifier:
   enable: true
   ignore_error: false
   exclude:
+    - 'themes\Material\*'
 
 css_minifier:
   enable: true
   exclude: 
     - '*.min.css'
+    - 'themes\Material\*'
 js_minifier:
   enable: true
   mangle: true
@@ -99,6 +101,7 @@ js_minifier:
   compress:
   exclude: 
     - '*.min.js'
+    - 'themes\Material\*'
 image_minifier:
   enable: true
   interlaced: false
