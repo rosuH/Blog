@@ -86,7 +86,7 @@ img:
 #       Available value of "host": google | baomitu | ustc | custom
 fonts:
     family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif
-    use: ustc
+    use: google
     custom_font_host:
 
 # Card Elevation Level
@@ -234,7 +234,7 @@ leancloud:
 
 # Busuanzi 不蒜子 Views
 busuanzi:
-    enable: true
+    enable: false
     all_site_uv: true
     post_pv: true
     busuanzi_pure_mini_js: "https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"
