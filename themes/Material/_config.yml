@@ -9,7 +9,7 @@ head:
     apple_touch_icon: "/img/favicon.png"
     keywords:
     site_verification:
-        google:
+        google: iJx7AAooJQRv0AQlBQWJhMUzxaYtW1XVcPpUsC_9TZk
         baidu:
 
     # Enable generate structured-data as JSON+LD for SEO or not.
@@ -33,7 +33,7 @@ scheme: Paradox
 
 # UI & UX: slogan, color, effect
 uiux:
-    slogan: "溯游从之，宛在水中央"
+    slogan: "求知若渴，虚怀若愚"
     theme_color: "#0097A7"
     theme_sub_color: "#00838F"
     hyperlink_color: "#00838F"
@@ -204,13 +204,12 @@ materialcdn:
 # Available value of "use":
 #     disqus | disqus_click | changyan | 163gentie
 comment:
-    use: 
-    shortname: # duoshuo or disqus shortname
+    use: disqus_click
+    shortname: blog-nhbebwyjaw # duoshuo or disqus shortname
     changyan_appid:
     changyan_conf:
     changyan_thread_key_type: path
     gentie_productKey: 
-
 # Search Systems
 # Available value:
 #     swiftype | google | local
@@ -238,3 +237,6 @@ busuanzi:
     all_site_uv: true
     post_pv: true
     busuanzi_pure_mini_js: "https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"
+    
+  
+
