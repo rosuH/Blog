@@ -63,7 +63,7 @@ thumbnail:
 #         type available value: A (animal), C (culture), N (nature), S (space), T (travel)
 background:
     purecolor: "#C2CCD0"
-    bgimg: # "/img/bg.jpg"
+    bgimg:  "/img/bg.png"
     bing:
         enable: false
         parameter:
@@ -90,7 +90,7 @@ fonts:
     custom_font_host:
 
 # Card Elevation Level
-card_elevation: 8
+card_elevation: 3
 
 # Copyright
 # Specify the date when the site was setup.
@@ -214,7 +214,7 @@ comment:
 # Available value:
 #     swiftype | google | local
 search:
-    use: local
+    use: google
     swiftype_key:
 
 # Analytics Systems
@@ -226,9 +226,9 @@ analytics:
 
 # Leancloud Views
 leancloud:
-    enable: false
-    app_id: 
-    app_key:  
+    enable: true
+    app_id: 9HzDPSidndm3Vw6fMqHeLDRn-gzGzoHsz
+    app_key:  2Fu2hW4FhWcLEPxdW4NTJ9wA
     av_core_mini: "https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"
 
 # Busuanzi 不蒜子 Views
