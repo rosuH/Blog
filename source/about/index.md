@@ -1,12 +1,12 @@
 ---
 title: 关于
 date: 2017-03-22
-update: 2017-07-27
+update: 2017-09-12
 layout: post
 ---
 ### 个人简介
 
-你好，我叫 rosu，目前（17年）是一名大二学生，热爱互联网行业以及相关技术，喜欢编程。
+你好，我叫 rosu，目前（17年）是一名大三学生，热爱互联网行业以及相关技术，喜欢编程。
 
 目前主要的方向是 Java / Android 开发。
 
@@ -32,8 +32,9 @@ TG: [@rosuh](https://t.me/rosuh)
    [![知识共享许可协议](https://i.creativecommons.org/l/by/4.0/88x31.png)](https://creativecommons.org/licenses/by/4.0/)
 
 
-- daily_pic: Photo by Nattu Adnan on Unsplash 
+- daily_pic: Photo by [rosuh1984 on VSCO](http://vsco.co/rosuh1984/media/59b738468a4d854cf4000000)
 - Siderbar_header: Photo by Tyler Gebhart on Unsplash
+- avatar.png: Created by [IcontFont-ColinXu](http://iconfont.cn/user/detail?spm=a313x.7781069.1998910419.dfa9d9a29&uid=496384)
 
 -----
 > 现实就是答案，就算抱怨生不逢时、社会不公，也不会有任何改变。现实就是现实，要理解现状并且分析，在那其中一定会有导致现状的原因。对原因有充分认识之后再据此付诸行动就好。连现状都不懂得判断的人，在我看来就是白痴。  -- 《红鳉鱼》/《赤めだか》
