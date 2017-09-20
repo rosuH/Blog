@@ -4,9 +4,9 @@
 
 # Head info
 head:
-    favicon: "https://static-blog-rosu.b0.upaiyun.com/img/favicon.ico"
-    high_res_favicon: "https://static-blog-rosu.b0.upaiyun.com/img/favicon.png"
-    apple_touch_icon: "https://static-blog-rosu.b0.upaiyun.com/img/favicon.png"
+    favicon: "/img/favicon.ico"
+    high_res_favicon: "/img/favicon.png"
+    apple_touch_icon: "/img/favicon.png"
     keywords:
     site_verification:
         google: iJx7AAooJQRv0AQlBQWJhMUzxaYtW1XVcPpUsC_9TZk
@@ -72,11 +72,11 @@ background:
 
 # Images Settings
 img:
-    logo: "https://static-blog-rosu.b0.upaiyun.com/img/logo.png"
-    avatar: "https://static-blog-rosu.b0.upaiyun.com/img/avatar.png"
-    daily_pic: "https://static-blog-rosu.b0.upaiyun.com/img/daily_pic.jpg"
-    sidebar_header: "https://static-blog-rosu.b0.upaiyun.com/img/sidebar_header.png"
-    random_thumbnail: "https://static-blog-rosu.b0.upaiyun.com/img/random/material-"
+    logo: "/img/logo.png"
+    avatar: "/img/avatar.png"
+    daily_pic: "/img/daily_pic.jpg"
+    sidebar_header: "/img/sidebar_header.png"
+    random_thumbnail: "/img/random/material-"
     footer_image:
         #upyun_logo:
             #link: "https://www.upyun.com/"
@@ -91,7 +91,7 @@ img:
 #          to /source/data/head.yml as custom code, to load custom font files.
 fonts:
     family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif
-    use: ustc
+    use: google
     custom_font_host:
 
 # Card Elevation Level
@@ -290,7 +290,7 @@ vendors:
 #   The new src will have the base domain you configured below.
 #   For example
 #       materialcdn: https://cdn.jsdelivr.net/npm/hexo-material@1.4.0/source
-    materialcdn: https://static-blog-rosu.b0.upaiyun.com/Material/source
+    materialcdn:
 
 # Third party library
 #   You can load these files from public cdn.
