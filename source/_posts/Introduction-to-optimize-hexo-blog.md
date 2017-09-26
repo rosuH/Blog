@@ -1,5 +1,5 @@
 ---
-title: "Hexo 博客优化入门"
+title: "Hexo 博客优化入门（一）"
 date: 2017-8-6 09:49:55
 tags:
 - 'Hexo'
@@ -12,7 +12,7 @@ categories:
 ---
 
 昨晚在本地折腾博客的时候，总是对自己博客的加载速度很不满意。
-本博客主题用的是 ~ [Hexo material theme](https://material.viosey.com/) ~ (现在已经改为 (milk)[https://github.com/xcatliu/hexo-theme-milk 了] )，于是想看看 [作者自己的博客](https://blog.viosey.com/) 的资源加载情况。
+本博客主题用的是 ~~[Hexo material theme](https://material.viosey.com/)~~ (现在已经改为 [milk](https://github.com/xcatliu/hexo-theme-milk) 了 )，于是想看看 [作者自己的博客](https://blog.viosey.com/) 的资源加载情况。
 令我惊异的是，其博客资源的体积都很小...
 一张图片竟然在 9k。果然是大佬 hhh。
 于是查看了我的博客的资源，决定先从图片压缩开始解决。
@@ -96,9 +96,9 @@ categories:
 这个插件集合了：
 
 > hexo-html-minifier, which is based on HTMLMinifier
-hexo-clean-css, which is based on clean-css
-hexo-uglify, which is based on UglifyJS
-hexo-imagemin, which is based on imagemin
+> hexo-clean-css, which is based on clean-css
+> hexo-uglify, which is based on UglifyJS
+> hexo-imagemin, which is based on imagemin
 
 四款插件，一次就搞定所有事情。
 插件安装和配置而已参看[hexo-all-minifier](https://github.com/chenzhutian/hexo-all-minifier)项目首页。
