@@ -1,6 +1,6 @@
 ---
-title: "Hexo 博客优化入门（一）"
-date: 2017-8-6 09:50:24
+title: "Hexo 博客优化入门"
+date: 2017-8-6 09:49:55
 tags:
 - 'Hexo'
 - '优化'
@@ -12,7 +12,7 @@ categories:
 ---
 
 昨晚在本地折腾博客的时候，总是对自己博客的加载速度很不满意。
-本博客主题用的是 [Hexo material theme](https://material.viosey.com/)，于是想看看 [作者自己的博客](https://blog.viosey.com/) 的资源加载情况。
+本博客主题用的是 ~ [Hexo material theme](https://material.viosey.com/) ~ (现在已经改为 (milk)[https://github.com/xcatliu/hexo-theme-milk 了] )，于是想看看 [作者自己的博客](https://blog.viosey.com/) 的资源加载情况。
 令我惊异的是，其博客资源的体积都很小...
 一张图片竟然在 9k。果然是大佬 hhh。
 于是查看了我的博客的资源，决定先从图片压缩开始解决。
@@ -21,18 +21,18 @@ categories:
 
 ## 图片格式选择
 
-`JPEG`: 作为互联网上使用频度最高的图片格式
-  - 无透明效果、颜色丰富的图片
-  - 因为每一次压缩均为有损压缩，所以对于线条、文字较多的图片不建议使用
+- `JPEG`: 作为互联网上使用频度最高的图片格式
+    - 无透明效果、颜色丰富的图片
+    - 因为每一次压缩均为有损压缩，所以对于线条、文字较多的图片不建议使用
 
-`PNG` ：有多种格式可选
-   - 需要透明效果
-   - 色块连续、多纯色
-   - 所有有时候颜色丰富的图片其大小要大于 `JPEG` 格式图片
-   - 可使用无损压缩
+- `PNG` ：有多种格式可选
+    - 需要透明效果
+    - 色块连续、多纯色
+    - 所有有时候颜色丰富的图片其大小要大于 `JPEG` 格式图片
+    - 可使用无损压缩
 
-`GIF`：目前动画效果支持较好的格式
-   - 在 `APNG` 还未普及的又需要引入动画效果图片的时候可以采用此格式
+- `GIF`：目前动画效果支持较好的格式
+    - 在 `APNG` 还未普及的又需要引入动画效果图片的时候可以采用此格式
 
 新的更优秀的图片格式，诸如 `WebP`, `APNG`, 仍然未被浏览器很好的支持，所以在此不赘述。
 
@@ -47,7 +47,8 @@ categories:
 - [iSparta](http://isparta.github.io/)：开源的 `PNG` 压缩与格式转换工具
 - [智图](https://zhitu.isux.us/)：高效优质的图片压缩平台，亦有桌面端软件
 
-上述软件/平台是经过我尝试之后比较**简易**、**高效**同时**免费**的工具，当然我们也可以选择 Photoshop。不过我自己并不精通 PS，所以效果并没有上述的好。
+上述软件/平台是经过我尝试之后比较**简易**、**高效**同时**免费**的工具，当然我们也可以选择 Photoshop。不过我自己并不
+精通 PS，所以效果并没有上述的好。
 
 ## 压缩前的准备
 
@@ -88,21 +89,16 @@ categories:
 我的图片原来超过 2M，因为之前没去理他...在压缩过后使用首页加载的 4 张图片总体积不超过 70k，虽然离很多优秀的优化还差得远，
 但是对于目前的我已经比较满意了。
 
-# 2. HTML, JS, CSS & Image 压缩插件
+# 2 HTML, JS, CSS & Image 压缩插件
 
 只是压缩图片显然没法满足需求，因为我注意到首页加载的某些 `js, css` 文件大小也比较大。
-所以我们亦需要一些压缩代码的工具。
-所以我找到了 Hexo 的插件  ~[hexo-all-minifier](https://github.com/chenzhutian/hexo-all-minifier)~。
-此插件目前尚有一些[小问题]()没有解决。
-遂找到基于这个插件的另一个新插件，并加入了新的特性：[hexo-filter-cleanup](https://github.com/mamboer/hexo-filter-cleanup)。
+所以我们亦需要一些压缩代码的工具。所以我找到了 Hexo 的插件 [hexo-all-minifier](https://github.com/chenzhutian/hexo-all-minifier)。
 这个插件集合了：
 
 > hexo-html-minifier, which is based on HTMLMinifier
-> hexo-clean-css, which is based on clean-css
-> hexo-uglify, which is based on UglifyJS
-> hexo-imagemin, which is based on imagemin
-> useref, let hexo parse build blocks in html files.
-> favicons, generate favicons on the fly.
+hexo-clean-css, which is based on clean-css
+hexo-uglify, which is based on UglifyJS
+hexo-imagemin, which is based on imagemin
 
 四款插件，一次就搞定所有事情。
 插件安装和配置而已参看[hexo-all-minifier](https://github.com/chenzhutian/hexo-all-minifier)项目首页。
