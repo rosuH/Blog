@@ -3,9 +3,9 @@
 
 # Site
 title: rosu 的博客
-subtitle: rosu's Personal Blog
+subtitle: 你好~
 description: Share, Learn & Do
-author: rosuh
+author: rosuH
 language: zh-CN
 timezone: Asia/Shanghai
 
@@ -48,7 +48,7 @@ highlight:
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
   path: ''
-  per_page: 3
+  per_page: 4
   order_by: -date
   
 # Category & Tag
@@ -84,7 +84,9 @@ search:
 
 
 ## Themes: https://hexo.io/themes/
-theme: Material
+#theme: Material
+theme: milk
+
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
