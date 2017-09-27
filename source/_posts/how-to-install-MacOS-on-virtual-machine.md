@@ -27,7 +27,7 @@ categories:
 - 首先正常安装 VMware，然后输入某神秘代码：`GU388-0PG5J-481EZ-ZEQNC-YKU98`
 - 打开任务管理器 --> 服务：右键停止 VMware 的服务
 
-![停用 VMware 服务](http://oq3jfi5lh.bkt.clouddn.com/blog/20170920/191822520.png?imageslim)
+![停用 VMware 服务](https://img.rosuh.me/blog-img/191822520.png)
 
 其中某一些需要先结束其余服务才能结束。
 
@@ -55,7 +55,7 @@ C:\Python27\python.exe unlocker.py
 
 类似输出如下：
 
-![win-install/py](http://oq3jfi5lh.bkt.clouddn.com/blog/20170920/192332540.png?imageslim)
+![win-install/py](https://img.rosuh.me/blog-img/192332540.png)
 
 
 
@@ -71,28 +71,28 @@ VMware 本身并没有 MacOS 系统安装环境，所以国外某些大神写了
 
 配置类型选择【经典】即可。
 
-![新建虚拟机](http://oq3jfi5lh.bkt.clouddn.com/blog/20170920/192648213.png?imageslim)
+![新建虚拟机](https://img.rosuh.me/blog-img/192648213.png)
 
 
 
 - 在【安装程序光盘镜像文件】中选择第一步下载的懒人镜像
 - 在打开的【选择文件对话框】，应该选择【所有文件】
 
-![选择镜像](http://oq3jfi5lh.bkt.clouddn.com/blog/20170920/192759933.png?imageslim)
+![选择镜像](https://img.rosuh.me/blog-img/192759933.png)
 
-![mark](http://oq3jfi5lh.bkt.clouddn.com/blog/20170920/193013555.png?imageslim)
+![mark](https://img.rosuh.me/blog-img/193013555.png)
 
 
 
 - 选择`Apple Mac OS`操作系统，下面的版本选择 OS X 10.11 就行
 - 如果这一步没有`Apple Mac OS`给你选择，那么说明你的补丁并没有打上去
 
-![mark](http://oq3jfi5lh.bkt.clouddn.com/blog/20170920/193101253.png?imageslim)
+![mark](https://img.rosuh.me/blog-img/193101253.png)
 
 - 命名虚拟机与设置虚拟机的保存路径
 - 记住这个路径，后面我们需要用到
 
-![mark](http://oq3jfi5lh.bkt.clouddn.com/blog/20170920/193232522.png?imageslim)
+![mark](https://img.rosuh.me/blog-img/193232522.png)
 
 
 
@@ -102,7 +102,7 @@ VMware 本身并没有 MacOS 系统安装环境，所以国外某些大神写了
 
 如果你现在就启动虚拟机的话，会出现如下错误：
 
-![mark](http://oq3jfi5lh.bkt.clouddn.com/blog/20170920/193415078.png?imageslim)
+![mark](https://img.rosuh.me/blog-img/193415078.png)
 
 从错误信息看，是 CPU 没有校验通过。也有的说，是因为引导没有设置好。
 
@@ -123,17 +123,17 @@ VMware 本身并没有 MacOS 系统安装环境，所以国外某些大神写了
 
 下面多图预警：
 
-![mark](http://oq3jfi5lh.bkt.clouddn.com/blog/20170920/194731319.png?imageslim)
+![mark](https://img.rosuh.me/blog-img/194731319.png)
 
 
 
-![mark](http://oq3jfi5lh.bkt.clouddn.com/blog/20170920/194750417.png?imageslim)
+![mark](https://img.rosuh.me/blog-img/194750417.png)
 
-![mark](http://oq3jfi5lh.bkt.clouddn.com/blog/20170920/194810854.png?imageslim)
+![mark](https://img.rosuh.me/blog-img/194810854.png)
 
 
 
-![mark](http://oq3jfi5lh.bkt.clouddn.com/blog/20170920/194757735.png?imageslim)
+![mark](https://img.rosuh.me/blog-img/194757735.png)
 
 
 
