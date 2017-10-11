@@ -27,7 +27,7 @@ sidebar:
   welcome: ">  现实就是答案。"
   social:
     - url: https://t.me/rosuh
-      icon: czs-paper-plane
+      icon: czs-telegram
       title: Telegram
     - url: https://wiki.rosuh.me
       icon: czs-book
