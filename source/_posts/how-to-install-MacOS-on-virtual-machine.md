@@ -11,7 +11,7 @@ categories:
 ---
 # 1. 准备阶段
 
-- 虚拟机软件 VMware: 链接: https://pan.baidu.com/s/1o7LcPdg 密码: u433
+- 虚拟机软件 VMware: 链接: https://pan.baidu.com/s/1qYyV5H6 密码: 8xr6
 - 虚拟机补丁 Unlocker208：链接: https://pan.baidu.com/s/1eRSKE3K 密码: sbq5
 - MacOS 懒人版镜像 链接: https://pan.baidu.com/s/1nuTmucL 密码: 3ur2
 - 安装 Python2.7 到你的电脑。记住安装路径
