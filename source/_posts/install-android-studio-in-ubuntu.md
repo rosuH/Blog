@@ -42,7 +42,7 @@ unzip xxx.zip -d /usr/local/
 在命令行执行
 
 ```shell
-/usr/local/android-studio/bin/studio.sh/
+/usr/local/android-studio/bin/studio.sh
 ```
 
 就会首次运行 AS 了。
