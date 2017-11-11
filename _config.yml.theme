@@ -1,0 +1,50 @@
+author: rosuh # 作者
+description: rosu's blog
+keyword: code, life and ?
+favicon: /css/images/favicon.ico
+
+excerpt_link: Read more
+
+menu:
+ Home: /
+ Tags: /tags/
+ Archives: /archives/
+ Projects: /project/
+ About: /about/
+
+# highlight
+highlight:
+  tomorrow
+
+# catalog
+catalog: true
+
+# donate
+donate: true
+
+# comment
+# you can set gitment or uyan
+
+comment: 
+
+# gitment config
+gitment_owner: rosuH
+gitment_repo: Blog
+gitment_oauth_id: 3152744e960f1db1cbb1
+gitment_oauth_secret: 1825cf75e7433b7b9fde0e312cae2aa47ffcaaf3
+
+# uyan
+# if you want to use uyan as your blog comment, plz remove/comment out gitment config
+
+baidu_id: 
+
+about: 
+  banner: https://img.rosuh.me/personal/banner.jpg
+  avatar: https://img.rosuh.me/personal/avatar.png
+  description: "Today is the day."
+  # Links
+  weibo_username: 
+  twitter_username: "@rosu_h"
+  github_username: "rosuH"
+  zhihu_username: 
+  douban_username: 
