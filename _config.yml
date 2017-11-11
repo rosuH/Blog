@@ -13,7 +13,7 @@ timezone: Asia/Shanghai
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: https://blog.rosuh.me
 root: /
-permalink: :year/:title/
+permalink: :title/
 permalink_defaults:
 
 # Directory
@@ -70,10 +70,7 @@ pagination_dir: page
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
-auto_dir_categorize:
-        enable: true
-        force: false
-
+#
 prism_plugin:
         mode: 'preprocess'    # realtime/preprocess 
         theme: 'solarizedlight'
@@ -85,7 +82,8 @@ search:
 
 ## Themes: https://hexo.io/themes/
 #theme: Material
-theme: milk
+#theme: milk
+theme: vexo
 
 
 # Deployment
