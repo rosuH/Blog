@@ -73,7 +73,7 @@ pagination_dir: page
 #
 prism_plugin:
         mode: 'preprocess'    # realtime/preprocess 
-        theme: 'solarizedlight'
+        theme: 'okaidia'
         line_number: true    # default false 
 search:
   path: search.xml
