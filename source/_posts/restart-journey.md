@@ -3,10 +3,14 @@ title: '重新开始'
 date: 2017-7-7 11:19:04
 layout: 'post'
 tags:
-    - "日志"
-    - '随笔'
-    - '计划'
-categories : [生活, 随笔]
+  - "日志"
+  - '随笔'
+  - '计划'
+
+categories:
+  - '生活'
+  - '随笔' 
+
 auto_spacing: ture
 ---
 ### 可能的未来
