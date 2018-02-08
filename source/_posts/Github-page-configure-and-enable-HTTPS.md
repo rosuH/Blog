@@ -40,7 +40,7 @@ GitHub Page 支持自定义域名，只需要在仓库的默认分支根目录�
 - 为你的域名添加两个 A 记录分别指向 GitHub 的主机
 - 为你的域名添加 CNAME 记录作为子域名的凭据（此处我添加了两个
 
-![添加 CNAME 记录](https://img.rosuh.me/blog-img/163425113.png)
+![添加 CNAME 记录](https://img.ioioi.top/blog-img/163425113.png)
 
  **注意事项** ：可以看到我的域名为 `rosuh.me` ，而 GitHub page 给我的默认域名为 `rosuh.github.io` （据你的 GitHub 用户名而定），而我要添加的子域名分别为：
 
@@ -57,7 +57,7 @@ GitHub Page 目前（2017）仍旧没有提供自定义域名的 HTTPS。我们�
 
 在 [CloudFlare](https://www.cloudflare.com/) 的 `Crypto` 选项中，我们选择 `Flexible` 
 
-![SSL 配置](https://img.rosuh.me/blog-img/163904181.png)
+![SSL 配置](https://img.ioioi.top/blog-img/163904181.png)
 
 这个选项实现了如下链接：
 
@@ -92,7 +92,7 @@ HSTS 指的是强制使用 HTTPS 服务，但是首次链接并不包含在其�
 
 接着看到下面的 `HTTP Strict Transport Security (HSTS)` ，仔细阅读完 CloudFalre 给你的提示，然后在 `Enable HSTS` 处切换为 `on` 就大功告成啦。
 
-![](https://img.rosuh.me/blog-img/20170802/165307762.png)
+![](https://img.ioioi.top/blog-img/20170802/165307762.png)
 
 到现在我们的文章标题就实现得差不多啦。
 
@@ -106,7 +106,7 @@ CloudFlare 是不是很赞啊？下面再介绍一个 CloudFlare 的功能：
 
 比如我想要访问主域名 `rosuh.me` 的时候直接跳转到我的博客，那么我可以添加一个规则如下：
 
-![](https://img.rosuh.me/blog-img/170044210.png)
+![](https://img.ioioi.top/blog-img/170044210.png)
 
 这样就可以直接跳转到我的博客啦。
 
