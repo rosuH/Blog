@@ -76,7 +76,10 @@ search:
   path: search.xml
   field: post
 
-
+prism_plugin:
+  mode: 'preprocess'    # realtime/preprocess
+  theme: 'default'
+  line_number: false    # default false
 ## Themes: https://hexo.io/themes/
 #theme: Material
 #theme: milk

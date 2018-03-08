@@ -11,8 +11,10 @@ categories:
 ---
 因为本博客迁移到了 GitHub Page，加之 [个人的 wiki](https://wiki.rosuh.me) 站点亦是使用 Hexo 托管在 GitHub Page 的，故而想将两个站点都配置到一个域名下面，分为两个子域名：
 
+```shell
 	blog.rosuh.me
 	wiki.rosuh.me
+```
 
 下面是具体配置步骤：
 
@@ -20,16 +22,23 @@ categories:
 
 GitHub Page 支持自定义域名，只需要在仓库的默认分支根目录下创建一个 `CNAME` 文件，里面填上你想要的域名即可。以我的博客为例，我的 `CNAME` 文件内容如下：
 
+```shell
 	blog.rosuh.me
+```
 
 相同的，在我 wiki 站点的目录亦需要添加如下 `CNAME` 文件：
 
+```shell
+
 	wiki.rosuh.me
+```
 
  **注意事项** ：如果你为某一个站点设定了子域名，那么意味着你不能在其他站点中填入诸如下面的域名： 
 
+```shell
 	www.rosuh.me
 	*.rosuh.me
+```
 
 因为通配符或者未指定子域名的情况，会和指定子域名的仓库冲突。
 
@@ -44,8 +53,10 @@ GitHub Page 支持自定义域名，只需要在仓库的默认分支根目录�
 
  **注意事项** ：可以看到我的域名为 `rosuh.me` ，而 GitHub page 给我的默认域名为 `rosuh.github.io` （据你的 GitHub 用户名而定），而我要添加的子域名分别为：
 
+```shell
 	blog.rosuh.me
 	wiki.rosuh.me
+```
 
 耐心等待 DNS 刷新即可。
 

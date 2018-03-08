@@ -31,6 +31,7 @@ Google 没有提供 Android Studio（后文称为 AS） 的软件源，所以我
 
 1. 解压下载的压缩包并移动至目标文件
 
+
 ```shell
 unzip xxx.zip -d /usr/local/
 ```
@@ -40,6 +41,7 @@ unzip xxx.zip -d /usr/local/
 2. 命令行运行 AS
 
 在命令行执行
+
 
 ```shell
 /usr/local/android-studio/bin/studio.sh
