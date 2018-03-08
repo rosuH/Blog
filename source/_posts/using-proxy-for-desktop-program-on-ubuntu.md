@@ -30,18 +30,20 @@ categories:
 #### 用 find
 在 linux 下找东西方便得很呢，打开你的 terminal：
 
-```
+```shell
+
 man find
+
 ```
 这个美妙的工具可以搜索他能搜索到的东西，要找个程序还不是分分钟的事情。
 举个例子。我们要找 Dropbox 的二进制文件所在：
 
-```
+```shell
 sudo find / -name "dropbox"
 ```
 搜索结果：
 
-```
+```shell
 
 /usr/share/doc/libnet-dropbox-api-perl/examples/dropbox
 /usr/share/doc/dropbox
@@ -55,7 +57,7 @@ sudo find / -name "dropbox"
 所以这里的 `dropbox` 的二进制文件就在 `/usr/bin/dropbox` 中咯。
 执行：
 
-```
+```shell
 proxychains /usr/bin/dropbox
 ```
 
@@ -81,7 +83,7 @@ proxychains /usr/bin/dropbox
 看看你的 `/usr/share/applications`，里面是不是有很多`desktop`配置文件呐。
 找到你想启动的应用程序，都会出现类似下面的内容（只多不少，因为有些程序会对本地化作处理
 
-```
+```shell
 [Desktop Entry]
 Version=1.0
 Name=Zeal

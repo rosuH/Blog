@@ -6,11 +6,12 @@ favicon: /css/images/favicon.ico
 excerpt_link: Read more
 
 menu:
- Home: /
- Tags: /tags/
- Archives: /archives/
- Projects: /project/
- About: /about/
+ 主页: /
+ 标签: /tags/
+ 归档: /archives/
+ 项目: /project/
+ 关于: /about/
+ 更多: 'https://rosuh.me'
 
 # highlight
 highlight:
@@ -39,12 +40,17 @@ gitment_oauth_secret: 1825cf75e7433b7b9fde0e312cae2aa47ffcaaf3
 baidu_id: 
 
 about: 
-  banner: https://img.rosuh.me/personal/banner.jpg
-  avatar: https://img.rosuh.me/personal/avatar.png
-  description: "Today is the day."
+  banner: https://img.ioioi.top/personal/banner.jpg
+  avatar: https://img.ioioi.top/personal/avatar.jpg
+  description: "任何足够先进的科技，皆与魔法无异。--亚瑟·克拉克"
   # Links
   weibo_username: 
   twitter_username: "@rosu_h"
   github_username: "rosuH"
-  zhihu_username: 
+  zhihu_username: "rosuh"
   douban_username: 
+
+mathjax:
+  enable: true
+  per_page: false
+  cdn: //cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML

@@ -40,7 +40,7 @@ OK，现在我们看看出了什么问题？
 
 是不是出现了一些错误呢～类似于
 
-```
+```shell
 /usr/share/themes/Ambiance/gtk-2.0/apps/mate-panel.rc:30: error: invalid string constant "murrine-scrollbar", expected valid string constant
 ../../sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc:**CRASHING**:seccomp-bpf failure in syscall 0281
 Received signal 11 SEGV_MAPERR 000008003119
