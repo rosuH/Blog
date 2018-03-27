@@ -1,5 +1,5 @@
 ---
-title: "16 章编程挑战"
+title: "16 章编程挑战：图片展示"
 date: 2018-3-18 16:02:01
 tags:
 - 'Android'
@@ -9,7 +9,6 @@ tags:
 
 categories:
 - 'Android'
-
 ---
 
 # 前言
@@ -18,7 +17,9 @@ categories:
 
 让我们先来看看问题。
 
-## 问题一：优化照片显示
+# 问题一：优化照片显示
+
+
 
 > 请创建能显示放大版照片的 DialogFragment。只要点击缩略图，就会弹出这个 DialogFragment，让用户查看放大版的照片。
 
@@ -33,19 +34,17 @@ categories:
 
 原书中，示例的 App 里有一个功能是显示一个选择日期的`DialogFragment`，所以实际上我们只需参照着做出来就可以了。
 
-创建一个 *ImageViewerDialog.java* 类，内容如下：
+创建一个*ImageViewerDialog.java* 类，内容如下：
 
 
 
 ```java
-public class ImageViewerDialog extends DialogFragment 
-{
+public class ImageViewerDialog extends DialogFragment {
     
     private static final String ARG_IMAGE_SOURCE = "imageSource";
     private ImageView mImageView;
 
-    public static ImageViewerDialog newInstance(String path)
-    {
+    public static ImageViewerDialog newInstance(String path){
         
         Bundle args = new Bundle();
         args.putSerializable(ARG_IMAGE_SOURCE, path);
@@ -56,8 +55,7 @@ public class ImageViewerDialog extends DialogFragment
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) 
-    {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         
         final String path = (String) getArguments().getSerializable(ARG_IMAGE_SOURCE);
         mImageView = new ImageView(getContext());
@@ -101,11 +99,9 @@ public class ImageViewerDialog extends DialogFragment
 
 
 ```java
-mPhotoView.setOnClickListener(new OnClickListener() 
-{
+mPhotoView.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) 
-            {
+            public void onClick(View v) {
                 
                 updatePhotoview();
                 if (mPhotoFile != null || !mPhotoFile.exists()) 
@@ -144,11 +140,15 @@ imageViewerDialog.show(manager, DIALOG_IMAGE_SOURCE);
 - 调用`show`方法让当前的`FragmentManager`展示我们的`ImageViewerDialog`
   - 别忘了，`ImageViewerDialog`是一个继承`DialogFragment`的类，也属于`fragment`的哦，所以使用`FragmentManager`来管理显示与否哦
 
+
+
 这样的话，我们就完成了第一个问题。接着，我们继续看第二个问题。
 
 
 
-## 问题二：优化缩略图加载
+# 问题二：优化缩略图加载
+
+
 
 > 本章，我们只能大致估算缩略图的目标尺寸。虽说这种做法可行且实施迅速，但还不够理想。
 > Android有个现成的API工具可用，叫作 ViewTreeObserver 。你可以从 Activity 层级结构中
@@ -164,17 +164,14 @@ imageViewerDialog.show(manager, DIALOG_IMAGE_SOURCE);
 *PictureUtils.java*
 
 ```java
-public class PictureUtils 
-{
+public class PictureUtils {
     ...
-    public static Bitmap getScaledBitmap(String path, Activity activity) 
-    {
+public static Bitmap getScaledBitmap(String path, Activity activity) {
         
 		Point size = new Point();
 		activity.getWindowManager().getDefaultDisplay()
 				.getSize(size);
 		return getScaledBitmap(path, size.x, size.y);
-    }
 }
 ```
 
@@ -192,7 +189,7 @@ mPhotoView.setImageBitmap(bitmap);
 
 当然首先我们得先理解一下什么是`ViewTreeObserver`。
 
-### `ViewTreeObserver`了解一下？
+###  ViewTreeObserver 了解一下？
 
 顾名思义，就是`ViewThree`的`Observer`，即是视图树的观察者。在设计模式里面，有一种称为“观察者”模式的东西。
 
@@ -219,25 +216,22 @@ private float height;
 ...
 @Override
 public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                         Bundle savedInstanceState) 
-{
+                         Bundle savedInstanceState) {
     ...
     mPhotoView.getViewTreeObserver()
-              .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() 
-              {
+              .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             		@Override
             		public void onGlobalLayout() {
                 		width = mPhotoView.getWidth();
                 		height = mPhotoView.getHeight();
                 		updatePhotoview();
-                    }
-	            });
+            }
+	});
     ...
 }
 
 ...
-private void updatePhotoview()
-{
+private void updatePhotoview(){
     
         if (mPhotoFile == null || !mPhotoFile.exists())
         {
@@ -285,8 +279,7 @@ private void updatePhotoview()
 
 
 ```java
-public static Bitmap getScaledBitmap(String path, int destWidth, int destHeight)
-{
+public static Bitmap getScaledBitmap(String path, int destWidth, int destHeight){
         // Read in the dimensions of the image on disk
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -297,8 +290,7 @@ public static Bitmap getScaledBitmap(String path, int destWidth, int destHeight)
 
         // Figure out how much to scale down by
         int inSampleSize = 1;
-        if (srcHeight > destHeight || srcWidth > destWidth)
-        {
+        if (srcHeight > destHeight || srcWidth > destWidth){
             
             float heightScale = srcHeight / destHeight;
             float widthScale = srcWidth / destWidth;
@@ -321,9 +313,13 @@ public static Bitmap getScaledBitmap(String path, int destWidth, int destHeight)
 
 
 
-到此我们两个编程挑战也就完成了。我利用了书里的例子，照猫画虎实现了目标功能。但是由于水平有限，可能存在诸多缺漏和不恰当的地方，还请诸君多多指正！谢谢~
+到此我们两个编程挑战也就完成了。
 
-------
+-----
+
+我利用了书里的例子，照猫画虎实现了目标功能。但是由于水平有限、资历尚且，可能存在诸多缺漏和不恰当的地方，还请诸君多多指正！谢谢~
+
+-----
 
 参看：
 
