@@ -480,6 +480,8 @@ mViewPager.setAdapter(...)
 
 # 结语
 
+本项目地址[**ViewPagerDemo**](https://github.com/rosuH/ViewPagerDemo)。
+
 目前为止，我们的轮播图就已经做好了。
 
 这两篇文章的目标读者是刚入门的同学，所以有许多地方还有改进的空间。
