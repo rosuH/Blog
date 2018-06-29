@@ -28,6 +28,14 @@ categories:
 
 我的 js 实现也基本参考他的做的。当然，我是在 Cocos Creator 上搭建了场景实现了，所以其中还有相当一部分是关于 Cocos Creator 的应用。此处先按下不表。
 
+下面推荐一个很有意思的 Github 项目，他这个实现了诸多寻找路径的算法！还有网页版！你可以看看实现过程以助于你理解算法。
+
+- [PathFinding.js visual ](http://qiao.github.io/PathFinding.js/visual/)
+
+---
+
+
+
 实现了 js 版本，我想着用我的老本行 Java 来实现故而有了如下的代码。
 
 **注意！因为写得匆忙，所以没有写测试代码。如有错漏，请见谅！并烦请赐教~**
