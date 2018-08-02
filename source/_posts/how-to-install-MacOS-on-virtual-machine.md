@@ -8,6 +8,8 @@ tags:
 
 categories:
 - '折腾'
+
+description: "本文主要写了如何安装 MacOS 虚拟机的过程"
 ---
 # 1. 准备阶段
 
@@ -24,7 +26,7 @@ categories:
 
 ## 2.1 安装 VMware 并打补丁
 
-- 首先正常安装 VMware，然后输入某神秘代码：`GU388-0PG5J-481EZ-ZEQNC-YKU98`
+- 首先正常安装 VMware，然后输入某神秘代码：`GU388-0PG5J-481EZ-ZEQNC-YKU98`（『盗版可耻』XD）
 - 打开任务管理器 --> 服务：右键停止 VMware 的服务
 
 ![停用 VMware 服务](https://img.ioioi.top/blog-img/191822520.png)

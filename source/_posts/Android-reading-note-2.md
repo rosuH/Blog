@@ -9,6 +9,9 @@ tags:
 
 categories:
 - 'Android'
+
+description: "本系列是笔者在实践过程中学习或复习到的一些 tips，为了避免忘记，特地记下来。本节记录的是 Java 中`this`关键字的使用场景以及从子线程切换回主线程的几种方式"
+
 ---
 
 ## 什么时候使用 `this`

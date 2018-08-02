@@ -9,6 +9,8 @@ tags:
 
 categories:
 - 'Android'
+
+description: "本系列是笔者在实践过程中学习或复习到的一些 tips，为了避免忘记，特地记下来。本节记录的是 Android 中的模块化以及 `OkHttp`的一些用法"
 ---
 
 ## 模块化步骤

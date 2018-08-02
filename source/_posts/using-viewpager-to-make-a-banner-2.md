@@ -11,6 +11,9 @@ tags:
 categories:
 - 'Android'
 - 'ViewPager'
+
+description: "本文是系列文章第二篇，这一次我们开始来造轮子啦..."
+
 ---
 
 # 前言

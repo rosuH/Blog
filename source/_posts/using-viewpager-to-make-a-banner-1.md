@@ -11,6 +11,8 @@ tags:
 categories:
 - 'Android'
 - 'ViewPager'
+
+description: "本文是系列文章第一篇，先来简单上手 ViewPager"
 ---
 
 # 简介

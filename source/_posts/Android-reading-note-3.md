@@ -9,6 +9,9 @@ tags:
 
 categories:
 - 'Android'
+
+description: "本系列是笔者在实践过程中学习或复习到的一些 tips，为了避免忘记，特地记下来。本节记录的是 Java 中的异常机制、如何在捕获子线程抛出的异常以及对弱引用的一些阐述"
+
 ---
 
 ## 子线程抛异常的问题
@@ -65,16 +68,17 @@ try {
 在 Java 中，可以使用`Thread.setUncaughtExceptionHandler()`为子线程设置一个`Handelr`，以便在抛出异常的时候有`Handler`可以处理这个异常。
 
 ```java
-...
+
 private Thread.UncaughtExceptionHandler mUncaughtExceptionHandler;
 
-...
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ...
+        
         mUncaughtExceptionHandler = new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
+
                 e.getCause().printStackTrace();
             }
         };
@@ -83,7 +87,7 @@ private Thread.UncaughtExceptionHandler mUncaughtExceptionHandler;
     private void exception(){
         Thread thread = new Thread(new Runnable() {
             @Override
-            public void run() {
+            public void run() { 
                 throw new RuntimeException("===Test===");
             }
         });

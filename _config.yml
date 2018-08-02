@@ -83,7 +83,8 @@ prism_plugin:
 ## Themes: https://hexo.io/themes/
 #theme: Material
 #theme: milk
-theme: vexo
+#theme: vexo
+theme: even
 
 
 # Deployment
