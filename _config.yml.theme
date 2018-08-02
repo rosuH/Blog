@@ -1,56 +1,103 @@
-author: rosuh # 作者
-description: rosu's blog
-keyword: code, life and ?
-favicon: /css/images/favicon.ico
+# ===========================================
+# Site Information Settings
+# ===========================================
 
-excerpt_link: Read more
+# Site creation time
+since: 2015
 
+# Custom your favicon.ico in `site/source`
+favicon: /favicon.ico
+
+# Set feed link (false | default | your feed link)
+# false: disable
+# default: use `atom.xml`, generator for `hexo-generator-feed`
+rss: default
+
+# ===========================================
+# Menu Settings
+# ===========================================
 menu:
- 主页: /
- 标签: /tags/
- 归档: /archives/
- 项目: /project/
- 关于: /about/
- 更多: 'https://rosuh.me'
+  Home: /
+  Archives: /archives/
+  Tags: /tags
+  Categories: /categories
+  About: /about
+  ?: "https://rosuh.me"
+# ===========================================
+# Theme Settings
+# ===========================================
+# color: Default | Mint Green | Cobalt Blue | Hot Pink | Dark Violet
+#color: Default
+theme:
+  color: Cobalt Blue
 
-# highlight
-highlight:
-  tomorrow
+toc: true
 
-# catalog
-catalog: true
+# jQuery fancybox
+fancybox: true
 
-# donate
-donate: true
+pjax: true
 
-# comment
-# you can set gitment or uyan
-
-comment: 
-
-# gitment config
-gitment_owner: rosuH
-gitment_repo: Blog
-gitment_oauth_id: 3152744e960f1db1cbb1
-gitment_oauth_secret: 1825cf75e7433b7b9fde0e312cae2aa47ffcaaf3
-
-# uyan
-# if you want to use uyan as your blog comment, plz remove/comment out gitment config
-
-baidu_id: 
-
-about: 
-  banner: https://img.ioioi.top/personal/banner.jpg
-  avatar: https://img.ioioi.top/personal/avatar.jpg
-  description: "任何足够先进的科技，皆与魔法无异。--亚瑟·克拉克"
-  # Links
-  weibo_username: 
-  twitter_username: "@rosu_h"
-  github_username: "rosuH"
-  zhihu_username: "rosuh"
-  douban_username: 
-
-mathjax:
+copyright:
   enable: true
-  per_page: false
-  cdn: //cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML
+  # https://creativecommons.org/
+  license: '<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>'
+
+reward:
+  enable: true
+  qrCode:
+    wechat: /images/wechat.jpg
+    alipay: /images/alipay.jpg
+
+# ===========================================
+# Social links Settings
+# ===========================================
+social:
+  email: rosuh@qq.com
+  stack-overflow:
+  twitter:
+  facebook:
+  linkedin:
+  google:
+  github: https://github.com/rosuh
+  weibo:
+  zhihu:
+  douban:
+  pocket:
+  tumblr:
+  instagram:
+
+# ===========================================
+# Third Party Services Settings
+# ===========================================
+
+# LeanCloud
+leancloud:
+  app_id:
+  app_key:
+
+# Baidu Analytics
+baidu_analytics:
+# Baidu Verification
+baidu_verification:
+
+# Google Analytics
+google_analytics:
+# Google Verification
+google_verification:
+
+# Disqus
+disqus_shortname: blog-rosuh-me
+
+#Changyan
+changyan:
+  appid:
+  appkey:
+
+#LiveRe
+livere_datauid:
+
+# ===========================================
+# Version
+# ===========================================
+version: 2.9.0
