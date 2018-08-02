@@ -11,6 +11,8 @@ tags:
 categories:
 - 'Android'
 - 'Thread'
+
+description: "在 Android 开发中，有一个非常重要但是较少被讨论到的问题：UI 的响应。这个问题一部分由 Android 系统本身决定，但更多时候是还是开发者的责任。抛开其他问题而言，解决..."
 ---
 
 

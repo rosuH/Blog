@@ -9,6 +9,9 @@ tags:
 
 categories:
 - 'Android'
+
+description: "本系列是笔者在实践过程中学习或复习到的一些 tips，为了避免忘记，特地记下来。本节记录的是`final`关键字的使用，以及一些第三方库"
+
 ---
 
 ## AtomicBoolean
@@ -25,8 +28,9 @@ boolean isRunning = false;
 if (!isRunning){
     //do something
     isRunning = true;
-}else{
-    // do not work
+} else{
+    
+    // do not work;
 }
 ```
 

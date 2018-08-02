@@ -8,10 +8,9 @@ tags:
 
 categories:
 - '博客折腾指南'
+
+description: "本文主要讲述我对 HTTPS 的了解的一些过程，包括如何给网站上 HTTPS..."
 ---
-
-
-
 # 1.0 什么是HTTPS？
 
 1. [HTTPS](https://zh.wikipedia.org/wiki/%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE) == HTTP + [SSL](https://en.wikipedia.org/wiki/Transport_Layer_Security)
