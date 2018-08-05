@@ -13,7 +13,7 @@ categories:
 description: "本系列是笔者在实践过程中学习或复习到的一些 tips，为了避免忘记，特地记下来。本节记录的是 Android 中的模块化以及 `OkHttp`的一些用法"
 ---
 
-## 模块化步骤
+# 模块化步骤
 
 1. 新建模块
 2. 编写模块内容
@@ -23,17 +23,13 @@ description: "本系列是笔者在实践过程中学习或复习到的一些 ti
 implementation project(path: ':downloadlibrary')
 ```
 
-
-
-## OkHttp 与 文件
+# OkHttp 与 文件
 
 1. `okhttp`会另起子线程，所以更新 UI 要注意回到主线程更新
 2. 文件写入需要写入权限
-
-```xml
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-```
-
+    ```xml
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    ```
 3. 获取目录的区别
 
 ```java

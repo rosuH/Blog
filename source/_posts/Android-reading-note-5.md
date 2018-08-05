@@ -23,7 +23,7 @@ description: "本系列是笔者在实践过程中学习或复习到的一些 ti
 
 ```java
 private Unbinder mUnbind;
-@Override
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_no_man, container, false);
@@ -32,7 +32,7 @@ private Unbinder mUnbind;
         return view;
     }
 
-@Override
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
@@ -44,9 +44,8 @@ private Unbinder mUnbind;
 使用`ButterKnife`也可以直接为按钮等控件设置监听。
 
 ```java
-...
 @OnClick(R.id.test_btn)
-    void test(){
+void test(){
         // do something
     }
 ```
@@ -130,7 +129,6 @@ Observable
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <?xml version="1.0" encoding="utf-8"?>
-...
 ```
 
 多写了一行`XML`声明...

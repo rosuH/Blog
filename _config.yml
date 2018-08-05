@@ -37,7 +37,7 @@ post_asset_folder: false
 relative_link: false
 future: true
 highlight:
-  enable: false
+  enable: true
 #  line_number: false
 #  auto_detect: false
 #  tab_replace:
@@ -76,10 +76,10 @@ search:
   path: search.xml
   field: post
 
-prism_plugin:
-  mode: 'preprocess'    # realtime/preprocess
-  theme: 'default'
-  line_number: false    # default false
+  #prism_plugin:
+  #mode: 'preprocess'    # realtime/preprocess
+  #theme: 'default'
+  #line_number: true    # default false
 ## Themes: https://hexo.io/themes/
 #theme: Material
 #theme: milk
