@@ -14,18 +14,18 @@ description: "本系列是笔者在实践过程中学习或复习到的一些 ti
 
 ---
 
-## 子线程抛异常的问题
+# 子线程抛异常的问题
 
 在尝试使用子线程抛出异常的时候，整个应用都会 crash 掉。
 
-### Java Exception 入门
+## Java Exception 入门
 
-#### 受查异常和运行时异常
+### 受查异常和运行时异常
 
 - 受查异常指的是可以被编译器检查出来的，指的是『在正常工作中可能会发生的错误』，比如像是网络连接错误、IO 错误等等；这些错误不是程序的逻辑错误，而是其他因素导致的。这类异常是必须被处理的
 - 运行时异常指的一般是程序逻辑缺漏，比如用户输入错误、某些配置文件错误等等，是可以通过程序进行避免的，这种异常应该尽量减少，编译器也不会检查
 
-1. 在方法声明使用`throws`表明此方法会抛出异常
+#### 1. 在方法声明使用`throws`表明此方法会抛出异常
 
 这种方法需要调用者**主动捕获**异常，而编写者不需要担心这些事情。
 
@@ -34,7 +34,7 @@ description: "本系列是笔者在实践过程中学习或复习到的一些 ti
 ...
 public A() throws RuntimeException{
     ...
-}    
+}
 
 // the caller
 
@@ -53,15 +53,15 @@ try {
 >
 > ​    3)仅当抛出了异常，该方法的调用者才必须处理或者重新抛出该异常。当方法的调用者无力处理该异常的时候，应该继续抛出，而不是囫囵吞枣。
 
-2. **主动抛出**异常
+#### 2. **主动抛出**异常
 
->  throw总是出现在函数体中，用来抛出一个Throwable类型的异常。程序会在throw语句后立即终止，它后面的语句执行不到，然后在包含它的所有try块中（可能在上层调用函数中）从里向外寻找含有与其匹配的catch子句的try块。
+> throw总是出现在函数体中，用来抛出一个Throwable类型的异常。程序会在throw语句后立即终止，它后面的语句执行不到，然后在包含它的所有try块中（可能在上层调用函数中）从里向外寻找含有与其匹配的catch子句的try块。
 
 *参看*：
 
 - [深入理解 Java 异常处理机制](https://blog.csdn.net/hguisu/article/details/6155636)
 
-### Handle 子线程异常
+## Handle 子线程异常
 
 如果捕获子线程异常呢？子线程在抛出异常之后，会引发整个程序的 crash，所以我们需要在主线程捕获异常之后进行一定的处理。
 
@@ -74,7 +74,7 @@ private Thread.UncaughtExceptionHandler mUncaughtExceptionHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        
+
         mUncaughtExceptionHandler = new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
@@ -103,9 +103,7 @@ private Thread.UncaughtExceptionHandler mUncaughtExceptionHandler;
 - [The *exception hierarchy* in Java](https://www.javamex.com/tutorials/exceptions/exceptions_hierarchy.shtml)
 - [Java Docs setUncaughtExceptionHandler](https://docs.oracle.com/javase/6/docs/api/java/lang/Thread.html#setUncaughtExceptionHandler%28java.lang.Thread.UncaughtExceptionHandler%29)
 
-
-
-## 同一线程收发消息
+# 同一线程收发消息
 
 遇到的情况是：
 
@@ -114,19 +112,15 @@ private Thread.UncaughtExceptionHandler mUncaughtExceptionHandler;
 
 结果造成了线程阻塞，UI 不更新。
 
-
-
-## ButterKnife 忘记 bindView()
+# ButterKnife 忘记 bindView()
 
 一直忘记在`Activity`调用这个方法。
 
-## WeakReference 和 WeakHashMap
+# WeakReference 和 WeakHashMap
 
 使用弱引用和`WeakHashMap`来防止内存泄露。
 
-
-
-### WeakReference 使用方法
+## WeakReference 使用方法
 
 1. 在主模块实例化`WeakReference`对象，把这个对象传给子模块
 2. 子模块调用`WeakReference.get()`方法，获得存在里面的对象
@@ -168,14 +162,11 @@ if (object != null){
 Object obj2 = object1;
 ```
 
-
-
 *参看*：
 
 - [不只是给面试 Java WeakReference 理解](http://puretech.iteye.com/blog/2008663)
-- 
 
-### WeakHashMap 用法
+## WeakHashMap 用法
 
 观看`WeakHashMap`的源码，其实用法和`HaspMap`是差不多的：
 
@@ -225,11 +216,9 @@ Object obj2 = object1;
         }
 ```
 
+# OKHTTP3 线程池与异步请求
 
-
-## OKHTTP3 线程池与异步请求
-
-### OKHTTP3 内部的线程池
+## OKHTTP3 内部的线程池
 
 用的时候才知道，它内部确实维护了一个线程池，想要实现多文件同时下载的话，只需要写个循环调用`call.enqueue()`就可以了。
 
@@ -297,7 +286,7 @@ public synchronized ExecutorService executorService() {
 - 最大线程数 = $2^{31} -1$（`Integer.MAX_VALUE`就是保存了这个值）
 - `SynchronousQueue<>()`队列
 
-#### corePoolSize VS maximumPoolSize
+### corePoolSize VS maximumPoolSize
 
 为什么核心线程数可以为 0？为什么还要设置`maximumPoolSize`这个参数呢？
 
@@ -310,15 +299,11 @@ public synchronized ExecutorService executorService() {
 
 所以`OkHttp3`中，核心线程数是 0 ，那么线程池空闲时就是没有线程的；一旦有任务进来，就会新建线程。
 
-
-
-*参看：*
+*参看*：
 
 - [Class ThreadPoolExecutor](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadPoolExecutor.html)
 - [聊聊并发（三）——JAVA线程池的分析和使用](http://www.infoq.com/cn/articles/java-threadPool)
 - [OkHttp3 如何取消请求](http://ngudream.com/2016/07/22/okhttp-call-cancel/)
-
-
 
 ## OkHTTP3 使用 header 控制下载起始点
 
@@ -346,12 +331,11 @@ fileOutputStream = new FileOutputStream(file, true);
 ## Java 文件批量删除
 
 ```java
-for(File file: dir.listFiles()) 
-    if (!file.isDirectory()) 
+for(File file: dir.listFiles())
+    if (!file.isDirectory())
         file.delete();
 ```
 
 *参看*：
 
 - [Delete all files in directory (but not directory) - one liner solution](https://stackoverflow.com/questions/13195797/delete-all-files-in-directory-but-not-directory-one-liner-solution)
-

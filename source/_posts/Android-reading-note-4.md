@@ -14,7 +14,7 @@ description: "本系列是笔者在实践过程中学习或复习到的一些 ti
 
 ---
 
-## AtomicBoolean
+# AtomicBoolean
 
 > A `boolean` value that may be updated atomically. See the `java.util.concurrent.atomic` package specification for description of the properties of atomic variables. An `AtomicBoolean` is used in applications such as atomically updated flags, and cannot be used as a replacement for a `Boolean`.
 
@@ -29,7 +29,6 @@ if (!isRunning){
     //do something
     isRunning = true;
 } else{
-    
     // do not work;
 }
 ```
@@ -44,8 +43,8 @@ if (!isRunning){
 AtomicBoolean isRuning = false;
 if (isRunning.compareAndSet(false, true)){
     // do something
-}else {
-    // do not work
+} else {
+    // do something
 }
 ```
 
@@ -60,7 +59,7 @@ if (isRunning.compareAndSet(false, true)){
 - [AtomicBoolean in Android Developer](https://developer.android.com/reference/java/util/concurrent/atomic/AtomicBoolean)
 - [AtomicBoolean 的介绍与使用](https://www.jianshu.com/p/9985810bd8cb)
 
-## final 关键字、修饰类
+# final 关键字、修饰类
 
 - `final`声明变量，表示该变量只可读
 - `final`声明方法，表示该方法不可被子类重写，编译时绑定
@@ -70,23 +69,19 @@ if (isRunning.compareAndSet(false, true)){
 
 - [深入理解 Java 中的 final 关键字](http://www.importnew.com/7553.html)
 
-
-
-## PermissionDispatcher 库
+# PermissionDispatcher 库
 
 一个通过注解的方式来控制和声明运行时权限的第三方库。
 
 - https://github.com/permissions-dispatcher/PermissionsDispatcher
 
-
-
-## Protocol Buffer
+# Protocol Buffer
 
 一种与语言无关，平台无关，可扩展的序列化结构化数据的方法，用于通信协议，数据存储等。
 
 - https://developers.google.com/protocol-buffers/docs/javatutorial
 
-## RenderScript
+# RenderScript
 
 > **Renderscript**（渲染脚本）是[Android操作系统](https://zh.wikipedia.org/wiki/Android)上的一套[API](https://zh.wikipedia.org/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%8E%A5%E5%8F%A3)。它基于[异构计算](https://zh.wikipedia.org/wiki/%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97)思想，专门用于密集型计算。 — Wikipedia
 

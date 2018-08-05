@@ -14,17 +14,18 @@ description: "本系列是笔者在实践过程中学习或复习到的一些 ti
 
 ---
 
-## 什么时候使用 `this`
+# 什么时候使用 `this`
 
 三种情况下我们使用`this`关键字
 
-### 1. 区分对象对象属性和局部变量
+## 1. 区分对象对象属性和局部变量
 
 ```java
 class A {
     private int age;
-    
+
     public void setAge(int age){
+
         this.age = age;
     }
 }
@@ -35,47 +36,40 @@ class A {
 ```java
 class A {
     private int mAge;
-    
+
     public void setAge(int age){
         mAge = age;
     }
 }
 ```
 
-
-
-2. 将当前对象作为参数传递给其他方法时
+## 2. 将当前对象作为参数传递给其他方法时
 
 ```java
 class B {
-    
     A.download(this);
 }
 ```
 
-
-
-3. 构造器重载时
+## 3. 构造器重载时
 
 ```java
 class A {
     public A(){
         this("Constructor");
     }
-    
+
     public A (String str){
-        System.println(str);s
+        System.println(str);
     }
 }
 ```
 
 - 参看[When should I use “this” in a class?](https://stackoverflow.com/questions/2411270/when-should-i-use-this-in-a-class)
 
+# 从子线程切换回 UI  线程
 
-
-## 从子线程切换回 UI  线程
-
-### 1. 使用`runOnUiThread`方法
+## 1. 使用`runOnUiThread`方法
 
 通过`Activity`使用`runOnUiThread`方法来切换回主线程，进行 UI 更新的操作
 
@@ -107,13 +101,11 @@ MainActivity.this.runOnUiThread(new Runnable(){
 
 而`Handler`会隐式关联（implicitly associated）实例化它的`Looper`，所以使用它来执行的动作的话，就会在主线程队列中执行了。
 
-
-
-### 2. `View.post()`方法
+## 2. `View.post()`方法
 
 这个方法实际上原理也是和`runOnUiThread()`方法一样，我们看一下源码：
 
-```Java
+```java
 /**
      * <p>Causes the Runnable to be added to the message queue.
      * The runnable will be run on the user interface thread.</p>
@@ -155,7 +147,7 @@ MainActivity.this.runOnUiThread(new Runnable(){
      */
     final static class AttachInfo {
         ...
-        
+
         /**
          * Creates a new set of attachment information with the specified
          * events handler and thread.
@@ -189,9 +181,7 @@ MainActivity.this.runOnUiThread(new Runnable(){
 
 所以其实这里的原理和第一步里的也是一样的。这里获取了父节点的`handler`，然后用它执行动作。（有可能父节点是递归向上获取`handler`直到获取`Activity`的`handler`）
 
-
-
-### 3. 手动使用`Handler`
+## 3. 手动使用`Handler`
 
 前两者内部原理都是`Handler`，我们理解了原理之后，其实我们也可以自己实现这么一个操作。并且可以更加灵活。
 
@@ -230,15 +220,13 @@ private static Handler getMainHandler() {
 
 ```
 
-*资料索引*
+*资料索引*：
 
 - [Android Developer ThreadLocal](https://developer.android.com/reference/java/lang/ThreadLocal)
 
 - [说说 getMainLooper](http://www.icodeyou.com/2015/10/11/2015-10-11-getMainLooper/)
 - [Understanding Android Core: Looper, Handler, and HandlerThread](https://blog.mindorks.com/android-core-looper-handler-and-handlerthread-bd54d69fe91a)
 - [Understanding Activity.runOnUiThred()](https://medium.com/@yossisegev/understanding-activity-runonuithread-e102d388fe93)
-
-
 
 # OKHTTP 下载文件频繁切换线程导致性能开销
 
@@ -255,19 +243,13 @@ private static Handler getMainHandler() {
 
 后面修改了之后，CPU 占用立刻下来了，即便是峰值也不到 25%。应该是正常水平了。
 
-
-
 # 线程池的使用
 
 1. 创建线程池之后，可以使用`for`循环，在里面执行
 
-
-
 *资料索引*：
 
 - [Java 四种线程池的用法分析](https://blog.csdn.net/u011974987/article/details/51027795)
-
-
 
 # 接口与回调相关
 
