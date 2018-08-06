@@ -73,20 +73,18 @@ if (isRunning.compareAndSet(false, true)){
 
 一个通过注解的方式来控制和声明运行时权限的第三方库。
 
-- https://github.com/permissions-dispatcher/PermissionsDispatcher
+- [Permission Dispatcher](https://github.com/permissions-dispatcher/PermissionsDispatcher)
 
 # Protocol Buffer
 
 一种与语言无关，平台无关，可扩展的序列化结构化数据的方法，用于通信协议，数据存储等。
 
-- https://developers.google.com/protocol-buffers/docs/javatutorial
+- [protocol buffers java tutorial](https://developers.google.com/protocol-buffers/docs/javatutorial)
 
 # RenderScript
 
 > **Renderscript**（渲染脚本）是[Android操作系统](https://zh.wikipedia.org/wiki/Android)上的一套[API](https://zh.wikipedia.org/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%8E%A5%E5%8F%A3)。它基于[异构计算](https://zh.wikipedia.org/wiki/%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97)思想，专门用于密集型计算。 — Wikipedia
 
-
-
-- https://www.developer.com/ws/android/development-tools/writing-native-android-code-ndk-vs.-renderscript.html
+- [NDK VS Renderscipt](https://www.developer.com/ws/android/development-tools/writing-native-android-code-ndk-vs.-renderscript.html)
 
 - [Renderscript WIkipedia](https://zh.wikipedia.org/wiki/Renderscript)

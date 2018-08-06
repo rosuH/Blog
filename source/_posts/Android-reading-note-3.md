@@ -87,7 +87,7 @@ private Thread.UncaughtExceptionHandler mUncaughtExceptionHandler;
     private void exception(){
         Thread thread = new Thread(new Runnable() {
             @Override
-            public void run() { 
+            public void run() {
                 throw new RuntimeException("===Test===");
             }
         });
@@ -132,7 +132,7 @@ private Thread.UncaughtExceptionHandler mUncaughtExceptionHandler;
 
 ```java
 ...
-// 新建一个含有 object1 的 WeakReference 对象    
+// 新建一个含有 object1 的 WeakReference 对象
 WeakReference<Object>() weakRef = new WeakReference<>(object1);
 // 使用
 Object object = weakRef.get();
@@ -320,7 +320,7 @@ request = new Request.Builder()
 
 ```java
 File file = new File(localUrl, fileName);
-fileOutputStream = new FileOutputStream(file, true);                    
+fileOutputStream = new FileOutputStream(file, true);
 ```
 
 *参看*：
