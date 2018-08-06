@@ -14,6 +14,7 @@ description: "网易云目前官方只支持到 Ubuntu 16.04，尚未支持 17.1
 ---
 
 # 前言
+
 网易云目前官方只支持到 Ubuntu 16.04，尚未支持 17.10。但是作为抖脚党是不能就此罢休的。
 
 # 1. 下载与安装
@@ -69,6 +70,7 @@ Received signal 11 SEGV_MAPERR 000008003119
  trp: 000000000000000e msk: 0000000000000000 cr2: 0000000008003119
 [end of stack trace]
 ```
+
 之类的错误咯。
 
 虽然看不出是什么问题...但是通过对网上类似问题的总结，我试了一下，关闭 sandbox 环境可以勉强解决。
@@ -76,9 +78,10 @@ Received signal 11 SEGV_MAPERR 000008003119
 ```shell
 sudo netease-cloud-music --no-sandbox %U
 ```
+
 这样就可以启动了吧？
 
-### 才不要每次都用命令行
+## 才不要每次都用命令行
 
 那就修改我们的 `desktop` 配置文件咯。
 
@@ -95,7 +98,7 @@ Exec=netease-cloud-music --no-sandbox %U
 
 这样保存之后重启应该就可以咯。
 
-#### 参看
+*参看*:
 
 - [Ubuntu17.10<解决安装完网易云音乐无法打开>](http://blog.csdn.net/gpwner/article/details/78347516)
 - [Ubuntu 17.10 can not run netease-cloud-music](https://stackoverflow.com/questions/46885202/ubuntu-17-10-can-not-run-netease-cloud-music/47176481#47176481) -- 这答案其实是我回答的 :P

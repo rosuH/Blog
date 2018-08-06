@@ -20,8 +20,6 @@ description: "本文章记录的是，『Android编程权威指南』第 21 章�
 
 我们一起来看看这一章的编程挑战是什么？
 
-
-
 # 问题：使用 SeekBar 控制播放速率
 
 > 让用户快速多听一些声音，请给BeatBox应用添加播放进度控制功能。完成后的界面如图
@@ -29,35 +27,25 @@ description: "本文章记录的是，『Android编程权威指南』第 21 章�
 > android/widget/SeekBar.html）控制 SoundPool 的 play(int, float, float, int, int, float)
 > 方法的播放速率参数值。
 
-
-
-![](https://img.ioioi.top/wiki/SumatraPDF_2018-03-27_08-22-18.png)
+![效果图](https://img.ioioi.top/wiki/SumatraPDF_2018-03-27_08-22-18.png)
 
 请诸位一定要好好阅读题目...此处只讲了使用`seekbar`控制播放的速率参数。没有说要做其他的功能。
 
 当时我脑袋瓜子可能没转过弯，于是想着顺便把播放控制都做出来...于是设计了下面的界面：
 
-![](https://img.ioioi.top/wiki/studio64_2018-03-27_08-39-30.png)
-
-
-
-
+![界面1](https://img.ioioi.top/wiki/studio64_2018-03-27_08-39-30.png)
 
 然后逐渐开始工作的时候，发现了一个致命的问题...
 
-### soundpool 不支持进度控制！
+## soundpool 不支持进度控制！
 
 原设计来说，`soundpool`就是用来播放短促的音效的，所以也就没有了播放进度控制的功能。这样的话，也就必须舍弃掉上面的功能了。
 
 废话不多说，我们先来看看该怎么做这个编程挑战。
 
-
-
-##  seekbar 了解一下？
+## seekbar 了解一下？
 
 我们可以直接去看看[官方文档](https://developer.android.com/reference/android/widget/SeekBar.html)怎么说：
-
-
 
 > A SeekBar is an extension of ProgressBar that adds a draggable thumb. The user can touch the thumb and drag left or right to set the current progress level or use the arrow keys. Placing focusable widgets to the left or right of a SeekBar is discouraged.
 
@@ -69,17 +57,13 @@ description: "本文章记录的是，『Android编程权威指南』第 21 章�
 
 意思是，我们可以通过给`seekbar`添加一个`onSeekBarChangeListener`监听器来通知用户对进度做了哪些改变。然后可以在监听器里做一些响应动作。
 
-
-
-###  seekBar  Demo
+## seekBar  Demo
 
 我们写一个小 Demo 做一下示范。新建一个`SeekBarDemo`项目。
 
 - 布局文件如下
 
-
-
-*activity_main.xml*
+*activity_main.xml*:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -102,15 +86,9 @@ description: "本文章记录的是，『Android编程权威指南』第 21 章�
 
 布局文件挺简单，一个`TextView`用来展示 `SeekBar`的`progress`，还有一个`SeekBar`。
 
-
-
 - 控制器文件如下
 
-
-
-*MainActivity.java*
-
-
+*MainActivity.java*:
 
 ```java
 public class MainActivity extends AppCompatActivity {
@@ -146,13 +124,9 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-
-
 这里的内容也简单，先实例化`TextView`和`SeekBar`组件，然后为后者添加一个`setOnSeekBarChangeListener`监听器。
 
 监听器内共三个方法，按**执行顺序**排列如下：
-
-
 
 - `onStartTrackingTouch`
   - 当触碰到`SeekBar`时，此方法被调用
@@ -164,17 +138,11 @@ public class MainActivity extends AppCompatActivity {
   - 当手离开`SeekBar`时，此方法被调用
   - 文件中为弹出一个 `Toast`
 
-
-
 效果如下：
 
 ![seekbarDemo](https://img.ioioi.top/wiki/seekbarDemo.gif)
 
-
-
 学会了如何使用`SeekBar`，接下来我们就可以开始做我们的编程调整了。
-
-
 
 ## 完成挑战
 
@@ -187,8 +155,6 @@ public class MainActivity extends AppCompatActivity {
 - 在监听器中控制播放的速率
   - 如何是操作更人性化？
 
-
-
 ### 在哪个布局里面添加 SeekBar 呢？
 
 我的建议是在`activity_fragment.xml`文件里，这个文件是托管`fragment`的`acitivity`的布局文件。
@@ -197,9 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
 我给出我的布局文件，因为我添加了三个控制按钮，所以嵌套多了一层。你可以选择不添加那三个按钮。
 
-*activity_fragment.xml*
-
-
+*activity_fragment.xml*:
 
 ```xml
 <RelativeLayout android:layout_width="match_parent"
@@ -262,61 +226,46 @@ public class MainActivity extends AppCompatActivity {
 
 </RelativeLayout>
 
-
 ```
-
-
-
-
 
 ### 实例化 SeekBar 并为之添加一个监听器
 
 我选择在`BeatBoxFragment.java`文件中实例化。
 
-*BeatBoxFragment.java*
-
-
+*BeatBoxFragment.java*:
 
 ```java
 public class BeatBoxFragment extends Fragment {
-    private SeekBar mSeekBar;		// seekbar 引用
-    private TextView mPlayTitle;	// 显示播放速率的 TextView
-    private float mProgress;		// 保存 progress
-    private Sound mSound;			// 保存 sound 变量
+    // seekbar 引用
+    private SeekBar mSeekBar;
+    // 显示播放速率的 TextView
+    private TextView mPlayTitle;
+    // 保存 progress
+    private float mProgress;
+    // 保存 sound 变量
+    private Sound mSound;
     ...
-    
+
     // 在 onCreateView 方法中实例化 SeekBar
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         ...
-     	mSeekBar = getActivity().findViewById(R.id.seek_bar);
+        mSeekBar = getActivity().findViewById(R.id.seek_bar);
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-               
-            }
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-               
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
     }
 }
 ```
 
-
-
-
-
 现在我们实例化好了`SeekBar`，也为之添加了一个空的监听器。接下来我们要考虑如何在监听器中操作播放速率，并且如何让操作更加人性化。
-
-
 
 ### 实现监听器
 
@@ -331,8 +280,6 @@ public class BeatBoxFragment extends Fragment {
 
 ![SeekBar 交互](https://img.ioioi.top/wiki/chrome_2018-03-27_09-34-41.png)
 
-
-
 于是，我们得到的判断：
 
 - 在`onStartTrackingTouch`中向`BeatBox`发送停止播放指令
@@ -342,26 +289,21 @@ public class BeatBoxFragment extends Fragment {
   - 同时设置`mPlayTitle`提示信息
 - 在`onStopTrackingTouch`调用`BeatBox.play(sound)`方法进行播放
 
-
-
 现在我们可以开始用代码实现了。
 
 - 首先，我们实现`BeatBox`里面，对`sound`变量的保存和返回
 
-
-
-*BeatBox.java*
-
-
+*BeatBox.java*:
 
 ```java
 public class BeatBox
 {
-    private float mRate;	// 实例变量，保存用户调整的播放速率
-    private Sound mSound;	// 实例变量，保存正在或将要播放的 sound 变量
-    
-    public void play(Sound sound)
-    {
+    // 实例变量，保存用户调整的播放速率
+    private float mRate;
+    // 实例变量，保存正在或将要播放的 sound 变量
+    private Sound mSound;
+
+    public void play(Sound sound) {
         Integer soundId = sound.getSoundId();
         if (soundId == null){
             return;
@@ -369,8 +311,7 @@ public class BeatBox
         mSoundPool.play(soundId, 1.0f, 1.0f, 1, 0, this.getRate());
         mSound = sound;
     }
-    
-    
+
     public Sound getSound()
     {
         return mSound;
@@ -379,56 +320,40 @@ public class BeatBox
 }
 ```
 
-
-
 这里我们做了两步，在`play`方法中，把每一次的`sound`变量都赋给`mSound`，这样，就不用担心播放时长太短，获取不到正在播放的`sound`了。
 
 然后为`mSound`设置一个`getter`方法就行了。
 
-
-
 - 然后是监听器实现
 
-
-
-*BeatBoxFragment.java*
-
-
+*BeatBoxFragment.java*:
 
 ```java
 mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
 {
     @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) 
-    {
-        if (progress == 0)
-        {
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (progress == 0) {
             mProgress = 0.5F;
-        }
-        else 
-        {
+        }else {
             mProgress = progress * 0.015F + 0.5F;
         }
-        
+
         mPlayTitle.setText("Rate: " + mProgress + " x");
         mBeatBox.setRate(mProgress);
     }
 
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) 
-    {
+    public void onStartTrackingTouch(SeekBar seekBar) {
         mSound = mBeatBox.getSound();
     }
 
     @Override
-    public void onStopTrackingTouch(SeekBar seekBar) 
-    {
+    public void onStopTrackingTouch(SeekBar seekBar) {
         mBeatBox.play(mSound);
     }
 });
 ```
-
-
 
 这里的实现就和我们思路里说的差不多了。此处就不再赘述。
 
@@ -444,47 +369,6 @@ mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
 
 你可以启动程序试试看那些惊悚的声音通过不同倍速播放出来的感觉...有点滑稽。哈哈。
 
-
-
 -----
 
 我利用了书里的例子，照猫画虎实现了目标功能。但是由于资历尚且、水平有限，可能存在诸多缺漏和不恰当的地方，还请诸君多多指正！谢谢~
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -10,8 +10,6 @@ categories:
 - '日常'
 ---
 
-
-
 # 前言
 
 因为早上想用[咕咕机](https://www.memobird.shop/)（Memobird）打印一下天气，发现他还有 Web 版本。然后想着能不能打包成一个`.exe`，直接丢到桌面执行，不想每次都打开浏览器、网页什么的...
@@ -21,8 +19,6 @@ categories:
 因为个人不需要添加过多的功能，所以使用门槛较低的 NW.js 来实现。如果你需要添加更多自定义的功能，可以考虑使用前者来完成你的开发工作。
 
 下面是过程。
-
-
 
 # 1. 软件准备
 
@@ -45,27 +41,21 @@ categories:
   - 用于修改程序的 `icon`
   - 需要下载并安装
 
-
-
 # 2. 打包
 
 第一步里，我们解压了 NW.js 的压缩包，现在我们进入该目录。然后着手开始我们的工作。
 
-![](https://img.ioioi.top/wiki/explorer_2018-03-08_15-43-42.png)
+![pic1](https://img.ioioi.top/wiki/explorer_2018-03-08_15-43-42.png)
 
 ## 2.1 创建一个项目文件夹
 
-
-
 在当前目录下创建一个文件夹并**进入**。文件夹命名随意，比如我命名为`memobird`。
 
-![](https://img.ioioi.top/wiki/explorer_2018-03-08_15-45-08.png)
-
-
+![pic2](https://img.ioioi.top/wiki/explorer_2018-03-08_15-45-08.png)
 
 接着我们在当前目录下，创建两个文件：`index.html`和`package.json`。
 
-![](https://img.ioioi.top/wiki/explorer_2018-03-08_15-47-37.png)
+![pic3](https://img.ioioi.top/wiki/explorer_2018-03-08_15-47-37.png)
 
 - `index.html`
   - 打包后程序的入口文件，你可以在这个文件里设置一个跳转链接到目标网站
@@ -164,20 +154,16 @@ categories:
 - 直接将 `nw.exe`拖入程序窗口
 - 在左侧目录中找到`Icon Group`目录，并在子文件中找到默认图标
 
-![](https://img.ioioi.top/wiki/2018-03-08_16-18-52.png)
-
-
+![pic](https://img.ioioi.top/wiki/2018-03-08_16-18-52.png)
 
 - 接着右击该图标，选择 replace icon
   - 然后选择刚刚我们做的图标并替换即可
 
-![](https://img.ioioi.top/wiki/2018-03-08_16-20-13.png)
-
-
+![pic](https://img.ioioi.top/wiki/2018-03-08_16-20-13.png)
 
 最后保存更改并退出。
 
-**虽然现在已经更改了，但是因为 windows 存在图标缓存，所以并没有发生变化。你可以将`nw.exe`复制到其他文件夹，就会看到变化了。**
+**虽然现在已经更改了，但是因为 windows 存在图标缓存，所以并没有发生变化。你可以将`nw.exe`复制到其他文件夹，就会看到变化了**。
 
 ##  2.3 打包文件
 
@@ -187,7 +173,7 @@ categories:
 copy /b nw.exe+memobird.nw mimobird.exe
 ```
 
-![](https://img.ioioi.top/wiki/2018-03-08_16-25-06.png)
+![pic](https://img.ioioi.top/wiki/2018-03-08_16-25-06.png)
 
 - `memobird.nw`是我们创建并复制过来的
 - `memobird.exe`  将要是打包后并生成的文件的名字
@@ -196,13 +182,9 @@ copy /b nw.exe+memobird.nw mimobird.exe
 
 现在便可以打开`memobird.exe`看看效果了。
 
-
-
 目前该文件只能在当前目录下运行，因为他需要一些资源文件。
 
 接着，我们便把资源文件也一并打包进去。
-
-
 
 # 3. 构建单文件执行程序
 
@@ -211,15 +193,13 @@ copy /b nw.exe+memobird.nw mimobird.exe
 
 接着打开我们的工作目录，把所有文件都拖进下面的空白中：
 
-![](https://img.ioioi.top/wiki/2018-03-08_16-31-06.png)
+![pic4](https://img.ioioi.top/wiki/2018-03-08_16-31-06.png)
 
 其中：`memobird.exe, memobird.nw`都是不需要的，你可以自己删掉。
 
 然后点击“执行封包”按钮开始封包。
 
-![](https://img.ioioi.top/wiki/2018-03-08_16-32-40.png)
-
-
+![pic5](https://img.ioioi.top/wiki/2018-03-08_16-32-40.png)
 
 等待封包完成即可。
 
@@ -227,28 +207,11 @@ copy /b nw.exe+memobird.nw mimobird.exe
 
 实际上类似于浏览器的模式。
 
-![](https://img.ioioi.top/wiki/2018-03-08_16-37-34.png)
+![pic6](https://img.ioioi.top/wiki/2018-03-08_16-37-34.png)
 
 -----
 
-参看：
+*参看*：
 
 - [使用NW将我们开发的网站打包成桌面应用](https://www.kancloud.cn/mikkle/thinkphp5_study/467061)
 - [修改 node-webkit 的默认图标](http://keenwon.com/1311.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

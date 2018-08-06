@@ -14,8 +14,11 @@ description: "本文主要讲述我对 HTTPS 的了解的一些过程，包括�
 # 1.0 什么是HTTPS？
 
 1. [HTTPS](https://zh.wikipedia.org/wiki/%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE) == HTTP + [SSL](https://en.wikipedia.org/wiki/Transport_Layer_Security)
+
 2. [数字证书认证机构](https://zh.wikipedia.org/wiki/%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6%E8%AE%A4%E8%AF%81%E6%9C%BA%E6%9E%84)、[数字证书](https://zh.wikipedia.org/wiki/%E9%9B%BB%E5%AD%90%E8%AD%89%E6%9B%B8)
-### 1.1 客户端通过HTTPS和服务器通信过程
+
+## 1.1 客户端通过HTTPS和服务器通信过程
+
 经过上面的一些资料的补充，相信你已经对HTTPS有了基本的认知了，下面我简介一下HTTTPS通信、证书和认证的一些细节
 
 1. CA(数字证书认证机构)和你服务器的关系
@@ -36,21 +39,24 @@ description: "本文主要讲述我对 HTTPS 的了解的一些过程，包括�
       值得注意的是，上述中，只有与之对应的密钥才能解密，而又因为不同客户端得到了不同的公钥，故而别人无法使用其他密钥进行解密。
       如果你有一个疑问，那就是『HTTPS能否被劫持吗？』
       那么我们假设黑客（*他的服务器为C*）想要获取我们的加密信息内容，他大概可以这么入手（肯定有其他方式，然而我不是黑客我想不到...）:
+
 - 获取私玥
     - **反向解密出私玥**：目前基本不可能做到...
     - **拿下CA**:获得所有其名下的证书、私玥。基本不可能，但是还是该选一家靠谱的CA才行...
+
 - 欺骗服务器和浏览器
     - 第一种方式：C作为中间人，替换服务器发下的公钥为C的假公钥；C接受客户端利用假公钥加密的信息并使用自己的私钥解密。
-
-
     - 第二种方式：大致同上，但是此时C和服务器形成HTTPS然而客户端和C只是HTTP，也就是剥离ssl层。
+
 - 解密（一定需要私钥）
     我就不班门弄斧了，总之就是现在，比较安全就是了。
     你可以参看下面的资料：
 1. [https可能被这样劫持吗](http://www.zhihu.com/question/22795329)
 2. [使用HTTPS的网站也能被黑客监听到数据吗？](http://www.zhihu.com/question/22779469)
 3. [基于SSLStrip的HTTPS会话劫持](http://wenku.baidu.com/view/def00c6858fafab069dc02f1.html)
+
 # 2.0 部署HTTPS
+
 部署HTTPS有简单也有稍显麻烦，更有一劳永逸的；我尝试*雨露均沾*一下...
 同时，我下面写的一般都是**DV证书**，也就是域名核准证书。
 这一类证书**只验证域名所有权，加密链接；并不会验证申请者的真实身份或组织**。
@@ -60,8 +66,10 @@ description: "本文主要讲述我对 HTTPS 的了解的一些过程，包括�
 而且，主流浏览器的状态栏都会显示小绿锁。
 DV和OV型证书在用户查看证书的详情是，OV型证书会在证书的Subject中显示域名+单位名称等信息；DV型证书只会在证书的Subject中显示域名。
 
-### 2.1 商业CA的免费DV证书申请
+## 2.1 商业CA的免费DV证书申请
+
 这一类算是比较简单的，步骤都可以简述出来：
+
 1. 递交申请
 2. 验证域名所有权
 3. 服务器绑定证书
@@ -69,14 +77,15 @@ DV和OV型证书在用户查看证书的详情是，OV型证书会在证书的Su
 
 -----
 
-*update 2016-11-11*
+*update 2016-11-11*:
 
-**谷歌和火狐相继宣布停止信任沃通和 StartCom 的证书，在 2016 年 10 月 21 日后被签发的证书都将不被信任**
+**谷歌和火狐相继宣布停止信任沃通和 StartCom 的证书，在 2016 年 10 月 21 日后被签发的证书都将不被信任**。
 
 - 现在阿里和腾讯都有赛门铁克的一年免费DV证书，推荐使用这一个，很简便
 - 或者使用 Let's Encrypt 申请证书
 
-### 2.2  利用[CloudFlare](https://www.cloudflare.com/)部署HTTPS
+## 2.2  利用[CloudFlare](https://www.cloudflare.com/) 部署HTTPS
+
 为什么要把这个单独出来讲呢？因为我觉得CloudFlare确实比较良心和方便...(以至于我一直被坑...
 
 - 此处的 CF 颁发的证书属于自签证书，只被 CF 自己认可
@@ -88,7 +97,7 @@ DV和OV型证书在用户查看证书的详情是，OV型证书会在证书的Su
 
 // end
 
-#### 2.2.1 利用[CloudFlare](https://www.cloudflare.com/)签发并部署DV证书
+### 2.2.1 利用[CloudFlare](https://www.cloudflare.com/)签发并部署DV证书
 
 1. **把域名托管在[CloudFlare](https://www.cloudflare.com/)**
 
@@ -128,8 +137,6 @@ DV和OV型证书在用户查看证书的详情是，OV型证书会在证书的Su
 
 ![sp160813_112021.png](https://ooo.0o0.ooo/2016/08/12/57ae922467cb0.png)
 
-
-
 5. 选择『ECDSA』算法，并且选择你的服务器类型。这里我选了Nginx。
 
 ![sp160813_112245.png](https://ooo.0o0.ooo/2016/08/12/57ae930ae7d4e.png)
@@ -154,6 +161,7 @@ DV和OV型证书在用户查看证书的详情是，OV型证书会在证书的Su
   实施：
   由于我的网站配置是在单独的配置文件中的，位于`/usr/local/nginx/conf/vhost/www.rosuh.me.conf`，所以我直接修改这个文件。如果你是把网站服务写在nginx的主配置中的，那就修改`/usr/local/nginx/conf/nginx.conf`
 - 修改端口
+
 ```shell
 #原来的配置
 server{
@@ -167,10 +175,12 @@ server{
     server_name ...
 }
 ```
+
 原来通过80端口（http）的访问已经失效了，必须指定443端口访问才行。
 
 - 开启ssl并进行基础配置
-```
+
+```shell
 #从上面的配置接下去，而不是重新写一个server
 server{
     listen 443;
@@ -183,13 +193,19 @@ server{
     ...
 }
 ```
+
 这只是基础配置，评分不高，但是先测试是否可行。
-`service nginx -t &&service nginx -s reload`
+
+```shell
+service nginx -t &&service nginx -s reload
+```
+
 - 重定向80端口
   完成至此，也只是让https可用，也就是用户必须再你的域名前面加上https才行，这样很不友好并且不安全。同时此时你的http不可用哦，因为我们把80端口删掉了，你也可以加上80端口，这样会保证https不可用的时候http还能正常使用。
   如果是不需要80端口，想强制HTTPS访问的，就需要
   配置重定向：
-```
+
+```shell
 server {
     listen 80;
     server_name www.rosuh.me  rosuh.me;
@@ -201,8 +217,8 @@ server {
 
 至此，基础配置HTTPS就算完成了。照道理现在应该可以的了。
 下面介绍另一种方法：
-#### 2.2.2 使用 Let's Encrypt 证书部署HTTPS
 
+### 2.2.2 使用 Let's Encrypt 证书部署HTTPS
 
 这一步和上述有所不同，你需要自行创建私钥和证书申请文件。
 
@@ -224,10 +240,13 @@ server {
 
 - 『提示没有找到openssl.cnf』
   由于环境配置不一，可以使用`find`命令进行查找：
-```
+
+```shell
 find / -name openssl.cnf
 ```
+
 然后替换原来教程的命令行中即可
+
 - 『获取网站证书失败』
   提示：
 >ValueError: Wrote file to /home/xxx/www/challenges/oJbvpIhkwkBGBAQUklWJXyC8VbWAdQqlgpwUJkgC1Vg, but couldn't download http://www.yoursite.com/.well-known/acme-challenge/oJbvpIhkwkBGBAQUklWJXyC8VbWAdQqlgpwUJkgC1Vg
@@ -236,9 +255,11 @@ find / -name openssl.cnf
 
 - 『crontab not found』
   crontab没有安装的缘故，使用下面命令进行安装：
-```
+
+```shell
 yum install cronie
 ```
+
 接着我们要进行Cloudflare的设置才能正常访问，并且获得测试的正确结果。
 或者在申请完证书之后，就把域名DNS修改为其他的服务商，比如阿里。
 
@@ -262,8 +283,6 @@ yum install cronie
 
 -----
 
-
-
 一些额外的补充：
 如果你是用的是wordpress的话，相信你需要迁移一些文件，并且修改一些设置。
 你可以参看：
@@ -271,10 +290,10 @@ yum install cronie
 
 -----
 
-
-
 # 3.0 年轻时犯的错误
+
 最初作为一个连 nginx 是什么的年轻人，折腾这个小绿锁确实用了一些时间，吃过一些苦头...
+
 1. 不知道什么是HTTPS
 2. 不理解CA、证书、公钥和私钥之类的基础知识
 3. 不懂nginx配置里都是什么意思
@@ -283,8 +302,8 @@ yum install cronie
 
 不过解决的方法归结起来就一句话？
 
-
 『不会就谷歌』
+
 -----
 
 一些你可能有用处的参考资料：

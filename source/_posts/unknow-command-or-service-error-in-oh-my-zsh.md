@@ -29,7 +29,7 @@ compdef: unknown command or service: git
 
 这个问题可能是 Git 版本相关，具体原因不清楚，由此引发的 zsh 运行出错。
 
-## 解决方法
+# 解决方法
 
 在 oh-my-zsh 的 issue 中有很多人有如下解决方法：
 
@@ -43,7 +43,7 @@ compinit
 一般情况下，上述两个命令进行手动初始化之后就没问题。不过后来版本的`zsh`貌似会对`.zcompdump`进行重命名，也就是生成带有版本号的`.zcompdump`诸如：`.zcompdump-modhelius-dell-5.0.2`。
 可能是在特殊环境下需要采用这样的做法，比如在 Cygwin 中。
 
-### Cygwin 中解决方法
+# Cygwin 中解决方法
 
 执行：
 
@@ -54,9 +54,9 @@ cp .zcompdump .zcompdump-$HOSTNAME-$ZSH_VERSION
 
 这样就生成了特定版本的`.zompdump`文件。此时应该就恢复正常了。
 
-
 -----
-### 资料索引：
+*参看*：
+
 - [compdef: unknown command or service: git](https://github.com/robbyrussell/oh-my-zsh/issues/630)
 - [Babun FAQ](http://babun.github.io/faq.html)
 - [Completion System](http://www.csse.uwa.edu.au/programming/linux/zsh-doc/zsh_23.html)
