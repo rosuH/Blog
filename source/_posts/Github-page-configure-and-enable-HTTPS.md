@@ -15,8 +15,8 @@ description: "因为本博客迁移到了 GitHub Page，加之个人的 wiki 站
 因为本博客迁移到了 GitHub Page，加之 [个人的 wiki](https://wiki.rosuh.me) 站点亦是使用 Hexo 托管在 GitHub Page 的，故而想将两个站点都配置到一个域名下面，分为两个子域名：
 
 ```shell
-	blog.rosuh.me
-	wiki.rosuh.me
+blog.rosuh.me
+wiki.rosuh.me
 ```
 
 下面是具体配置步骤：
@@ -26,21 +26,20 @@ description: "因为本博客迁移到了 GitHub Page，加之个人的 wiki 站
 GitHub Page 支持自定义域名，只需要在仓库的默认分支根目录下创建一个 `CNAME` 文件，里面填上你想要的域名即可。以我的博客为例，我的 `CNAME` 文件内容如下：
 
 ```shell
-	blog.rosuh.me
+blog.rosuh.me
 ```
 
 相同的，在我 wiki 站点的目录亦需要添加如下 `CNAME` 文件：
 
 ```shell
-
-	wiki.rosuh.me
+wiki.rosuh.me
 ```
 
- **注意事项** ：如果你为某一个站点设定了子域名，那么意味着你不能在其他站点中填入诸如下面的域名： 
+ **注意事项** ：如果你为某一个站点设定了子域名，那么意味着你不能在其他站点中填入诸如下面的域名：
 
 ```shell
-	www.rosuh.me
-	*.rosuh.me
+www.rosuh.me
+*.rosuh.me
 ```
 
 因为通配符或者未指定子域名的情况，会和指定子域名的仓库冲突。
@@ -57,8 +56,8 @@ GitHub Page 支持自定义域名，只需要在仓库的默认分支根目录�
  **注意事项** ：可以看到我的域名为 `rosuh.me` ，而 GitHub page 给我的默认域名为 `rosuh.github.io` （据你的 GitHub 用户名而定），而我要添加的子域名分别为：
 
 ```shell
-	blog.rosuh.me
-	wiki.rosuh.me
+blog.rosuh.me
+wiki.rosuh.me
 ```
 
 耐心等待 DNS 刷新即可。
@@ -69,7 +68,7 @@ GitHub Page 支持自定义域名，只需要在仓库的默认分支根目录�
 
 GitHub Page 目前（2017）仍旧没有提供自定义域名的 HTTPS。我们可以使用 [CloudFlare](https://www.cloudflare.com/) 的 CDN 实现 ”曲线救国“。
 
-在 [CloudFlare](https://www.cloudflare.com/) 的 `Crypto` 选项中，我们选择 `Flexible` 
+在 [CloudFlare](https://www.cloudflare.com/) 的 `Crypto` 选项中，我们选择 `Flexible`
 
 ![SSL 配置](https://img.ioioi.top/blog-img/163904181.png)
 
@@ -84,7 +83,7 @@ GitHub Page 目前（2017）仍旧没有提供自定义域名的 HTTPS。我们�
 
 **但是现在，我们的用户依旧可以选择使用 HTTP 的方式链接到我们的网站，因为我们没有设置强制 HTTPS 服务，所以这样依旧有被剥离攻击的危险** 。
 
-*为了验证这个说法，你可以直接输入域名进行访问，你会发现直接执行的是 HTTP 协议* 
+*为了验证这个说法，你可以直接输入域名进行访问，你会发现直接执行的是 HTTP 协议* 。
 
 ## 3.1 启用强制 HTTPS 访问服务（HSTS）
 
@@ -106,8 +105,6 @@ HSTS 指的是强制使用 HTTPS 服务，但是首次链接并不包含在其�
 
 接着看到下面的 `HTTP Strict Transport Security (HSTS)` ，仔细阅读完 CloudFalre 给你的提示，然后在 `Enable HSTS` 处切换为 `on` 就大功告成啦。
 
-![](https://img.ioioi.top/blog-img/20170802/165307762.png)
-
 到现在我们的文章标题就实现得差不多啦。
 
 本文利用了 GitHub page 和 CloudFlare 就轻松完成了从无到有，从有到赞的配置过程。
@@ -120,11 +117,9 @@ CloudFlare 是不是很赞啊？下面再介绍一个 CloudFlare 的功能：
 
 比如我想要访问主域名 `rosuh.me` 的时候直接跳转到我的博客，那么我可以添加一个规则如下：
 
-![](https://img.ioioi.top/blog-img/170044210.png)
+![page rules](https://img.ioioi.top/blog-img/170044210.png)
 
 这样就可以直接跳转到我的博客啦。
-
-
 
 ------
 

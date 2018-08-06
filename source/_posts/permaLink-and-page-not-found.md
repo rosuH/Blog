@@ -10,8 +10,6 @@ categories:
 - '博客折腾指南'
 ---
 
-
-
 - 前言
   这绝对是我自己做死....
 - 问题描述
@@ -29,6 +27,7 @@ categories:
     如果是Nginx，则直接在配置文件（可能你是单独虚拟机的配置文件）`nginx.conf`，写重定向从『新的固定链接』到『默认链接』。
 
 后来Wordpress更新了新的固定链接修改方法，如果你是用的是[lnmp一键脚本](http://lnmp.org)的话，在部署的时候，就可以选择你的固定链接（伪静态）选项了，这样，下面的配置文件就会自动保存在nginx的conf目录。
+
 ```shell
 #在nginx的conf中，新建wordpress.conf文件，把下面代码粘贴进去
 location / {
@@ -40,14 +39,16 @@ rewrite /wp-admin$ $scheme://$host$uri/ permanent;
 #root那一行，下面加上：
 include wordpress.conf
 ```
+
 接着测试一下配置文件:
-`/usr/local/nginx/sbin/nginx/ -t`
+
+```shell
+/usr/local/nginx/sbin/nginx/ -t
+```
+
 然后重启就行啦。
 
-
-
 -----
-
 
 之所以是做死，是因为，本来我有这个文件，
 然而我自己把它删了....

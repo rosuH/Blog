@@ -33,21 +33,19 @@ Google 没有提供 Android Studio（后文称为 AS） 的软件源，所以我
 
 1. 解压下载的压缩包并移动至目标文件
 
+    ```shell
+    unzip xxx.zip -d /usr/local/
+    ```
 
-```shell
-unzip xxx.zip -d /usr/local/
-```
-
-此处我将解压出来的文件夹移到了 `/usr/local/`中，也就是 AS 的程序所在的路径了。
+    此处我将解压出来的文件夹移到了 `/usr/local/`中，也就是 AS 的程序所在的路径了。
 
 2. 命令行运行 AS
 
-在命令行执行
+    在命令行执行
 
-
-```shell
-/usr/local/android-studio/bin/studio.sh
-```
+    ```shell
+    /usr/local/android-studio/bin/studio.sh
+    ```
 
 就会首次运行 AS 了。
 
@@ -76,7 +74,7 @@ sudo systemd-resolve --flush-caches
 
 现在重新继续运行 AS 就可以更新啦。以后也会从这个 IP 下载文件，速度很快。
 
-# 3. 设置 JDK 
+# 3. 设置 JDK
 
 [Set the JDK version](https://developer.android.com/studio/intro/studio-config.html#jdk)
 
@@ -136,13 +134,3 @@ X-Desktop-File-Install-Version=0.22
 
 在该条目中，你需要修改你的 AS 所在的目录，也就是 `Exec` 以及 `Icon` 条目的值。
 保存完毕之后重启电脑就大功告成了。
-
-
-
-
-
-
-
-
-
-

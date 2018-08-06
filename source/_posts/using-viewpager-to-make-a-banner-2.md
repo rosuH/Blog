@@ -34,11 +34,7 @@ description: "本文是系列文章第二篇，这一次我们开始来造轮子
 
 接下来就让我们开工吧。
 
-
-
 # 1. 循环滚动
-
-
 
 `ViewPager`虽然好用，但是并不原生支持循环滚动，也就是你：
 
@@ -51,7 +47,7 @@ description: "本文是系列文章第二篇，这一次我们开始来造轮子
 
 该怎么实现呢？目前也有比较成熟的三个做法：
 
-### 多页面假循环
+## 多页面假循环
 
 - 创建很多个页面，即便我们真正需要展示的时候只有 5 个页面
   - 把起始点放在队列中间，如果到了要展示的第一个页面，继续往左的时候，我们把接下来就把页面设置为最后一个的样式
@@ -62,9 +58,9 @@ description: "本文是系列文章第二篇，这一次我们开始来造轮子
 
 我们把第一个展示的页面设置为 500，那用户需要滑动 499 才会到头。
 
-![](https://img.ioioi.top/wiki/2018-04-21_10-22-02.png)
+![pic](https://img.ioioi.top/wiki/2018-04-21_10-22-02.png)
 
-#### 这样性能会不会很差？
+### 这样性能会不会很差？
 
 - 不会
 
@@ -74,15 +70,11 @@ description: "本文是系列文章第二篇，这一次我们开始来造轮子
 
 记得前面我们说过的，`FragmentPagerAdapter`会默认帮我们创建三个页面，所以这里也只会创建三个页面，超过前中后的其他页面都会被回收。
 
-
-
-###  其余两种实现方法
+### 其余两种实现方法
 
 我们主要使用第一种，理解起来简单易懂，也没有明显的短板。
 
 其余两种方法描述看下面这篇文章：[Android实现真正的ViewPager【平滑过渡】...](https://blog.csdn.net/zhengxiaoyao0716/article/details/48805703)
-
-
 
 ---
 
@@ -98,18 +90,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ...
-    	mViewPager.setAdapter(new FragmentPagerAdapter(fm) {
-            
-            private int mIndex;	// 存储通过 position 计算出正确的数组索引
-            
+        mViewPager.setAdapter(new FragmentPagerAdapter(fm) {
+
+            // 存储通过 position 计算出正确的数组索引
+            private int mIndex;
+
             @Override
             public Fragment getItem(int position) {
                 mIndex = Math.abs(position - START_POSITION) % mStringList.length;
-                
+
                 if (position < START_POSITION && mIndex != 0){
                     mIndex = mStringList.length - mIndex;
                 }
-                
+
                 return PageFragment.newInstance(mIndex);
             }
 
@@ -120,17 +113,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
-        
+
         mViewPager.setCurrentItem(START_POSITION);
 
         ...
     }
-    
-    
 }
 ```
-
-
 
 - 定义两个常量，分别是
   - `MAX_NUMBER`：页面总数，一共 1000 个
@@ -138,9 +127,9 @@ public class MainActivity extends AppCompatActivity {
 
 ```java
 mIndex = Math.abs(position - START_POSITION) % mStringList.length;
-                
+
 if (position < START_POSITION && mIndex != 0){
-	mIndex = mStringList.length - mIndex;
+    mIndex = mStringList.length - mIndex;
 }
 ```
 
@@ -153,7 +142,7 @@ if (position < START_POSITION && mIndex != 0){
 ```java
 @Override
 public int getCount() {
-	return MAX_NUMBER;
+    return MAX_NUMBER;
 }
 ```
 
@@ -165,15 +154,9 @@ public int getCount() {
 mViewPager.setCurrentItem(START_POSITION);
 ```
 
-
-
 这样我们的循环滚动就完成了~快试试看吧。
 
-![](https://img.ioioi.top/wiki/unlimited-circle.gif)
-
-
-
-
+![pic](https://img.ioioi.top/wiki/unlimited-circle.gif)
 
 # 2. 页面指示器
 
@@ -188,8 +171,6 @@ mViewPager.setCurrentItem(START_POSITION);
   - 未选中的样式
 - 添加控件到视图里面
 - 当页面滑动的时候，修改指示器的样式
-
-
 
 ## 创建控件样式
 
@@ -207,8 +188,6 @@ mViewPager.setCurrentItem(START_POSITION);
 </shape>
 ```
 
-
-
 被选中样式：*dot_selected.xml*
 
 ```java
@@ -220,8 +199,6 @@ mViewPager.setCurrentItem(START_POSITION);
     <solid android:color="@color/colorPrimary"/>
 </shape>
 ```
-
-
 
 接着在`activity_main.xml`里加入一个`LinearLayout`布局，后面我们使用代码的方式把小点加入进去：
 
@@ -238,7 +215,7 @@ mViewPager.setCurrentItem(START_POSITION);
         android:background="@android:color/darker_gray"
         android:layout_centerInParent="true">
     </android.support.v4.view.ViewPager>
-    
+
     <LinearLayout
         android:id="@+id/ll_inside"
         android:layout_below="@+id/view_pager_inside"
@@ -250,17 +227,15 @@ mViewPager.setCurrentItem(START_POSITION);
 </RelativeLayout>
 ```
 
-
-
 ## 添加控件到视图中
 
->  此处的代码思路来自[Android ViewPager 无限循环左右滑动（可自动） 实现](https://blog.csdn.net/u012760183/article/details/52230786)。
+> 此处的代码思路来自[Android ViewPager 无限循环左右滑动（可自动） 实现](https://blog.csdn.net/u012760183/article/details/52230786)。
 
 回到`MainActivity.java`中，
 
 ```java
 public class MainActivity extends AppCompatActivity {
-	private List<TextView> mTextViews;
+    private List<TextView> mTextViews;
     private LinearLayout mLinearLayout;
 
     ...
@@ -270,11 +245,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mViewPager = findViewById(R.id.view_pager_inside);
         mLinearLayout = findViewById(R.id.ll_inside);
-        
+
         initCircle();
         ....
     }
-    
+
     ...
     private void initCircle() {
         mTextViews = new ArrayList<>();
@@ -301,8 +276,6 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-
-
 - 定义两个变量
   - `mTextViews`：存放小点的列表
     - 我们的小点其实是由`TetxView`构成，然后背景颜色设置为圆形的
@@ -318,11 +291,11 @@ public class MainActivity extends AppCompatActivity {
 
 ```java
 public class MainActivity extends AppCompatActivity {
-	
+
     ...
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	...
+        ...
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -339,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });  
     }
-    
+
     private void changePoints(int pos){
         if (mTextViews != null){
             for (int i = 0; i < mTextViews.size(); i++){
@@ -369,7 +342,7 @@ private int mIndex;
 
 @Override
 public void onPageSelected(int position) {
-	mIndex = Math.abs(position - START_POSITION) % mStringList.length;
+    mIndex = Math.abs(position - START_POSITION) % mStringList.length;
     if (position < START_POSITION && mIndex != 0){
         mIndex = mStringList.length - mIndex;
      }
@@ -425,10 +398,6 @@ protected void onCreate(Bundle savedInstanceState) {
         mHandler = null; //此处在Activity退出时及时 回收
 }
 ```
-
-
-
-
 
 # 4. 修改过渡动画
 
@@ -499,46 +468,4 @@ mViewPager.setAdapter(...)
 - [Android实现真正的ViewPager【平滑过渡】...](https://blog.csdn.net/zhengxiaoyao0716/article/details/48805703)
 - [Android ViewPager 无限循环左右滑动（可自动） 实现](https://blog.csdn.net/u012760183/article/details/52230786)
 
-
-
-
-
-![](https://img.ioioi.top/wiki/loadcat.gif)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+![cat](https://img.ioioi.top/wiki/loadcat.gif)

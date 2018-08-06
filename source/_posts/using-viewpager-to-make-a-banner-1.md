@@ -32,19 +32,13 @@ description: "本文是系列文章第一篇，先来简单上手 ViewPager"
 
 接下来，我们就从`Viewpager`是什么开始，慢慢来了解他。
 
-
-
 # 1. Viewpager 上手
 
 [官方开发文档：android.support.v4.view.ViewPager](https://developer.android.com/reference/android/support/v4/view/ViewPager.html)
 
-
-
 - `ViewPager`是一个布局管理器，可以作为根布局
   - 因为他继承于`ViewGroup`，常见的布局管理器还有`FrameLayout`, `LinearLayout`等
   - 当他作为根布局时，每一个页面都将占据整个布局
-
-
 
 - `ViewPager`该怎么使用
   - 在布局文件中添加一个`<ViewPager>`标签，此位置作为`ViewPager`容器主体所在
@@ -61,9 +55,7 @@ description: "本文是系列文章第一篇，先来简单上手 ViewPager"
 
 接下来我们开始动手来使用`ViewPager`。
 
-
-
-### 创建 ViewPager 容器和子页面布局文件
+## 创建 ViewPager 容器和子页面布局文件
 
 我们新建一个项目之后，打开默认创建的`activity_main.xml`布局文件中，将内容改为以下代码：
 
@@ -72,7 +64,7 @@ description: "本文是系列文章第一篇，先来简单上手 ViewPager"
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
+
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager_inside"
         android:layout_width="400dp"
@@ -83,13 +75,9 @@ description: "本文是系列文章第一篇，先来简单上手 ViewPager"
 </RelativeLayout>
 ```
 
-
-
 可以看到，布局文件中仅有一个根布局`RelativeLayout`和一个`ViewPager`。
 
 这里的`ViewPager`就是容器主体所在。
-
-
 
 接着我们创建嵌入的页面布局文件：
 
@@ -120,29 +108,25 @@ description: "本文是系列文章第一篇，先来简单上手 ViewPager"
 </LinearLayout>
 ```
 
-
-
 这里面是常规布局，有一个卡片`CardView`和内藏一个的`TextView`。
 
 到时候，滑动的每一个页面的布局模板都来自这个文件，我们只需要在代码里稍微修改，就可以生成特定的页面了。
-
-
 
 现在，我们回到`MainActivity.java`文件中，实例化我们刚刚的`ViewPager`。
 
 ```java
 public class MainActivity extends AppCompatActivity {
-    private ViewPager mViewPager;	// 定义一个 Viewpager 变量
-    
+    // 定义一个 Viewpager 变量
+    private ViewPager mViewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ...
-        mViewPager = findViewById(R.id.view_pager_inside);	// 实例化 ViewPager
+        // 实例化 ViewPager
+        mViewPager = findViewById(R.id.view_pager_inside);
     }
 }
 ```
-
-
 
 接下来我们该干什么呢？当然是为`ViewPager`添加页面了。
 
@@ -164,20 +148,18 @@ public class MainActivity extends AppCompatActivity {
 使用`Alt + Insert`，选择`Override Methods`，然后重写`onCreateView`如下：
 
 ```java
-	private TextView mTextView;
-    private CardView mCardView;    
+    private TextView mTextView;
+    private CardView mCardView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view_pager_fragment, container, false);
-        
+
         mTextView = view.findViewById(R.id.text_view_fragment);
         mCardView = view.findViewById(R.id.card_view);
         return view;
     }
 ```
-
-
 
 我们使用了`LayoutInflater`来将`view_page_fragment.xml`加载为代码里的`View`对象，然后再从`view`对象里，找到我们放置的两个组件：`CardView`和`TextView`。
 
@@ -198,16 +180,14 @@ public class MainActivity extends AppCompatActivity {
 
 ```java
 public class PageFragment extends Fragment {
-   
+
     public static Fragment newInstance(){
-       
+
         return new PageFragment();
     }
-	public View onCreateView ...
+    public View onCreateView ...
 }
 ```
-
-
 
 如果你写过静态`Intent`生成方法，相信这个类生成器也很容易理解了。
 
@@ -223,9 +203,7 @@ public class PageFragment extends Fragment {
 
 我们来看看现在的情况吧：
 
-![](https://img.ioioi.top/wiki/chrome_2018-04-20_22-28-55.png)
-
-
+![pic](https://img.ioioi.top/wiki/chrome_2018-04-20_22-28-55.png)
 
 可以看到，这是典型的 MVC 结构，在这里面呢，`PageFragment`唯一地通过`MainActivity.java`来创建，虽然我们还没有实现这一步。
 
@@ -241,7 +219,7 @@ public class PageFragment extends Fragment {
 
 ```java
 public class PageFragment extends Fragment {
-   
+
     private static final String ARGS_TITLE = "argsTitle";
     private CardView mCardView;
     private TextView mTextView;
@@ -253,11 +231,9 @@ public class PageFragment extends Fragment {
         pageFragment.setArguments(args);
         return pageFragment;
     }
-	public View onCreateView ...
+    public View onCreateView ...
 }
 ```
-
-
 
 在这里面，我们使用了`Bundle`对象来存储要传递的数据，然后使用`setArguement()`方法来把参数附加到新建的`pageFragment`对象里面。
 
@@ -268,22 +244,22 @@ public class PageFragment extends Fragment {
 ```java
 public class MainActivity extends AppCompatActivity {
     ...
-        
+
     private String[] mStringList = {
             "T1", "T2", "T3", "T4", "T5"
     };
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ...
         FragmentManager fm = getSupportFragmentManager();      
         mViewPager.setAdapter(new FragmentPagerAdapter(fm) {
-         
+
             @Override
             public Fragment getItem(int position) {
-                
+
                 String title = mStringList[position];
-                
+
                 return PageFragment.newInstance(title);
             }
 
@@ -301,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
 这里我们先定义了一个字符串数组，来存储文字字符串。也就是之前图片的【模型】区域。
 
 ```java
-FragmentManager fm = getSupportFragmentManager(); 
+FragmentManager fm = getSupportFragmentManager();
 ```
 
 这句代码是获取一个`FragmentManager`，也就是`fragment`的管理器。接下来在`ViewPager`中需要用这个管理器来管理`fragment`。（别担心，这里系统已经帮你做好了，你只要传入一个管理器就行。
@@ -317,7 +293,7 @@ mViewPager.setAdapter(new FragmentPagerAdapter(fm) {
 - `FragmentPagerAdapter`
   - 会提前自动创建：前中后，三个页面
   - 适合页面布局简单的情况
-- `FragmentStatePagerAdapter` 
+- `FragmentStatePagerAdapter`
   - 只会创建一个页面
   - 适合页面布局复杂的情况
 
@@ -358,12 +334,10 @@ mViewPager.setCurrentItem(0);
 
         String title = getArguments().getString(ARGS_TITLE);
         mTextView.setText(title);
-        
+
         return view;
     }
 ```
-
-
 
 现在不就可以了嘛~
 
@@ -371,17 +345,9 @@ mViewPager.setCurrentItem(0);
 
 那你干嘛不加一个`ImageView`进去啊，然后传入一些令人**心旷神怡**的图片还不是美滋滋？
 
-
-
 ![Viewpager](https://img.ioioi.top/wiki/viewpagerdemo.gif)
 
-
-
-
-
-
-
----
+-----
 
 - 本项目地址[**ViewPagerDemo**](https://github.com/rosuH/ViewPagerDemo)
 
@@ -393,11 +359,4 @@ mViewPager.setCurrentItem(0);
 
     ​
 
-#### 接下来的文章会实现**无限循环滑动**、**页面指示器**，敬请期待~
-
-
-
-
-
-
-
+接下来的文章会实现**无限循环滑动**、**页面指示器**，敬请期待~

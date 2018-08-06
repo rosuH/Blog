@@ -22,8 +22,6 @@ description: "本文章记录的是，『Android编程权威指南』第 16 章�
 
 # 问题一：优化照片显示
 
-
-
 > 请创建能显示放大版照片的 DialogFragment。只要点击缩略图，就会弹出这个 DialogFragment，让用户查看放大版的照片。
 
 题目已经给出了提示，就是使用`DialogFragment`来实现这个功能。
@@ -39,16 +37,12 @@ description: "本文章记录的是，『Android编程权威指南』第 16 章�
 
 创建一个*ImageViewerDialog.java* 类，内容如下：
 
-
-
 ```java
 public class ImageViewerDialog extends DialogFragment {
-    
     private static final String ARG_IMAGE_SOURCE = "imageSource";
     private ImageView mImageView;
 
     public static ImageViewerDialog newInstance(String path){
-        
         Bundle args = new Bundle();
         args.putSerializable(ARG_IMAGE_SOURCE, path);
 
@@ -59,28 +53,30 @@ public class ImageViewerDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        
         final String path = (String) getArguments().getSerializable(ARG_IMAGE_SOURCE);
         mImageView = new ImageView(getContext());
-        // 把图片装载到 imageView 
+        // 把图片装载到 imageView
         Point size = new Point();
         getActivity().getWindowManager().getDefaultDisplay().getSize(size); // 获取当前屏幕尺寸
         Glide.with(getActivity())
                 .applyDefaultRequestOptions(new RequestOptions()
-                .placeholder(R.drawable.ic_crime_camera)	// 过渡图片，可选操作
-                .override(size.x, size.y))	// 将图片设置为屏幕尺寸
-                .load(path)				   // 从路径载入图片
-                .into(mImageView);		   // 将图片装入 imageview
-        
+                // 过渡图片，可选操作
+                .placeholder(R.drawable.ic_crime_camera)
+                // 将图片设置为屏幕尺寸
+                .override(size.x, size.y))
+                // 从路径载入图片
+                .load(path)
+                // 将图片装入 imageview
+                .into(mImageView);
+
         return new AlertDialog.Builder(getActivity())
-                .setView(mImageView)	  // 设置 AlertDialog 的 view 为 imageview
+                // 设置 AlertDialog 的 view 为 imageview
+                .setView(mImageView)
                 .create();
     }
 }
 
 ```
-
-
 
 可以看到，这里面由两个方法：
 
@@ -99,22 +95,17 @@ public class ImageViewerDialog extends DialogFragment {
 
 `CrimeFragment.java`
 
-
-
 ```java
 mPhotoView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                
                 updatePhotoview();
-                if (mPhotoFile != null || !mPhotoFile.exists()) 
-                {    
+                if (mPhotoFile != null || !mPhotoFile.exists()) {
                     FragmentManager manager = getFragmentManager();
                     imageViewerDialog = ImageViewerDialog.newInstance(mPhotoFile.getPath());
                     imageViewerDialog.show(manager, DIALOG_IMAGE_SOURCE);
                 }
-                else 
-                {
+                else {
                     mPhotoButton.performClick();
                 }
             }
@@ -128,30 +119,20 @@ mPhotoView.setOnClickListener(new OnClickListener() {
 
 我们来看看第一个分支里做了什么事情：
 
-
-
 ```java
 FragmentManager manager = getFragmentManager();
 imageViewerDialog = ImageViewerDialog.newInstance(mPhotoFile.getPath());
 imageViewerDialog.show(manager, DIALOG_IMAGE_SOURCE);
 ```
 
-
-
 - 获取当前的`FragmentManager`
 - 使用`ImageViewerDialog.newInstance`创建图片展示类
 - 调用`show`方法让当前的`FragmentManager`展示我们的`ImageViewerDialog`
   - 别忘了，`ImageViewerDialog`是一个继承`DialogFragment`的类，也属于`fragment`的哦，所以使用`FragmentManager`来管理显示与否哦
 
-
-
 这样的话，我们就完成了第一个问题。接着，我们继续看第二个问题。
 
-
-
 # 问题二：优化缩略图加载
-
-
 
 > 本章，我们只能大致估算缩略图的目标尺寸。虽说这种做法可行且实施迅速，但还不够理想。
 > Android有个现成的API工具可用，叫作 ViewTreeObserver 。你可以从 Activity 层级结构中
@@ -164,17 +145,18 @@ imageViewerDialog.show(manager, DIALOG_IMAGE_SOURCE);
 
 我们看一下，原文中如何使用 `Bitmap`剪切缩略图的：
 
-*PictureUtils.java*
+*PictureUtils.java*:
 
 ```java
 public class PictureUtils {
     ...
 public static Bitmap getScaledBitmap(String path, Activity activity) {
-        
-		Point size = new Point();
-		activity.getWindowManager().getDefaultDisplay()
-				.getSize(size);
-		return getScaledBitmap(path, size.x, size.y);
+    Point size = new Point();
+    activity
+        .getWindowManager()
+        .getDefaultDisplay()
+        .getSize(size);
+    return getScaledBitmap(path, size.x, size.y);
 }
 ```
 
@@ -182,17 +164,15 @@ public static Bitmap getScaledBitmap(String path, Activity activity) {
 
 ```java
 Bitmap bitmap = PictureUtils.getScaledBitmap(
-				mPhotoFile.getPath(), getActivity());
+    mPhotoFile.getPath(), getActivity());
 mPhotoView.setImageBitmap(bitmap);
 ```
 
-
-
-可以看到，正如题目所描述的，示例中使用的是一个固定的尺寸（`getDefaultDisplay()`为屏幕尺寸）进行剪裁，这样的图片虽然不会变得过大，但是尺寸不精确，难免造成浪费。现在我们使用`ViewTreeObserver `方法来获得子`view`的尺寸，并将之设置为剪裁尺寸。
+可以看到，正如题目所描述的，示例中使用的是一个固定的尺寸（`getDefaultDisplay()`为屏幕尺寸）进行剪裁，这样的图片虽然不会变得过大，但是尺寸不精确，难免造成浪费。现在我们使用`ViewTreeObserver`方法来获得子`view`的尺寸，并将之设置为剪裁尺寸。
 
 当然首先我们得先理解一下什么是`ViewTreeObserver`。
 
-###  ViewTreeObserver 了解一下？
+## ViewTreeObserver 了解一下？
 
 顾名思义，就是`ViewThree`的`Observer`，即是视图树的观察者。在设计模式里面，有一种称为“观察者”模式的东西。
 
@@ -206,11 +186,7 @@ mPhotoView.setImageBitmap(bitmap);
 
 怎么样，是不是思路很清晰？接着我们便可以来实现了。
 
-
-
-*CrimeFragment.java*
-
-
+*CrimeFragment.java*:
 
 ```java
 ...
@@ -223,26 +199,23 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
     ...
     mPhotoView.getViewTreeObserver()
               .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            		@Override
-            		public void onGlobalLayout() {
-                		width = mPhotoView.getWidth();
-                		height = mPhotoView.getHeight();
-                		updatePhotoview();
+                    @Override
+                    public void onGlobalLayout() {
+                        width = mPhotoView.getWidth();
+                        height = mPhotoView.getHeight();
+                        updatePhotoview();
             }
-	});
+    });
     ...
 }
 
 ...
 private void updatePhotoview(){
-    
-        if (mPhotoFile == null || !mPhotoFile.exists())
-        {
+
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
             mPhotoButton.setVisibility(VISIBLE);
             mPhotoView.setClickable(false);
-        }
-    	else 
-    	{
+        }else {
             mPhotoButton.setVisibility(GONE);
             mPhotoView.setClickable(true);
             Bitmap bitmap = PictureUtils.getScaledBitmap(
@@ -251,8 +224,6 @@ private void updatePhotoview(){
         }
 }
 ```
-
-
 
 可以看到：
 
@@ -273,13 +244,11 @@ private void updatePhotoview(){
 
 因为我做的例子，是把图片和照片按钮放在同一个位置，当有图片的时候，不显示拍照按钮，当没有图片的时候，显示拍照按钮。**关于书里的，我们只需要关注第二个分支的最后两句**。
 
-书里面的`PictureUtils`方法里：由两个同名的重载方法`getScaledBitmap`，因为我们重新优化缩略图加载功能，所以我们就不需要第二个剪切方法了。可以把它删掉。（删掉：`getScaledBitmap(String path, Activity activity) `）
+书里面的`PictureUtils`方法里：由两个同名的重载方法`getScaledBitmap`，因为我们重新优化缩略图加载功能，所以我们就不需要第二个剪切方法了。可以把它删掉。（删掉：`getScaledBitmap(String path, Activity activity)`）
 
 然后修改第一个参数列表为：`getScaledBitmap(String path, int destWidth, int destHeight)`。
 
 内部代码如下：
-
-
 
 ```java
 public static Bitmap getScaledBitmap(String path, int destWidth, int destHeight){
@@ -294,7 +263,6 @@ public static Bitmap getScaledBitmap(String path, int destWidth, int destHeight)
         // Figure out how much to scale down by
         int inSampleSize = 1;
         if (srcHeight > destHeight || srcWidth > destWidth){
-            
             float heightScale = srcHeight / destHeight;
             float widthScale = srcWidth / destWidth;
 
@@ -308,13 +276,9 @@ public static Bitmap getScaledBitmap(String path, int destWidth, int destHeight)
     }
 ```
 
-
-
 在这里修改了参数列表，仅此而已。因为我们使用了 `ViewTreeObserver`监视 `imageView`然后会返回该`view`的`width`和`heigh`，所以这里传入该`view`的`width`和`heigh`，也就是精确的缩放尺寸。紧跟着，`getScaledBitmap`这个方法算出缩放比例，重新创建`Bitmap`对象并返回。
 
 我们也就得到了一个精确缩放的`Bitmap`对象。
-
-
 
 到此我们两个编程挑战也就完成了。
 
@@ -333,5 +297,3 @@ public static Bitmap getScaledBitmap(String path, int destWidth, int destHeight)
 - [ViewTreeObserver使用](http://blog.csdn.net/A38017032/article/details/55806436)
 
 感谢~
-
-

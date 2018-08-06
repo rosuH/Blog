@@ -32,17 +32,13 @@ description: "在某件机缘巧合（实际上是曲折的辛酸故事）的事
 
 下面推荐一个很有意思的 Github 项目，他这个实现了诸多寻找路径的算法！还有网页版！你可以看看实现过程以助于你理解算法。
 
-- [PathFinding.js visual ](http://qiao.github.io/PathFinding.js/visual/)
+- [PathFinding.js visual](http://qiao.github.io/PathFinding.js/visual/)
 
 ---
 
-
-
 实现了 js 版本，我想着用我的老本行 Java 来实现故而有了如下的代码。
 
-**注意！因为写得匆忙，所以没有写测试代码。如有错漏，请见谅！并烦请赐教~**
-
-
+**注意！因为写得匆忙，所以没有写测试代码。如有错漏，请见谅！并烦请赐教**~
 
 # A* 算法 Java 实现
 
@@ -251,4 +247,3 @@ public class AStarFinder {
 }
 
 ```
-
