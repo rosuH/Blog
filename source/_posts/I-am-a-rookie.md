@@ -167,9 +167,9 @@ Sub 编排座位()
         .Color = -16776961
         .TintAndShade = 0
     End With
-    
+
 ' 编排座位
-    
+
     Range("I2").Select
     For index = 1 To stuNum
         Randomize

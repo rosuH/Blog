@@ -108,43 +108,37 @@ categories:
 - `windows`
   - 程序窗口设置
 
-
-
 这两个文件编辑好之后，将这两个文件打包为一个`.zip`格式的压缩包，并压缩包后缀改为`.nw`。
 
-![](https://img.ioioi.top/wiki/Snipaste_2018-03-08_15-57-35.png)
+![pic](https://img.ioioi.top/wiki/Snipaste_2018-03-08_15-57-35.png)
 
 *图示为使用 7-zip 压缩软件，你可以使用任何能达到同样效果的压缩软件*。
 
-![](https://img.ioioi.top/wiki/Snipaste_2018-03-08_15-59-19.png)
+![pic](https://img.ioioi.top/wiki/Snipaste_2018-03-08_15-59-19.png)
 
-![](https://img.ioioi.top/wiki/Snipaste_2018-03-08_15-59-30.png)
-
-
+![pic](https://img.ioioi.top/wiki/Snipaste_2018-03-08_15-59-30.png)
 
 接着，把`.nw`后缀的文件，复制到上一目录，也即是我们工作的根目录。
 
-![](https://img.ioioi.top/wiki/2018-03-08_16-03-00.png)
+![pic](https://img.ioioi.top/wiki/2018-03-08_16-03-00.png)
 
 ## 2.2 修改图标
 
 如果你不需要修改图标，那么可以直接跳过这一步。我们在这里需要先修改`nw.exe`的图标，因为待会用`nw.exe`打包之后，默认图标就是`nw.exe`的图标。
 
-打开[ IconWorkshop](http://www.iconworkshop.cn/)软件，不需要选择创建`icon`，而是打开一张你选好的图片会比较快。当然，你也可以自己从零开始创建一个`icon`。
+打开[IconWorkshop](http://www.iconworkshop.cn/)软件，不需要选择创建`icon`，而是打开一张你选好的图片会比较快。当然，你也可以自己从零开始创建一个`icon`。
 
-![](https://img.ioioi.top/wiki/2018-03-08_16-13-21.png)
+![pic](https://img.ioioi.top/wiki/2018-03-08_16-13-21.png)
 
 在图片窗口左上角，找到创建`icon`的功能按钮。
 
-![](https://img.ioioi.top/wiki/2018-03-08_16-14-45.png)
-
-
+![pic](https://img.ioioi.top/wiki/2018-03-08_16-14-45.png)
 
 在弹出的对话框中，你可以自定义图标的信息。如果没什么要求直接确定即可。
 
 点击确定之后，它会回到刚刚的图标窗口，这时候需要保存一下。
 
-![](https://img.ioioi.top/wiki/2018-03-08_16-16-41.png)
+![pic](https://img.ioioi.top/wiki/2018-03-08_16-16-41.png)
 
 这样我们的图标就制作完成了。
 
