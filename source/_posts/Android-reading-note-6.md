@@ -83,6 +83,7 @@ Application --> BufferQueue --> System(Harware) --> User
 等系统侧硬件层渲染完，我们用户就可以在显示屏上看到真正的 UI 了。
 
 ## 结果
+
 现在是不是有点了解这些东西了呢。
 我们回过头看上面那张层次图片，会发现`SurfaceView`和其他普通`View`是区分开的。
 这就是`SurfaceView`的特点啦。`SurfaceView` 其实是`Surface`和`View`的『结合体』。
