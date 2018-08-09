@@ -1,5 +1,5 @@
 ---
-title: "Hexo 博客优化入门（一）"
+title: "Hexo prism 插件导致代码格式错乱"
 date: 2018-08-08 11:15:18
 tags:
 - 'Hexo'
