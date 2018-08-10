@@ -1,5 +1,5 @@
 ---
-title: "Android 札记系列(6)：ButterKnife, RxJava 和 XML"
+title: "Android 札记系列(6)：XML、SurfaceView 和动画"
 date: 2018-08-05 21:41:25
 tags:
 - 'Android'
