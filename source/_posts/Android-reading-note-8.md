@@ -180,7 +180,7 @@ ResultBean result = igetData
 那么如果有其他类型，类似于 `ResultBean` 的，比如 `ImageBean`、`ProductBean` 也被包在这样的格式里面，那么其实我们可以使用泛型定义 `DataBean`。
 
 ```java
-public class DataBean {
+public class DataBean<T> {
 	private String code;
 	private String messga;
 	private T data;
