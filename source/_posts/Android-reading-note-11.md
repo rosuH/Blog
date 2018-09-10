@@ -211,3 +211,16 @@ adb shell screenrecord /sdcard/demo.mp4
 
 - [adb 截屏和录屏命令](https://blog.csdn.net/gdutxiaoxu/article/details/69802895)
 
+
+
+# AndroidVideoCache
+
+[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)一个视频预缓存库，通过一个本地代理来把网络视频流操作得想本地文件流一样舒服~
+
+
+
+附上一个主动`Cache`的示例。
+
+
+
+- [Can I cache video without using videoview? #59](https://github.com/danikula/AndroidVideoCache/issues/59)
