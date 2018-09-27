@@ -76,7 +76,7 @@ MockingBot.dmg ======>>> application/octet-stream
 可以看到，几乎全部格式都识别出来了。而且我这里有一个『浑水摸鱼』的『家伙』，那就是`这本来是张 png 图片.mp4`，人如其名。
 这个也识别出来了（`octet-stream`指的是二进制文件）。
 那 Tika 究竟是怎么做的呢？让我们来看看源码呗。
-篇幅所限，如果你对这个部分有兴趣，可以移步我的另一篇文章[Tika 源码浅析](https://blog.rosuh.me/tika-source-code-analysis/)。
+篇幅所限，如果你对这个部分有兴趣，可以移步我的另一篇文章[Tika 源码浅析](https://blog.rosuh.me/2018/09/tika-source-code-analysis/)。
 
 *这里假设你已经看过了 Tika 源码...*
 
