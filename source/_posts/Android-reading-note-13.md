@@ -16,7 +16,7 @@ description: "本系列是笔者在实践过程中学习或复习到的一些 ti
 
 1. separator: 跨平台文件分隔符，依据不同平台来取不同的值. Windows 下是`\`，Unix 系统下是`/`
 
-2. separatorChar: 把 1 的字符形式
+2. separatorChar: 1 的字符形式
 
 3. pathSeparator: 跨平台的路径分隔符. 比如环境变量之间的分隔符，Unix 下是`:`，Windows 下是`;`
 
