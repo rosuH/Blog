@@ -28,7 +28,7 @@ before_script:
   - git config user.name "rosuh"
   - git config user.email "rosuh@qq.com"
   - sed -i'' "s~https://github.com/rosuh/Blog.git~https://${GITHUB_ACCESS_TOKEN}@github.com/rosuh/Blog.git~" _config.yml
-  - cat _config.xml
+  - cat _config.yml
 
 script:
   - hexo clean
