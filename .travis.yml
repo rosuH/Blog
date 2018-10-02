@@ -25,9 +25,9 @@ install:
 
 # 执行清缓存，生成网页操作
 before_script:
-  - git config user.name "rosuh"
+  - git config user.name "rosuH"
   - git config user.email "rosuh@qq.com"
-  - sed -i'' "s~https://github.com/rosuh/Blog.git~https://${GITHUB_ACCESS_TOKEN}@github.com/rosuh/Blog.git~" _config.yml
+  - sed -i'' "s~https://github.com/rosuH/Blog.git~https://${GITHUB_ACCESS_TOKEN}@github.com/rosuH/Blog.git~" _config.yml
   - cat _config.yml
 
 script:
