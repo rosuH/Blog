@@ -4,7 +4,7 @@
 # Site
 title: rosu 的博客
 subtitle: 你好~
-description: Share, Learn & Do
+description: 『任何足夠先進的科技，皆與魔法無異』
 author: rosuH
 language: zh-CN
 timezone: Asia/Shanghai
@@ -84,7 +84,7 @@ search:
 #theme: Material
 #theme: milk
 #theme: vexo
-theme: even
+theme: cactus
 
 
 # Deployment

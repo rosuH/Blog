@@ -1,0 +1,6 @@
+[submodule "themes/typography"]
+	path = themes/typography
+	url = git@github.com:rosuH/hexo-theme-typography.git
+[submodule "themes/cactus"]
+	path = themes/cactus
+	url = git@github.com:rosuH/hexo-theme-cactus.git
