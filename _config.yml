@@ -81,10 +81,8 @@ search:
   #theme: 'default'
   #line_number: true    # default false
 ## Themes: https://hexo.io/themes/
-#theme: Material
-#theme: milk
-#theme: vexo
-theme: cactus
+theme: vexo
+
 
 
 # Deployment
