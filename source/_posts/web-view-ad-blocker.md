@@ -128,7 +128,7 @@ javascript:(
 
 # 结语
 
-至此，我们简单的实现了对豆瓣移动端网页的拦截。
+至此，我们简单地实现了对豆瓣移动端网页的拦截。
 
 参考链接：
 
@@ -137,4 +137,5 @@ javascript:(
 - [how to get html content from a webview?](https://stackoverflow.com/questions/8200945/how-to-get-html-content-from-a-webview)
 
 - [Any way to hide elements from webview? (android)](https://stackoverflow.com/questions/3029926/any-way-to-hide-elements-from-webview-android)
+
 - [Android block ads in webview](https://stackoverflow.com/questions/24547446/android-block-ads-in-webview)
