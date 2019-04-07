@@ -25,20 +25,4 @@ install:
 script:
   - hexo clean
   - hexo generate
-
-
-  # 接下来是部署到 Firebase Hosting 的配置信息
-deploy:
-  # 默认在部署前会把整个目录恢复到刚拷贝时的状态，但是我们需要上面生成好的文件，故跳过该阶段
-  skip_cleanup: true
-
-  # Travis CI 预置了发布到 firebase 的配置
-  provider: firebase
-  
-  # 配置 Firebase 的用户验证和工程信息，下文会提到
-  token:
-    secure: $FIREBASE_TOKEN
-  project: $FIREBASE_PROJECT
-
-# End: Build LifeCycle
-
+  - firebase deploy --non-interactive --project ${FIREBASE_PROJECT}  --token ${FIREBASE_TOKEN}
