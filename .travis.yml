@@ -12,7 +12,7 @@ cache:
 
 branches:
   only:
-    - master
+    - hexo
 
 before_install:
   - npm install -g hexo-cli
@@ -25,6 +25,7 @@ install:
 script:
   - hexo clean
   - hexo generate
+
 
   # 接下来是部署到 Firebase Hosting 的配置信息
 deploy:
