@@ -10,6 +10,10 @@ cache:
   directories:
     - node_modules
 
+branches:
+  only:
+    - master
+
 before_install:
   - npm install -g hexo-cli
   - npm install -g firebase-tools
