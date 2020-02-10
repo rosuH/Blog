@@ -89,5 +89,5 @@ theme: vexo
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/rosuH/Blog.git
+  repo: git@github.com:rosuH/Blog.git
   branch: master
