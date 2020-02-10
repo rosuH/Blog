@@ -7,7 +7,7 @@ tags:
 - 'SSL'
 
 categories:
-- '博客折腾指南'
+  - "技术" 
 
 description: "为我的新站点启用HTTPS但是仍然遇到了一些障碍..."
 ---

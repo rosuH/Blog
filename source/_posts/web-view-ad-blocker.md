@@ -8,7 +8,7 @@ tags:
   - 'ADBlocker'
 
 categories:
-  - 'Android'
+  - "技术"
 ---
 
 # 前言

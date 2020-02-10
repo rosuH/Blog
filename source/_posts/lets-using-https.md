@@ -7,7 +7,7 @@ tags:
 - 'SSL'
 
 categories:
-- '博客折腾指南'
+  - "技术" 
 
 description: "本文主要讲述我对 HTTPS 的了解的一些过程，包括如何给网站上 HTTPS..."
 ---

@@ -6,11 +6,8 @@ tags:
   - "视频"
   - "文件类型"
   - "Tika"
-
-
 categories:
-  - "Android"
-  - "SourceCode"
+  - "技术"
 
 description: "Tika，一个用于检测和分析文件的库。今天我们来小探其看源码..."
 ---

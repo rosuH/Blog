@@ -10,7 +10,7 @@ tags:
   - "多线程"
 
 categories:
-  - "Android"
+  - "技术" 
 ---
 
 # 1. RxJava 中的异步控制

@@ -9,8 +9,7 @@ tags:
 - 'fragment'
 
 categories:
-- 'Android'
-- 'ViewPager'
+  - "技术"
 
 description: "本文是系列文章第二篇，这一次我们开始来造轮子啦..."
 

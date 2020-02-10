@@ -1,13 +1,13 @@
 ---
 title: "如何在 Ubuntu 对桌面程序使用代理"
+date: 2017-11-8 14:50:40
 tags:
   - 'Ubuntu'
   - 'proxychains'
   - 'desktop'
 
-categories: 
-  - "修复的机体故障"
-  - "修复日志"
+categories:
+  - "技术"
 
 description: "如果你不具备路由器代理的情况，那么我们需要在本地做透明代理。这样的话，对本地代理的使用情况完全取决于第三方程序的支持情况..."
 ---

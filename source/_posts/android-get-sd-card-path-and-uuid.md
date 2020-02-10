@@ -8,7 +8,7 @@ tags:
   - "UUID"
 
 categories:
-  - "Android"
+  - "技术"
 
 description: "本文将展示 Android 中如何获取 SD 卡的路径，以及 SD 卡的唯一标志 UUID..."
 ---

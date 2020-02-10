@@ -6,10 +6,8 @@ tags:
   - "Coroutine"
   - "协程"
   - "翻译"
-
-
 categories:
-  - "Android"
+  - "技术"
 ---
 
 > 原文链接：https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md#basic-ui-coroutines
