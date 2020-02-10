@@ -7,7 +7,7 @@ tags:
 - 'Java'
 
 categories:
-- '算法'
+  - "技术"
 
 description: "在某件机缘巧合（实际上是曲折的辛酸故事）的事情发生之后，我接到了通过 Javascript 实现一个 A* 算法任务..."
 ---

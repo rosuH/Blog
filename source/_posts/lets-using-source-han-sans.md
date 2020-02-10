@@ -7,7 +7,7 @@ tags:
 - 'Wordpress'
 
 categories:
-- '博客折腾指南'
+  - "技术"
 ---
 
 # 思源黑体

@@ -9,9 +9,8 @@ tags:
   - "Tika"
   - "FFmpegMediaMetadataRetriever"
 
-
 categories:
-  - "Android"
+  - "技术"
 
 description: "最近遇到一个需求，需要判断视频文件是否是真正的视频文件。什么意思呢？因为有一些文件虽然后缀是`.mp4`，但是『它的心』却是其他文件的心。所以一旦播放器播放它，可能就会出错了..."
 ---

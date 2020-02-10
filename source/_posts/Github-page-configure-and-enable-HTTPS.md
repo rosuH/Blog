@@ -7,7 +7,7 @@ tags:
 - '子域名'
 
 categories:
-- '博客折腾指南'
+  - "技术"
 
 description: "因为本博客迁移到了 GitHub Page，加之个人的 wiki 站点亦是使用 Hexo 托管在 GitHub Page 的，故而想将两个站点都配置到一个域名下面..."
 ---

@@ -2,13 +2,11 @@
 title: "Ubutnu17.10 安装网易云"
 date: 2017-11-8 14:50:40
 tags: 
-- "netease-cloud-music"
-- "ubuntu"
-- "software"
+  - "netease-cloud-music"
+  - "ubuntu"
+  - "software"
 categories:
-- "札记" 
-- "修复的机体故障"
-- "修复日志"
+  - "技术" 
 
 description: "网易云目前官方只支持到 Ubuntu 16.04，尚未支持 17.10。但是作为抖脚党是不能就此罢休的..."
 ---

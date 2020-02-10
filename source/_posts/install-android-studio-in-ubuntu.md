@@ -6,9 +6,7 @@ tags:
 - "JDK"
 - "desktop"
 categories:
-- "札记" 
-- "修复的机体故障"
-- "修复日志"
+  - "技术" 
 
 description: "本文主要讲述我在 Linux 下安装 Android Studio 的过程..."
 ---

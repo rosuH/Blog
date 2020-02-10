@@ -7,7 +7,7 @@ tags:
 - '代码块'
 
 categories:
-- '博客折腾指南'
+  - "技术" 
 
 description: "之前一段时间都被 Hexo 的代码块格式问题困扰..."
 ---

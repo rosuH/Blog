@@ -4,10 +4,9 @@ date: 2017-9-20 19:59:07
 tags:
 - '虚拟机'
 - 'Mac OS'
-- '折腾'
 
 categories:
-- '折腾'
+  - "技术"
 
 description: "本文主要写了如何安装 MacOS 虚拟机的过程"
 ---

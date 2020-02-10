@@ -9,9 +9,7 @@ tags:
 
 categories:
   - '生活'
-  - '随笔' 
 
-auto_spacing: ture
 ---
 # 可能的未来
 

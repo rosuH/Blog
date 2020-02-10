@@ -6,9 +6,9 @@ tags:
 - "git"
 - "oh-my-zsh"
 - "Cygwin"
-categories: 
-- "修复的机体故障"
-- "修复日志"
+ 
+categories:
+  - "技术" 
 ---
 > OS: Win10
 > Shell: Babun 1.2.0

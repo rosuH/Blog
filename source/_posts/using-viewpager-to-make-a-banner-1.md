@@ -1,6 +1,6 @@
 ---
 title: "手动实现轮播图（一）：ViewPager 入门实践"
-date: 22018-4-20 20:50:48
+date: 2018-4-20 20:50:48
 tags:
 - 'Android'
 - 'viewpager'
@@ -9,8 +9,7 @@ tags:
 - 'fragment'
 
 categories:
-- 'Android'
-- 'ViewPager'
+  - "技术"
 
 description: "本文是系列文章第一篇，先来简单上手 ViewPager"
 ---
