@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      GitHub Page 子域名配置 &amp; 启用 HTTPS | rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>GitHub Page 子域名配置 & 启用 HTTPS</h2>
+  <p class="post-date">2017-08-02</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>因为本博客迁移到了 GitHub Page，加之 <a href="https://wiki.rosuh.me" target="_blank" rel="noopener">个人的 wiki</a> 站点亦是使用 Hexo 托管在 GitHub Page 的，故而想将两个站点都配置到一个域名下面，分为两个子域名：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blog.rosuh.me</span><br><span class="line">wiki.rosuh.me</span><br></pre></td></tr></table></figure>
+
+<p>下面是具体配置步骤：</p>
+<h1 id="1-上传-CNAME-到仓库"><a href="#1-上传-CNAME-到仓库" class="headerlink" title="1. 上传 CNAME 到仓库"></a>1. 上传 CNAME 到仓库</h1><p>GitHub Page 支持自定义域名，只需要在仓库的默认分支根目录下创建一个 <code>CNAME</code> 文件，里面填上你想要的域名即可。以我的博客为例，我的 <code>CNAME</code> 文件内容如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">blog.rosuh.me</span><br></pre></td></tr></table></figure>
+
+<p>相同的，在我 wiki 站点的目录亦需要添加如下 <code>CNAME</code> 文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wiki.rosuh.me</span><br></pre></td></tr></table></figure>
+
+<p> <strong>注意事项</strong> ：如果你为某一个站点设定了子域名，那么意味着你不能在其他站点中填入诸如下面的域名：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">www.rosuh.me</span><br><span class="line">*.rosuh.me</span><br></pre></td></tr></table></figure>
+
+<p>因为通配符或者未指定子域名的情况，会和指定子域名的仓库冲突。</p>
+<h1 id="2-为域名添加-CNAME-解析"><a href="#2-为域名添加-CNAME-解析" class="headerlink" title="2. 为域名添加 CNAME 解析"></a>2. 为域名添加 CNAME 解析</h1><p>去到你的域名托管商那里，如果并不特别在意中国的载入速度，那么推荐使用 <a href="https://www.cloudflare.com/" target="_blank" rel="noopener">CloudFlare</a> 作为你的域名托管商。益处后文会提及一些。</p>
+<ul>
+<li>为你的域名添加两个 A 记录分别指向 GitHub 的主机</li>
+<li>为你的域名添加 CNAME 记录作为子域名的凭据（此处我添加了两个</li>
+</ul>
+<p><img src="https://img.ioioi.top/blog-img/163425113.png" alt="添加 CNAME 记录"></p>
+<p> <strong>注意事项</strong> ：可以看到我的域名为 <code>rosuh.me</code> ，而 GitHub page 给我的默认域名为 <code>rosuh.github.io</code> （据你的 GitHub 用户名而定），而我要添加的子域名分别为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blog.rosuh.me</span><br><span class="line">wiki.rosuh.me</span><br></pre></td></tr></table></figure>
+
+<p>耐心等待 DNS 刷新即可。</p>
+<p>至此，子域名配置已经可以使用了。接着我们继续配置 HTTPS。</p>
+<h1 id="3-CloudFlare-提供的-HTTPS-服务"><a href="#3-CloudFlare-提供的-HTTPS-服务" class="headerlink" title="3. CloudFlare 提供的 HTTPS 服务"></a>3. CloudFlare 提供的 HTTPS 服务</h1><p>GitHub Page 目前（2017）仍旧没有提供自定义域名的 HTTPS。我们可以使用 <a href="https://www.cloudflare.com/" target="_blank" rel="noopener">CloudFlare</a> 的 CDN 实现 ”曲线救国“。</p>
+<p>在 <a href="https://www.cloudflare.com/" target="_blank" rel="noopener">CloudFlare</a> 的 <code>Crypto</code> 选项中，我们选择 <code>Flexible</code></p>
+<p><img src="https://img.ioioi.top/blog-img/163904181.png" alt="SSL 配置"></p>
+<p>这个选项实现了如下链接：</p>
+<ul>
+<li>User —&gt; HTTPS —&gt; CloudFlare CDN</li>
+<li>CloudFlare —&gt; HTTP —&gt; Hots(GitHub Page)</li>
+</ul>
+<p>也就是说，我们使用了 CloudFlare 的 CDN，所以用户链接到其 CDN 时，将会使用 HTTPS 链接，而 CloudFlare 的 CDN 链接到我们的网站也就是 GitHub Page 时，仍旧是 HTTP。</p>
+<p>这样的方式也能抵御一部分中间人攻击和网络劫持。</p>
+<p><strong>但是现在，我们的用户依旧可以选择使用 HTTP 的方式链接到我们的网站，因为我们没有设置强制 HTTPS 服务，所以这样依旧有被剥离攻击的危险</strong> 。</p>
+<p><em>为了验证这个说法，你可以直接输入域名进行访问，你会发现直接执行的是 HTTP 协议</em> 。</p>
+<h2 id="3-1-启用强制-HTTPS-访问服务（HSTS）"><a href="#3-1-启用强制-HTTPS-访问服务（HSTS）" class="headerlink" title="3.1 启用强制 HTTPS 访问服务（HSTS）"></a>3.1 启用强制 HTTPS 访问服务（HSTS）</h2><p>我们的目标是从两个时间点入手：</p>
+<ul>
+<li>用户首次次链接到我们的网站</li>
+<li>用户非首次链接到我们的网站</li>
+</ul>
+<p>HSTS 指的是强制使用 HTTPS 服务，但是首次链接并不包含在其中。一般情况下，大部分网站都是使用：</p>
+<ul>
+<li>首次链接 302 跳转：从 HTTP 到 HTTPS</li>
+<li>非首次链接：HSTS 生效</li>
+</ul>
+<p>这么一来，我们就得先启用链接跳转服务了。</p>
+<p>如果是自己搭建的服务器，我们可以在服务器端做跳转和 HSTS 服务，现在我们只需要使用 CloudFlare 提供的服务就行啦。是不是很方便？ ;)</p>
+<p>依旧是点开 <code>Crypto</code> 页面，下滑找到 <code>Always use HTTPS</code> 然后点击 <code>on</code> 开启就行了。</p>
+<p>接着看到下面的 <code>HTTP Strict Transport Security (HSTS)</code> ，仔细阅读完 CloudFalre 给你的提示，然后在 <code>Enable HSTS</code> 处切换为 <code>on</code> 就大功告成啦。</p>
+<p>到现在我们的文章标题就实现得差不多啦。</p>
+<p>本文利用了 GitHub page 和 CloudFlare 就轻松完成了从无到有，从有到赞的配置过程。</p>
+<p>CloudFlare 是不是很赞啊？下面再介绍一个 CloudFlare 的功能：</p>
+<p>如果你细心一些，就会发现如果直接访问不带子域的链接比如我的 <code>rosuh.me</code> 是没法访问的。因为你的 GitHub page 设定了子域名，所以这个域名就没办法直接代表一个仓库了。</p>
+<p>这样的话，我们可以使用 CloudFlare 的 <code>Page Rules</code> 功能来进行跳转操作。</p>
+<p>比如我想要访问主域名 <code>rosuh.me</code> 的时候直接跳转到我的博客，那么我可以添加一个规则如下：</p>
+<p><img src="https://img.ioioi.top/blog-img/170044210.png" alt="page rules"></p>
+<p>这样就可以直接跳转到我的博客啦。</p>
+<hr>
+<p>参看：</p>
+<ul>
+<li><a href="http://wiki.jikexueyuan.com/project/github-pages-basics/tip-cname.html" target="_blank" rel="noopener">在 DNS 提供者上配置 CNAME 记录的技巧</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/github-pages-basics/set-custom-domains.html" target="_blank" rel="noopener">设置 GitHub Pages 的自定义域名</a></li>
+<li><a href="http://swiftcafe.io/post/hsts" target="_blank" rel="noopener">开启 HSTS 协议让你的站点更加安全</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Github page" >
+    <span class="tag-code">Github page</span>
+  </a>
+
+  <a href="/tags#HTTPS" >
+    <span class="tag-code">HTTPS</span>
+  </a>
+
+  <a href="/tags#子域名" >
+    <span class="tag-code">子域名</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2017/07/I-am-a-rookie/">
+        <span class="nav-arrow">← </span>
+        
+          从小事情看大问题
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2017/08/unknow-command-or-service-error-in-oh-my-zsh/">
+        
+          修复 oh-my-zsh 和 Git 的搭配错误
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Disqus START -->
+      <div id="disqus_thread"></div>
+      <!-- Disqus END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-上传-CNAME-到仓库"><span class="toc-nav-text">1. 上传 CNAME 到仓库</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-为域名添加-CNAME-解析"><span class="toc-nav-text">2. 为域名添加 CNAME 解析</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3-CloudFlare-提供的-HTTPS-服务"><span class="toc-nav-text">3. CloudFlare 提供的 HTTPS 服务</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-1-启用强制-HTTPS-访问服务（HSTS）"><span class="toc-nav-text">3.1 启用强制 HTTPS 访问服务（HSTS）</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://blog.rosuh.me/2017/08/Github-page-configure-and-enable-HTTPS/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+  <script>
+    var disqus_shortname = 'blog-rosuh-me';
+    
+    var disqus_url = 'https://blog.rosuh.me/2017/08/Github-page-configure-and-enable-HTTPS/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//go.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

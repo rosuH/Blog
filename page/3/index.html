@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/09/tika-source-code-analysis/">Tika 源码浅析</a>
+      </h2>
+      <p class="article-date">2018年9月27日</p>
+      
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#视频" >
+    <span class="tag-code">视频</span>
+  </a>
+
+  <a href="/tags#文件类型" >
+    <span class="tag-code">文件类型</span>
+  </a>
+
+  <a href="/tags#Tika" >
+    <span class="tag-code">Tika</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          Tika最简单的使用：new Tika().detect(file)。
+其中新建一个Tiak实例的时候，初始化了默认的文件类型、文件解析类以及文件探测类。机会大部分工作都是在这里面做的。由于篇幅有限，我们略过开始的一些调用，让我们看到 Tika 库里的MagicDetector类，它实现了D ...
+        
+      </div>
+      <a class="more" href="/2018/09/tika-source-code-analysis/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/09/android-file-type/">如何判断萤石云视频是否可以播放</a>
+      </h2>
+      <p class="article-date">2018年9月26日</p>
+      
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#视频" >
+    <span class="tag-code">视频</span>
+  </a>
+
+  <a href="/tags#文件类型" >
+    <span class="tag-code">文件类型</span>
+  </a>
+
+  <a href="/tags#萤石云" >
+    <span class="tag-code">萤石云</span>
+  </a>
+
+  <a href="/tags#Tika" >
+    <span class="tag-code">Tika</span>
+  </a>
+
+  <a href="/tags#FFmpegMediaMetadataRetriever" >
+    <span class="tag-code">FFmpegMediaMetadataRetriever</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          最近遇到一个问题，需要判断视频文件是否是真正的视频文件。什么意思呢？萤石的摄像头是将视频写入 TF 卡的：
+
+通过萤石云视频平台将TF卡格式化后，程序会采用预占空间的方式预先将1/4的空间作为视频或者图片的存储空间。
+
+然后他预写入的文件是.mp4后缀的，但是是不可播放的文件。所以一旦播放器 ...
+        
+      </div>
+      <a class="more" href="/2018/09/android-file-type/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/08/hexo-code-block-style-mess/">Hexo prism 插件导致代码格式错乱</a>
+      </h2>
+      <p class="article-date">2018年8月8日</p>
+      
+        
+  <a href="/tags#Hexo" >
+    <span class="tag-code">Hexo</span>
+  </a>
+
+  <a href="/tags#prism" >
+    <span class="tag-code">prism</span>
+  </a>
+
+  <a href="/tags#代码块" >
+    <span class="tag-code">代码块</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          问题描述在之前的很长一段时间里，我的博客渲染出来的代码块格式都有问题，总是会莫名其妙地将换行符搞丢。导致格式错乱，阅读体验很差。大概的样子就是下面这样：
+1234567891011// Normal 正常样式class A &#123;    public A()&#123;         ...
+        
+      </div>
+      <a class="more" href="/2018/08/hexo-code-block-style-mess/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/06/implement-a-star-in-Java/">A*（A星） 算法 Java 实现</a>
+      </h2>
+      <p class="article-date">2018年6月29日</p>
+      
+        
+  <a href="/tags#A*" >
+    <span class="tag-code">A*</span>
+  </a>
+
+  <a href="/tags#Algorithm" >
+    <span class="tag-code">Algorithm</span>
+  </a>
+
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          前言在某件机缘巧合（实际上是曲折的辛酸故事）的事情发生之后，我接到了通过 Javascript 实现一个 A* 算法任务。
+讲道理我在一开始接到的时候还不知道这个是什么东西…后面阅读下面的文章之后才有所了解：
+
+A*寻路算法
+
+上面这篇文章是译文，原文已经 404 了，好在本文翻译的还不错。 ...
+        
+      </div>
+      <a class="more" href="/2018/06/implement-a-star-in-Java/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/05/java-threads-vs-android-asynctask-which-to-use/">「译」Java Thread vs AsyncTask：该用哪个？</a>
+      </h2>
+      <p class="article-date">2018年5月15日</p>
+      
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#线程" >
+    <span class="tag-code">线程</span>
+  </a>
+
+  <a href="/tags#AsyncTask" >
+    <span class="tag-code">AsyncTask</span>
+  </a>
+
+  <a href="/tags#Thread" >
+    <span class="tag-code">Thread</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+本文发布于我的博客
+此文章为「译文」，原文链接：http://www.mergeconflict.net/2012/05/java-threads-vs-android-asynctask-which.html
+翻译已获原作者授权。水平有限，如有缺漏，恳请指正，谢谢~
+
+前言在 Andro ...
+        
+      </div>
+      <a class="more" href="/2018/05/java-threads-vs-android-asynctask-which-to-use/">「阅读更多」</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/page/2/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/page/4/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/04/using-viewpager-to-make-a-banner-2/">手动实现轮播图（二）：循环滚动、定时切换与指示器</a>
+      </h2>
+      <p class="article-date">2018年4月21日</p>
+      
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#viewpager" >
+    <span class="tag-code">viewpager</span>
+  </a>
+
+  <a href="/tags#轮播图" >
+    <span class="tag-code">轮播图</span>
+  </a>
+
+  <a href="/tags#banner" >
+    <span class="tag-code">banner</span>
+  </a>
+
+  <a href="/tags#fragment" >
+    <span class="tag-code">fragment</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          前言在上一篇文章手动实现轮播图（一）：ViewPager 入门实践中，我们认识了ViewPager这个布局，也简单上手了一下。
+接下来这篇文章，我们会进一步朝着轮播图的方向前进。
+
+原来的文章末尾，我使用了 Glide 加载 Gif 图片作为轮播图的内容，所以现在也是基于那个代码继续下去的。 ...
+        
+      </div>
+      <a class="more" href="/2018/04/using-viewpager-to-make-a-banner-2/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/04/using-viewpager-to-make-a-banner-1/">手动实现轮播图（一）：ViewPager 入门实践</a>
+      </h2>
+      <p class="article-date">2018年4月20日</p>
+      
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#viewpager" >
+    <span class="tag-code">viewpager</span>
+  </a>
+
+  <a href="/tags#轮播图" >
+    <span class="tag-code">轮播图</span>
+  </a>
+
+  <a href="/tags#banner" >
+    <span class="tag-code">banner</span>
+  </a>
+
+  <a href="/tags#fragment" >
+    <span class="tag-code">fragment</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          简介Viewpager是 Android 提供的布局管理器，常被用来实现左右滑动的页面、视图。
+在实际工程中，有许多都是用来实现轮播图功能的。
+今天，我们从零开始造一个简易轮播图组件。
+本系列文章面向的读者，是刚学完 Android 教材的初学者，旨在：
+
+简单介绍ViewPager原理并如 ...
+        
+      </div>
+      <a class="more" href="/2018/04/using-viewpager-to-make-a-banner-1/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/03/Use-NW-to-build-a-web-app/">使用 NW.js 创建简单的桌面应用</a>
+      </h2>
+      <p class="article-date">2018年3月8日</p>
+      
+        
+  <a href="/tags#NWjs" >
+    <span class="tag-code">NWjs</span>
+  </a>
+
+  <a href="/tags#Memobird" >
+    <span class="tag-code">Memobird</span>
+  </a>
+
+  <a href="/tags#日常" >
+    <span class="tag-code">日常</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          前言因为早上想用咕咕机（Memobird）打印一下天气，发现他还有 Web 版本。然后想着能不能打包成一个.exe，直接丢到桌面执行，不想每次都打开浏览器、网页什么的…
+然后了解了一下Electron 和 NW.js。然后顺着用了后者尝试打包了一下，发现还是挺简单的。
+因为个人不需要添加过多 ...
+        
+      </div>
+      <a class="more" href="/2018/03/Use-NW-to-build-a-web-app/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/11/install-android-studio-in-ubuntu/">绕了一大圈的 Android Studio 安装札记</a>
+      </h2>
+      <p class="article-date">2017年11月8日</p>
+      
+        
+  <a href="/tags#Android Studio" >
+    <span class="tag-code">Android Studio</span>
+  </a>
+
+  <a href="/tags#JDK" >
+    <span class="tag-code">JDK</span>
+  </a>
+
+  <a href="/tags#desktop" >
+    <span class="tag-code">desktop</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          本文导览
+蠢哭
+安装 Android Studio
+修改 hosts 及更新
+设置 JDK
+设置桌面图标
+
+0. 蠢哭直到写本文的时候，才发现自己没有认真看官网的安装说明，导致和“秦王绕柱”一样绕了一大圈。…（多看官方文档才有出路啊同志们下文结合自己的经验以及官方指南写出的，某些部分甚至是翻 ...
+        
+      </div>
+      <a class="more" href="/2017/11/install-android-studio-in-ubuntu/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/11/install-netease-cloud-music-on-ubuntu-17-10/">Ubutnu17.10 安装网易云</a>
+      </h2>
+      <p class="article-date">2017年11月8日</p>
+      
+        
+  <a href="/tags#netease-cloud-music" >
+    <span class="tag-code">netease-cloud-music</span>
+  </a>
+
+  <a href="/tags#ubuntu" >
+    <span class="tag-code">ubuntu</span>
+  </a>
+
+  <a href="/tags#software" >
+    <span class="tag-code">software</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          前言网易云目前官方只支持到 Ubuntu 16.04，尚未支持 17.10。但是作为抖脚党是不能就此罢休的。
+1. 下载与安装去官方下载页面下载 Ubuntu 16.04 的 deb。在 terminal 执行
+1sudo dpkg -i xxx.deb
+
+安装该 deb。安装过程将会很顺利 ...
+        
+      </div>
+      <a class="more" href="/2017/11/install-netease-cloud-music-on-ubuntu-17-10/">「阅读更多」</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/page/3/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/page/5/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

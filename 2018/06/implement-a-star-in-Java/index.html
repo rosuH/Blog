@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      A*（A星） 算法 Java 实现 | rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>A*（A星） 算法 Java 实现</h2>
+  <p class="post-date">2018-06-29</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在某件机缘巧合（实际上是曲折的辛酸故事）的事情发生之后，我接到了通过 Javascript 实现一个 A* 算法任务。</p>
+<p>讲道理我在一开始接到的时候还不知道这个是什么东西…后面阅读下面的文章之后才有所了解：</p>
+<ul>
+<li><a href="http://www.cppblog.com/christanxw/archive/2006/04/07/5126.html" target="_blank" rel="noopener">A*寻路算法</a></li>
+</ul>
+<p>上面这篇文章是译文，原文已经 404 了，好在本文翻译的还不错。我看了这篇文章才了解了这些东西。</p>
+<p>本文章不鹦鹉学舌，误导读者。所以不会再赘述算法的流程，诸君看上述版本即可~</p>
+<p>再接着就是实现：</p>
+<ul>
+<li><a href="https://www.cnblogs.com/huansky/p/5572631.html" target="_blank" rel="noopener">js 实现 A* 寻路算法</a></li>
+</ul>
+<p>我的 js 实现也基本参考他的做的。当然，我是在 Cocos Creator 上搭建了场景实现了，所以其中还有相当一部分是关于 Cocos Creator 的应用。此处先按下不表。</p>
+<p>下面推荐一个很有意思的 Github 项目，他这个实现了诸多寻找路径的算法！还有网页版！你可以看看实现过程以助于你理解算法。</p>
+<ul>
+<li><a href="http://qiao.github.io/PathFinding.js/visual/" target="_blank" rel="noopener">PathFinding.js visual</a></li>
+</ul>
+<hr>
+<p>实现了 js 版本，我想着用我的老本行 Java 来实现故而有了如下的代码。</p>
+<p><strong>注意！因为写得匆忙，所以没有写测试代码。如有错漏，请见谅！并烦请赐教</strong>~</p>
+<h1 id="A-算法-Java-实现"><a href="#A-算法-Java-实现" class="headerlink" title="A* 算法 Java 实现"></a>A* 算法 Java 实现</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AStarFinder</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 分别是：直行成本，斜行成本，地图宽度和地图高度</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STRAIGHT_COST = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> OBLIQUE_COST = <span class="number">14</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAP_WIDTH = <span class="number">960</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAP_HEIGHT = <span class="number">480</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 节点内部类，设有坐标、f, g, h 等变量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Pos</span></span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> x;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> y;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> g;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> h;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> f;</span><br><span class="line">        <span class="keyword">private</span> Pos parent;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Pos</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.x = x;</span><br><span class="line">            <span class="keyword">this</span>.y = y;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getX</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> x;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setX</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.x = x;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getY</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> y;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setY</span><span class="params">(<span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.y = y;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getG</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> g;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setG</span><span class="params">(<span class="keyword">int</span> g)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.g = g;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getH</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> h;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setH</span><span class="params">(<span class="keyword">int</span> h)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.h = h;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getF</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> f;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setF</span><span class="params">(<span class="keyword">int</span> f)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.f = f;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Pos <span class="title">getParent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> parent;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setParent</span><span class="params">(Pos parent)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.parent = parent;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 路径查找方法</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> startX 起始点 x 坐标</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> startY 起始点 y 坐标</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> endX  终点 x 坐标</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> endY  终点 y 坐标</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 返回路径坐标集合</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ArrayList&lt;Pos&gt; <span class="title">searchRoad</span><span class="params">(<span class="keyword">int</span> startX, <span class="keyword">int</span> startY, <span class="keyword">int</span> endX, <span class="keyword">int</span> endY)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 分别是打开点列表、关闭点列表、结果点列表和障碍点列表</span></span><br><span class="line">        ArrayList&lt;Pos&gt; openList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        ArrayList&lt;Pos&gt; closeList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        ArrayList&lt;Pos&gt; resultList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        ArrayList&lt;Pos&gt; barriersList = getBarriersList();</span><br><span class="line">        <span class="comment">// 结果节点的索引</span></span><br><span class="line">        <span class="keyword">int</span> resultIndex = -<span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 是否获得了结果</span></span><br><span class="line">        <span class="keyword">boolean</span> isGetResult = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将当前点加入开启列表中</span></span><br><span class="line">        openList.add(<span class="keyword">new</span> Pos(startX, startY));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            <span class="comment">// 先将当前节点取出并加入关闭列表之中</span></span><br><span class="line">            Pos currentPoint = openList.get(<span class="number">0</span>);</span><br><span class="line">            closeList.add(currentPoint);</span><br><span class="line">            <span class="comment">// 获取周围八个点的集合，并轮询</span></span><br><span class="line">            ArrayList&lt;Pos&gt; surroundPoints = getSurroundPoints(currentPoint);</span><br><span class="line">            <span class="keyword">for</span> (Pos pos : surroundPoints)&#123;</span><br><span class="line">                <span class="comment">// 是否是障碍点</span></span><br><span class="line">                <span class="keyword">boolean</span> isBarrier = barriersList.contains(pos);</span><br><span class="line">                <span class="comment">// 是否是关闭列表中的点</span></span><br><span class="line">                <span class="keyword">boolean</span> isExistList = closeList.contains(pos);</span><br><span class="line">                <span class="comment">// 是否是在地图范围内</span></span><br><span class="line">                <span class="keyword">boolean</span> isInMap = pos.x &gt;= <span class="number">0</span> &amp;&amp; pos.x &lt; MAP_WIDTH/<span class="number">2</span> &amp;&amp;</span><br><span class="line">                        pos.y &gt;= <span class="number">0</span> &amp;&amp; pos.y &lt;= MAP_HEIGHT/<span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (!isExistList &amp;&amp; !isBarrier &amp;&amp; isInMap)&#123;</span><br><span class="line">                    <span class="comment">// 均是，计算 g 值</span></span><br><span class="line">                    <span class="keyword">int</span> g = currentPoint.g +</span><br><span class="line">                            ((currentPoint.x - pos.x) * (currentPoint.y - pos.y) == <span class="number">0</span> ? STRAIGHT_COST : OBLIQUE_COST);</span><br><span class="line">                    <span class="comment">// 如果当前点不在打开点中，那么计算 h, f 值，并加入进入</span></span><br><span class="line">                    <span class="keyword">if</span> (!openList.contains(pos))&#123;</span><br><span class="line">                        pos.h = Math.abs(endX - pos.x) * <span class="number">10</span> + Math.abs(endY - pos.y) * <span class="number">10</span>;</span><br><span class="line">                        pos.g = g;</span><br><span class="line">                        pos.f = pos.g + pos.h;</span><br><span class="line">                        pos.parent = currentPoint;</span><br><span class="line">                        openList.add(pos);</span><br><span class="line">                    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="comment">// 如果在打开点列表中，那么重新计算 g 和 f，因为 g 当前位置相关</span></span><br><span class="line">                        <span class="keyword">int</span> index = openList.indexOf(pos);</span><br><span class="line">                        <span class="keyword">if</span> (g &lt; openList.get(index).g)&#123;</span><br><span class="line">                            openList.get(index).parent = currentPoint;</span><br><span class="line">                            openList.get(index).g = g;</span><br><span class="line">                            openList.get(index).f = g + openList.get(index).h;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (openList.isEmpty())&#123;</span><br><span class="line">                    System.out.println(<span class="string">"没有可用通路"</span>);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 对打开点列表进行升序排序，每次都获得第一个 f 为最小</span></span><br><span class="line">                openList.sort(<span class="keyword">new</span> Comparator&lt;Pos&gt;() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Pos o1, Pos o2)</span> </span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> Integer.compare(o1.f, o2.f);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 遍历打开点列表看结果点是否在其中</span></span><br><span class="line">            <span class="keyword">for</span> (Pos tmpPos : openList)&#123;</span><br><span class="line">                <span class="keyword">if</span> (tmpPos.x == endX &amp;&amp; tmpPos.y == endY)&#123;</span><br><span class="line">                    isGetResult = <span class="keyword">true</span>;</span><br><span class="line">                    resultIndex = openList.indexOf(tmpPos);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;<span class="keyword">while</span> (isGetResult);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (resultIndex == -<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="comment">// 如果索引值为 -1 ，那么说明没有结果点</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 获取路径</span></span><br><span class="line">            Pos currentPos = openList.get(resultIndex);</span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                resultList.add(currentPos);</span><br><span class="line">                currentPos = currentPos.parent;</span><br><span class="line">            &#125;<span class="keyword">while</span> (currentPos.x != startX || currentPos.y != startY);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> resultList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取障碍物区域坐标集合</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 返回坐标集合</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> ArrayList&lt;Pos&gt; <span class="title">getBarriersList</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">// @to-do</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;Pos&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取周围八个节点函数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> currentPoint 当前点</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span>  返回八个存有节点的集合</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> ArrayList&lt;Pos&gt; <span class="title">getSurroundPoints</span><span class="params">(Pos currentPoint)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x = currentPoint.x;</span><br><span class="line">        <span class="keyword">int</span> y = currentPoint.y;</span><br><span class="line"></span><br><span class="line">        ArrayList&lt;Pos&gt; surroundPoints = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        surroundPoints.add(<span class="keyword">new</span> Pos(x - <span class="number">1</span>, y - <span class="number">1</span>));</span><br><span class="line">        surroundPoints.add(<span class="keyword">new</span> Pos(x , y - <span class="number">1</span>));</span><br><span class="line">        surroundPoints.add(<span class="keyword">new</span> Pos(x + <span class="number">1</span>, y - <span class="number">1</span>));</span><br><span class="line">        surroundPoints.add(<span class="keyword">new</span> Pos(x + <span class="number">1</span>, y));</span><br><span class="line">        surroundPoints.add(<span class="keyword">new</span> Pos(x + <span class="number">1</span>, y + <span class="number">1</span>));</span><br><span class="line">        surroundPoints.add(<span class="keyword">new</span> Pos(x, y + <span class="number">1</span>));</span><br><span class="line">        surroundPoints.add(<span class="keyword">new</span> Pos(x - <span class="number">1</span>, y + <span class="number">1</span>));</span><br><span class="line">        surroundPoints.add(<span class="keyword">new</span> Pos(x - <span class="number">1</span>, y));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> surroundPoints;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#A*" >
+    <span class="tag-code">A*</span>
+  </a>
+
+  <a href="/tags#Algorithm" >
+    <span class="tag-code">Algorithm</span>
+  </a>
+
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/05/java-threads-vs-android-asynctask-which-to-use/">
+        <span class="nav-arrow">← </span>
+        
+          「译」Java Thread vs AsyncTask：该用哪个？
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/08/hexo-code-block-style-mess/">
+        
+          Hexo prism 插件导致代码格式错乱
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Disqus START -->
+      <div id="disqus_thread"></div>
+      <!-- Disqus END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#前言"><span class="toc-nav-text">前言</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#A-算法-Java-实现"><span class="toc-nav-text">A* 算法 Java 实现</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://blog.rosuh.me/2018/06/implement-a-star-in-Java/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+  <script>
+    var disqus_shortname = 'blog-rosuh-me';
+    
+    var disqus_url = 'https://blog.rosuh.me/2018/06/implement-a-star-in-Java/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//go.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

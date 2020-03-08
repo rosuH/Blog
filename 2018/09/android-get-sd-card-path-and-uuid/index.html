@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      Android 获取 SD 卡路径和 UUID | rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Android 获取 SD 卡路径和 UUID</h2>
+  <p class="post-date">2018-09-27</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="Android-的存储结构"><a href="#Android-的存储结构" class="headerlink" title="Android 的存储结构"></a>Android 的存储结构</h1><p>下面的『内外』，是相对应用而言的。应用内部沙盒称为内部存储，其外部称为外部存储。</p>
+<h2 id="内部存储"><a href="#内部存储" class="headerlink" title="内部存储"></a>内部存储</h2><h3 id="位置"><a href="#位置" class="headerlink" title="位置"></a>位置</h3><p>Android 内部存储在<code>/data/data/</code>目录下，根据应用的包名划分出来。<br>每个应用都有如下几个子文件夹：</p>
+<ul>
+<li><p><code>data/data/包名/shared_prefs</code>：存放该APP内的SP信息</p>
+</li>
+<li><p><code>data/data/包名/databases</code>：存放该APP的数据库信息</p>
+</li>
+<li><p><code>data/data/包名/files</code>：将APP的文件信息存放在files文件夹</p>
+</li>
+<li><p><code>data/data/包名/cache</code>：存放的是APP的缓存信息</p>
+</li>
+</ul>
+<h3 id="读取方法"><a href="#读取方法" class="headerlink" title="读取方法"></a>读取方法</h3><p>内部存储不需要申请读取权限，可以任君使用！<br>读写文件分别使用：</p>
+<ul>
+<li><p><code>openFileOutput()</code></p>
+<ul>
+<li><code>write()</code> 写入</li>
+<li><code>close()</code> 关闭</li>
+</ul>
+</li>
+<li><p><code>openFileInput</code></p>
+<ul>
+<li><code>read()</code> 读取</li>
+<li><code>close()</code>关闭</li>
+</ul>
+</li>
+</ul>
+<p>也可以直接使用：</p>
+<ul>
+<li><p><code>getCacheDir()</code>来获取缓存目录</p>
+</li>
+<li><p><code>getFilesDir()</code>来获取文件目录</p>
+</li>
+</ul>
+<h2 id="外部存储"><a href="#外部存储" class="headerlink" title="外部存储"></a>外部存储</h2><p>外置存储就必须申请权限，而且这里也有一些需要注意的地方，可以移步<a href="https://blog.rosuh.me/2018/09/Android-reading-note-12/#Android-8-0-%20%E6%9D%83%E9%99%90%E7%BB%84%20-tips">阅读</a>。</p>
+<p>一般来说，使用<code>Environment.getExternalStorageDirectory()</code>获取的是『外置存储』，但是实际上这个并不是很准确。反而回因为这个『外置』而让人困惑：如果有外置 SD 卡的情况…那谁才是外置呢？</p>
+<p>看一下这个方法的注释，他解释得很清楚：</p>
+<blockquote>
+<p>Note: don’t be confused by the word “external” here. This directory can better be thought as media/shared storage</p>
+</blockquote>
+<p>他说你不要被『外置』这个词搞蒙了，实际上更像是一个『共享』存储器。这样一说其实你就知道了，即便是有外置 SD 卡的情况，两者都属于『外置存储器』。因为这个概念是相对于 App 内部沙盒存储器来说的。<br>但是这个时候直接调用这个方法获取的，可能并不是 SD 卡的路径。因为用户并没有将 SD 卡设置为『默认存储器』，所以上面这个方法将会得到原本的『共享』存储器。而不是 SD 卡。</p>
+<p>我们看一下实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> File <span class="title">getExternalStorageDirectory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    throwIfUserRequired();</span><br><span class="line">    <span class="keyword">return</span> sCurrentUser.getExternalDirs()[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> File[] getExternalDirs() &#123;</span><br><span class="line">    <span class="keyword">final</span> StorageVolume[] volumes = StorageManager.getVolumeList(mUserId,</span><br><span class="line">            StorageManager.FLAG_FOR_WRITE);</span><br><span class="line">    <span class="keyword">final</span> File[] files = <span class="keyword">new</span> File[volumes.length];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; volumes.length; i++) &#123;</span><br><span class="line">        files[i] = volumes[i].getPathFile();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> files;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>getExternalDirs()</code>方法返回了一个分卷列表，然后<code>getExternalStorageDirectory()</code>直接返回了该列表的第一个元素。也就是『默认存储器』了。</p>
+<p>那么我们如何获取 SD 卡路径呢？</p>
+<h3 id="获取外置-SD-卡路径"><a href="#获取外置-SD-卡路径" class="headerlink" title="获取外置 SD 卡路径"></a>获取外置 SD 卡路径</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 返回外置存储卡路径</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> context</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> 返回存储卡路径</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getExtendedMemoryPath</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">    StorageManager mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);</span><br><span class="line">    Class storageVolumeClazz;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        storageVolumeClazz = Class.forName(<span class="string">"android.os.storage.StorageVolume"</span>);</span><br><span class="line">        Method getVolumeList = mStorageManager.getClass().getMethod(<span class="string">"getVolumeList"</span>);</span><br><span class="line">        Method getPath = storageVolumeClazz.getMethod(<span class="string">"getPath"</span>);</span><br><span class="line">        Method isRemovable = storageVolumeClazz.getMethod(<span class="string">"isRemovable"</span>);</span><br><span class="line">        Object result = getVolumeList.invoke(mStorageManager);</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> length = Array.getLength(result);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">            Object storageVolumeElement = Array.get(result, i);</span><br><span class="line">            String path = (String) getPath.invoke(storageVolumeElement);</span><br><span class="line">            <span class="keyword">boolean</span> removable = (Boolean) isRemovable.invoke(storageVolumeElement);</span><br><span class="line">            <span class="keyword">if</span> (removable) &#123;</span><br><span class="line">                <span class="keyword">return</span> path;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException | InvocationTargetException  | NoSuchMethodException | IllegalAccessException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里利用了反射获取 SD 卡的路径。</p>
+<h3 id="获取-SD-卡的-UUID"><a href="#获取-SD-卡的-UUID" class="headerlink" title="获取 SD 卡的 UUID"></a>获取 SD 卡的 UUID</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 获取 SD 卡的 UUID，FAT32 格式为 xxxx-xxxx；NTFS 是更长的 hex 字符串</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> context</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> 返回 SD 卡的 UUID</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">getRealSDCardId</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">    StorageManager mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);</span><br><span class="line">    <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.N)&#123;</span><br><span class="line">        <span class="comment">// 如果 API 大于 23，可以直接调用</span></span><br><span class="line">        <span class="keyword">if</span> (mStorageManager == <span class="keyword">null</span> || mStorageManager.getStorageVolumes().size() &lt;= <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        StorageVolume sdVolume = mStorageManager.getStorageVolumes().get(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> sdVolume.getUuid();</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        String storagePath = getExtendedMemoryPath(context);</span><br><span class="line">        <span class="keyword">if</span> (!TextUtils.isEmpty(storagePath))&#123;</span><br><span class="line">            <span class="comment">// 只考虑 FAT 32 格式的情况，TODO 兼容 NTFS 格式</span></span><br><span class="line">            Pattern pattern = Pattern.compile(PATTERN_GET_SD_CARD_ID);</span><br><span class="line">            Matcher matcher = pattern.matcher(storagePath);</span><br><span class="line">            <span class="keyword">if</span> (matcher.find())&#123;</span><br><span class="line">                <span class="keyword">return</span> matcher.group();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里还做了版本判断，如果 API 大于 23 的版本，可以直接调用<code>getStorageVolumes()</code>方法，获取所有卷的卷标。</p>
+<p><em>参看</em>：</p>
+<ul>
+<li><p><a href="https://juejin.im/post/58b557de128fe10065e93cc8" target="_blank" rel="noopener">Android存储（1）– 你还在乱用Android存储嘛！！！</a></p>
+</li>
+<li><p><a href="https://stackoverflow.com/questions/47567116/how-to-get-sd-card-id-serial-number?noredirect=1&lq=1" target="_blank" rel="noopener">How to get SD Card ID/Serial Number?</a></p>
+</li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#SD card" >
+    <span class="tag-code">SD card</span>
+  </a>
+
+  <a href="/tags#路径" >
+    <span class="tag-code">路径</span>
+  </a>
+
+  <a href="/tags#UUID" >
+    <span class="tag-code">UUID</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/09/tika-source-code-analysis/">
+        <span class="nav-arrow">← </span>
+        
+          Tika 源码浅析
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/09/from-asynchronous-thread-to-rxjava-backpressure/">
+        
+          从异步线程到 RxJava 的背压控制
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Disqus START -->
+      <div id="disqus_thread"></div>
+      <!-- Disqus END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Android-的存储结构"><span class="toc-nav-text">Android 的存储结构</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#内部存储"><span class="toc-nav-text">内部存储</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#位置"><span class="toc-nav-text">位置</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#读取方法"><span class="toc-nav-text">读取方法</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#外部存储"><span class="toc-nav-text">外部存储</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#获取外置-SD-卡路径"><span class="toc-nav-text">获取外置 SD 卡路径</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#获取-SD-卡的-UUID"><span class="toc-nav-text">获取 SD 卡的 UUID</span></a></li></ol></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://blog.rosuh.me/2018/09/android-get-sd-card-path-and-uuid/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+  <script>
+    var disqus_shortname = 'blog-rosuh-me';
+    
+    var disqus_url = 'https://blog.rosuh.me/2018/09/android-get-sd-card-path-and-uuid/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//go.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

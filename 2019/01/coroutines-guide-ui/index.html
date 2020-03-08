@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      【翻译】协程在 UI 编程中的使用指南 | rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>【翻译】协程在 UI 编程中的使用指南</h2>
+  <p class="post-date">2019-01-09</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><blockquote>
+<p>原文链接：<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md#basic-ui-coroutines" target="_blank" rel="noopener">https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md#basic-ui-coroutines</a></p>
+<p>原文开源协议：<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/LICENSE.txt" target="_blank" rel="noopener">https://github.com/Kotlin/kotlinx.coroutines/blob/master/LICENSE.txt</a></p>
+</blockquote>
+<p>本指南假设您已经对协程这个概念有了基础的理解，如果您不了解，可以看看 <a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/docs/coroutines-guide.md" target="_blank" rel="noopener">Guide to kotlin.coroutines</a>，它会给出一些协程在 UI 编程中应用的示例。</p>
+<p>所有 UI 应用程序库都有一个普遍的问题：他们的 UI 均受限于一个主线程中，所有的 UI 更新操作都必须发生在这个特定的线程中。对于此类应用使用协程，这意味您必须有一个合适的协程调度器，将协程的执行操作限制在那个特定的 UI 线程中。</p>
+<p>对于此，<code>kotlin.coroutine</code>有三个模块，他们为不同的 UI 应用程序库提供协程上下文。</p>
+<ul>
+<li><a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-android" target="_blank" rel="noopener">kotlinx-coroutines-android</a> – <code>Dispatchers.Main</code> Android 应用程序上下文</li>
+<li><a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx" target="_blank" rel="noopener">kotlinx-coroutines-javafx</a> – <code>Dispatcher.JavaFx</code> JavaFx UI 应用程序上下文</li>
+<li><a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-swing" target="_blank" rel="noopener">kotlinx-coroutines-swing</a> – <code>Dispatcher.Swing</code> Swing UI 应用程序上下文</li>
+</ul>
+<p><code>kotlin-coroutines-core</code>库里的<code>Dispatcher.Main</code>提供了可用的 UI 分发器实现，而<a href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html" target="_blank" rel="noopener"><code>ServiceLoader</code></a> API 会自动发现并加载正确的实现（Android，JavaFx 或 Swing）。举个例子，如果您正在编写 JavaFx 应用程序，您可以使用<code>Dispatcher.Main</code>或<code>Dispatcher.JavaFx</code>扩展，他们是同一个对象。</p>
+<p>本指南同时涵盖了所有的 UI 库，因为每个模块只包含一个长度为几页的对象定义。您可以使用其中任何一个作为示例，为您喜欢的 UI 库编写相应的上下文对象，即便它未被本文写出来。</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li>设置<ul>
+<li><a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md#javafx" target="_blank" rel="noopener">JavaFx</a></li>
+<li><a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md#android" target="_blank" rel="noopener">Android</a></li>
+</ul>
+</li>
+<li>基础 UI 协程<ul>
+<li>启动 UI 协程</li>
+<li>取消 UI 协程</li>
+</ul>
+</li>
+<li>在 UI Context 中使用 actors<ul>
+<li>扩展协程</li>
+<li>最多仅有一个协程 job</li>
+<li>事件合并</li>
+</ul>
+</li>
+<li>阻塞操作<ul>
+<li>UI 卡顿问题</li>
+<li>结构化并发、生命周期和协程亲子继承</li>
+<li>阻塞操作</li>
+</ul>
+</li>
+<li>进阶提示<ul>
+<li>不使用分发器在 UI 事件控制器中启动协程</li>
+</ul>
+</li>
+</ul>
+<h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><p>本指南中可运行的例子将使用 JavaFx 实现。这么做的好处是，所有的示例可以直接在任何操作需要上运行而不需要安装任何模拟器或类似的东西，并且他们是完全独立的。</p>
+<h3 id="JavaFx"><a href="#JavaFx" class="headerlink" title="JavaFx"></a>JavaFx</h3><p>这个基础的 JavaFx 示例程序由一个名为<code>hello</code>并使用<code>Hello World!</code>进行初始化的文本标签以及一个名为<code>fab</code>的桃红色的位于右下角的原型按钮组成。</p>
+<p><img src="https://i.loli.net/2019/01/09/5c34cb074b9de.png" alt="ui-example-javafx"></p>
+<p>JavaFx 的 <code>start</code>函数将会调用<code>setup</code>函数，并将<code>hello</code>和<code>fab</code>这两个节点的引用作为参数传递给 <code>setup</code> 函数。<code>setup</code> 函数是本指南中存放各种代码的地方：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">setup</span><span class="params">(hello:<span class="type">Text</span>, fab: <span class="type">Circle</span>)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 占个位</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>点击<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx/test/guide/example-ui-basic-01.kt" target="_blank" rel="noopener">此处</a>查看完整代码</p>
+</blockquote>
+<p>您可以从 GitHub <code>clone</code>  <a href="https://github.com/Kotlin/kotlinx.coroutines" target="_blank" rel="noopener">kotlinx.coroutines</a> 项目到您本地，然后用 IDEA 打开。本指南的所有例子都在 <a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx" target="_blank" rel="noopener"><code>ui/kotlinx-coroutines-javafx</code></a> 模块的 <code>test</code>文件夹中。这样您便可以运行并观察每一个例子的运行情况以及修改项目来进行实验。</p>
+<h2 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h2><p>跟着 <a href="https://kotlinlang.org/docs/tutorials/kotlin-android.html" target="_blank" rel="noopener">Getting Started With Android and Kotlin</a> 这份指南，在 Android Studio 中创建 Kotlin 项目。我们也推荐您使用 <a href="https://kotlinlang.org/docs/tutorials/android-plugin.html" target="_blank" rel="noopener">Kotlin Android Extensions</a>  中的扩展特性。</p>
+<p>在 Android Studio 2.3 中，您会得到下面的类似的应用程序界面：</p>
+<p><img src="https://i.loli.net/2019/01/09/5c34cb1ef0bda.png" alt="ui-example-android"></p>
+<p>到<code>context_main.xml</code>文件中，为您的<code>TextView</code>分配<code>hello</code>的资源 ID，然后使用<code>Hello World!</code>来初始化它。</p>
+<p>那个桃红色的浮动按钮资源  ID 是<code>fab</code> 。</p>
+<p>在<code>MainActivity.kt</code>中，移除掉<code>fab.setOnclickListener{...}</code>，接着在<code>onCreate()</code>方法的最后一行添加一行<code>setup(hello, fab)</code>来调用它。</p>
+<p>然后在<code>MainActivity.kt</code>文件的尾部，给出<code>setup()</code>函数的实现：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">setup</span><span class="params">(text: <span class="type">TextView</span>, fab: <span class="type">FloatingActionButton</span>)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 占位</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在您<code>app/build.gradle</code> 的<code>dependecies{...}</code>块中添加依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.0"</span><br></pre></td></tr></table></figure>
+
+<p>Android 的示例存放在  <a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-android/example-app" target="_blank" rel="noopener"><code>ui/kotlinx-coroutines-android/example-app</code></a> ，您可以<code>clone</code>下来运行。</p>
+<h1 id="基础-UI-协程"><a href="#基础-UI-协程" class="headerlink" title="基础 UI 协程"></a>基础 UI 协程</h1><p>这个小节将展示协程在 UI 应用程序中的基础使用。</p>
+<h2 id="启动-UI-协程"><a href="#启动-UI-协程" class="headerlink" title="启动 UI 协程"></a>启动 UI 协程</h2><p><code>kotlinx-coroutines-javafx</code> 模块包含了<a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-javafx/kotlinx.coroutines.javafx/kotlinx.coroutines.-dispatchers/-java-fx.html" target="_blank" rel="noopener">Dispatchers.JavaFx</a> 分发器，该分发器分配协程操作给 JavaFx 应用线程。</p>
+<p>我们将之导入并用<code>Main</code>作为其别名，以便所有示例都可以轻松地移植到 Android 上：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> kotlinx.coroutines.javafx.JavaFx <span class="keyword">as</span> Main</span><br></pre></td></tr></table></figure>
+
+<p>主 UI 线程的协程可以在 UI 线程上执行任何更新 UI 的操作，并且可以不阻塞主线程地挂起（suspend）操作。举个例子，我们可以编写命令式代码（imperative style）来执行动画。下面的代码将使用 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/launch.html" target="_blank" rel="noopener">launch</a> 协程构造器，从 10 到 1 进行倒数，每隔 2 秒倒数一次并更新文本。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">setup</span><span class="params">(hello: <span class="type">Text</span>, fab: <span class="type">Circle</span>)</span></span> &#123;</span><br><span class="line">    GlobalScope.launch(Dispatchers.Main) &#123; <span class="comment">// launch coroutine in the main thread</span></span><br><span class="line">        <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">10</span> downTo <span class="number">1</span>) &#123; <span class="comment">// countdown from 10 to 1 </span></span><br><span class="line">            hello.text = <span class="string">"Countdown <span class="variable">$i</span> ..."</span> <span class="comment">// update text</span></span><br><span class="line">            delay(<span class="number">500</span>) <span class="comment">// wait half a second</span></span><br><span class="line">        &#125;</span><br><span class="line">        hello.text = <span class="string">"Done!"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>您可以<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx/test/guide/example-ui-basic-02.kt" target="_blank" rel="noopener">在此</a>获取完整的代码</p>
+</blockquote>
+<p>那么，上面究竟发生了什么呢？因为我们在 UI 线程启动（launching）了协程，所以我们可以在该协程内自由地更新 UI 的同时还可以调用挂起函数（suspend functions），比如  <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/delay.html" target="_blank" rel="noopener">delay</a> 。当 <code>delay</code> 在等待时（waits），UI 并不会卡住（frozen），因为 <code>delay</code> 并不会阻塞 UI 线程 —— 这就是协程的挂起。</p>
+<blockquote>
+<p>相应的 Android 应用代码是一样的。您只需要复制<code>setup</code>函数内的代码到 Android 项目中的对应函数中即可</p>
+</blockquote>
+<h2 id="取消-UI-协程"><a href="#取消-UI-协程" class="headerlink" title="取消 UI 协程"></a>取消 UI 协程</h2><p>当我们想要停止一个协程的时候，我们可以持有一个由 <code>launch</code>函数返回的 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-job/index.html" target="_blank" rel="noopener">Job</a> 对象并利用它来取消（cancel）。</p>
+<p>让我们通过点击桃红色的按钮来停止协程：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">setup</span><span class="params">(hello: <span class="type">Text</span>, fab: <span class="type">Circle</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> job = GlobalScope.launch(Dispatchers.Main) &#123; <span class="comment">// launch coroutine in the main thread</span></span><br><span class="line">        <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">10</span> downTo <span class="number">1</span>) &#123; <span class="comment">// countdown from 10 to 1 </span></span><br><span class="line">            hello.text = <span class="string">"Countdown <span class="variable">$i</span> ..."</span> <span class="comment">// update text</span></span><br><span class="line">            delay(<span class="number">500</span>) <span class="comment">// wait half a second</span></span><br><span class="line">        &#125;</span><br><span class="line">        hello.text = <span class="string">"Done!"</span></span><br><span class="line">    &#125;</span><br><span class="line">    fab.onMouseClicked = EventHandler &#123; job.cancel() &#125; <span class="comment">// cancel coroutine on click</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>您可以在<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx/test/guide/example-ui-basic-03.kt" target="_blank" rel="noopener">这里</a>获取完整代码</p>
+</blockquote>
+<p>现在实现的效果是：当倒数正在进行时，点击圆形按钮将会停止倒数。请注意，<a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-job/cancel.html" target="_blank" rel="noopener">Job.cancel</a> 方法线程安全并且非阻塞。它只是给协程发送取消信号，而不会等待协程真正终止。</p>
+<p><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-job/cancel.html" target="_blank" rel="noopener">Job.cancel</a> 该方法可以在任何地方调用，而如果在已经取消或者完成的协程上，该方法不做什么事情。</p>
+<blockquote>
+<p>相应的 Android 代码示例如下</p>
+</blockquote>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fab.setOnClickListener&#123;job.cancel()&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="在-UI-Context-中使用-actors"><a href="#在-UI-Context-中使用-actors" class="headerlink" title="在 UI Context 中使用 actors"></a>在 UI Context 中使用 actors</h1><p>在一节中，我们将会展示 UI 应用程序是如何在其 UI 上下文（Context）中使用 actors ，以确保启动的协程数量不会无限增长。</p>
+<h2 id="协程扩展"><a href="#协程扩展" class="headerlink" title="协程扩展"></a>协程扩展</h2><p>我们的目标是编写一个名为<code>onClick</code>的扩展协程构建器函数，这样每当圆形按钮被点击的时候，都会执行一个倒数动画：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">setup</span><span class="params">(hello: <span class="type">Text</span>, fab: <span class="type">Circle</span>)</span></span> &#123;</span><br><span class="line">    fab.onClick &#123; <span class="comment">// start coroutine when the circle is clicked</span></span><br><span class="line">        <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">10</span> downTo <span class="number">1</span>) &#123; <span class="comment">// countdown from 10 to 1 </span></span><br><span class="line">            hello.text = <span class="string">"Countdown <span class="variable">$i</span> ..."</span> <span class="comment">// update text</span></span><br><span class="line">            delay(<span class="number">500</span>) <span class="comment">// wait half a second</span></span><br><span class="line">        &#125;</span><br><span class="line">        hello.text = <span class="string">"Done!"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们的第一个<code>onClick</code>版本：在每一个鼠标事件上启动一个新的协程，并将之对应的鼠标事件传递给动作使用者：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> Node.<span class="title">onClick</span><span class="params">(action: <span class="type">suspend</span> (<span class="type">MouseEvent</span>) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    onMouseClicked = EventHandler &#123; event -&gt;</span><br><span class="line">        GlobalScope.launch(Dispatchers.Main) &#123; </span><br><span class="line">            action(event)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>您可以<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx/test/guide/example-ui-actor-01.kt" target="_blank" rel="noopener">在此</a>获取完整的代码</p>
+</blockquote>
+<p>请注意，每当圆形按钮被点击，它便会启动一个新的协程，这些新协程会竞争地更新文本。这看起来并不好，我们会在后面解决这个问题。</p>
+<blockquote>
+<p>在 Android 中，可以为 <code>View</code> 类编写对应的扩展函数代码，所以上面 <code>setup</code> 函数中的代码可以不需要另作更改就直接使用。Android 中没有 <code>MouseEvent</code>，所以此处略过</p>
+</blockquote>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> View.<span class="title">onClick</span><span class="params">(action: <span class="type">suspend</span> () -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    setOnClickListener &#123; </span><br><span class="line">        GlobalScope.launch(Dispatchers.Main) &#123;</span><br><span class="line">            action()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="最多只有一个协程-Job"><a href="#最多只有一个协程-Job" class="headerlink" title="最多只有一个协程 Job"></a>最多只有一个协程 Job</h2><p>我们可以在开启一个新的协程之前，取消掉一个正在运行（active）的 Job，以此来确保最多只有一个协程在执行倒计时工作。然而，通常来说这并不是一个最好的解决方法。<a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-job/cancel.html" target="_blank" rel="noopener">cancel</a> 函数仅仅发送一个取消信号去中断一个协程。取消的操作是合作性的，在现在的版本中，当协程在做一件不可取消的或类似的事件时，它是可以忽略取消信号的。</p>
+<p>一个更好的解决方法是使用一个 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/actor.html" target="_blank" rel="noopener">actor</a> 来确保协程不会同时进行。让我们修改<code>onClick</code>扩展实现：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> Node.<span class="title">onClick</span><span class="params">(action: <span class="type">suspend</span> (<span class="type">MouseEvent</span>) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 启动一个 actor 来接管这个节点中的所有事件</span></span><br><span class="line">    <span class="keyword">val</span> eventActor = GlobalScope.actor&lt;MouseEvent&gt;(Dispatchers.Main) &#123;</span><br><span class="line">        <span class="keyword">for</span> (event <span class="keyword">in</span> channel) action(event) <span class="comment">//传递事件给 action</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// install a listener to offer events to this actor</span></span><br><span class="line">    onMouseClicked = EventHandler &#123; event -&gt;</span><br><span class="line">        eventActor.offer(event)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>您可以<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx/test/guide/example-ui-actor-02.kt" target="_blank" rel="noopener">在此</a>获取完整代码</p>
+</blockquote>
+<p>整合 <code>actor</code> 协程和常规事件控制（event handler）的关键点，在于 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/index.html" target="_blank" rel="noopener">SendChannel</a> 中有一个不中断（no wait）的  <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/offer.html" target="_blank" rel="noopener">offer</a>  函数。如果发送消息这个行为可行的话，<a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/offer.html" target="_blank" rel="noopener">offer</a>  函数会立即发送一个元素给 <code>actor</code> ，否则该元素将会被丢弃。<code>offer</code> 函数会返回一个 <code>Boolean</code> 作为结果，不过在此该结果被我们忽略了。</p>
+<p>试着重复点击这个版本的代码中的圆形按钮。当倒数都动画正在执行时，该点击操作会被忽略掉。这是因为 <code>actor</code> 正忙于动画而没有从 channel 接受消息。默认情况下，一个 <code>actor</code> 的消息信箱（mailbox）是由 <code>RendezvousChannel</code>实现的，后者的 <code>offer</code>操作仅在 <code>receive</code> 活跃时有效。</p>
+<blockquote>
+<p>在 Android 中，<code>View</code> 被传递给 <code>OnClickListener</code>，所以我们把 <code>view</code> 当作信号（signal）传递给 <code>actor</code> 。对应的 <code>View</code> 类扩展如下：</p>
+</blockquote>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> View.<span class="title">onClick</span><span class="params">(action: <span class="type">suspend</span> (<span class="type">View</span>) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    <span class="comment">// launch one actor</span></span><br><span class="line">    <span class="keyword">val</span> eventActor = GlobalScope.actor&lt;View&gt;(Dispatchers.Main) &#123;</span><br><span class="line">        <span class="keyword">for</span> (event <span class="keyword">in</span> channel) action(event)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// install a listener to activate this actor</span></span><br><span class="line">    setOnClickListener &#123; </span><br><span class="line">        eventActor.offer(it)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="事件合并"><a href="#事件合并" class="headerlink" title="事件合并"></a>事件合并</h2><p>有时候处理最新的事件比忽略掉它更合适。 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/actor.html" target="_blank" rel="noopener">actor</a> 协程构建器接受一个可选的 <code>capacity</code> 参数来控制用于消息信箱（mailbox）的 channel 的实现。所有有效的选项均在 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html" target="_blank" rel="noopener"><code>Channel()</code></a> 工厂函数中有所阐述。</p>
+<p>让我们修改代码，传递 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/-c-o-n-f-l-a-t-e-d.html" target="_blank" rel="noopener">Channel.CONFLATED</a> 这个 capacity 参数来使用  <code>ConflatedChannel</code> 。只需要更改创建 actor 的那行代码即可：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> Node.<span class="title">onClick</span><span class="params">(action: <span class="type">suspend</span> (<span class="type">MouseEvent</span>) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    <span class="comment">// launch one actor to handle all events on this node</span></span><br><span class="line">    <span class="keyword">val</span> eventActor = GlobalScope.actor&lt;MouseEvent&gt;(Dispatchers.Main, capacity = Channel.CONFLATED) &#123; <span class="comment">// &lt;--- Changed here</span></span><br><span class="line">        <span class="keyword">for</span> (event <span class="keyword">in</span> channel) action(event) <span class="comment">// pass event to action</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// install a listener to offer events to this actor</span></span><br><span class="line">    onMouseClicked = EventHandler &#123; event -&gt;</span><br><span class="line">        eventActor.offer(event)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>您可以<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx/test/guide/example-ui-actor-03.kt" target="_blank" rel="noopener">在此</a>获取完整的 JavaFx 代码。在 Android 上，您需要修改之前示例中的 <code>val eventActor = ...</code> 这一行。</p>
+</blockquote>
+<p>现在，如果动画正在进行时圆形按钮被点击了，动画将会在结束之后重新启动。仅会重启一次。当动画进行时，重复的点击操作将会被合并，而仅有最新的事件会被处理。</p>
+<p>这对于那些需要接收高频率事件流，并基于最新事件更新 UI 的 UI 应用程序而言，也是一种合乎需求的行为（ a desired behaviour ）。使用  <code>ConflatedChannel</code> 的协程可以避免由事件缓冲（buffering of events）带来的延迟。</p>
+<p>您可以试验不同的  <code>capacity</code>  参数来看看上面代码的效果和行为。设置 <code>capacity = Channel.UNLIMITED</code> 将创建一个 <code>LinkedListChannel</code> 实现的信箱，这会缓冲所有事件。在这种情况下，动画的执行次数和圆形按钮点击次数保持一致。</p>
+<h1 id="阻塞操作"><a href="#阻塞操作" class="headerlink" title="阻塞操作"></a>阻塞操作</h1><p>这一小节将解释如何在 UI 协程中完成线程阻塞操作（thread-blocking operations）。</p>
+<h2 id="UI-卡顿问题"><a href="#UI-卡顿问题" class="headerlink" title="UI 卡顿问题"></a>UI 卡顿问题</h2><blockquote>
+<p>The problem of UI freezes</p>
+</blockquote>
+<p>如果所有 API 接口函数均以挂起函数（suspending functions）来实现那是最好不过的事情了，这样那些函数将永远不会阻塞调用它们的线程。然而，事实往往并非如此。比如，有时候您必须做一些消耗 CPU 的计算操作，或者只是需要调用第三方的 API 来访问网络，这些行为都会阻塞调用函数的线程。您无法在 UI 线程或是 UI 线程启动的协程直接做上述操作，因为那会直接阻塞 UI 线程从而导致 UI 界面卡顿。</p>
+<p>下面的例子将会展示这个问题。我们将使用 <code>onClick</code> 扩展和上一节中的 <em>UI 限制性事件合并 actor</em> 来处理 UI 线程的最后一次点击。</p>
+<p>举个例子，我们将进行 <a href="https://en.wikipedia.org/wiki/Fibonacci_number" target="_blank" rel="noopener">斐波那契数列</a> 的简单演算：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">fib</span><span class="params">(x: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> = </span><br><span class="line">	<span class="keyword">if</span> (x &lt;= <span class="number">1</span>) x <span class="keyword">else</span> fib(x - <span class="number">1</span>) + fib(x - <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>每当圆形按钮被点击，我们都会进行更大的斐波那契数的计算。为了让 UI 卡顿变得明显可见，将会有一个持续执行的快速的计数器动画，并在 UI 分发器（dispatcher）更新文本：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">setup</span><span class="params">(hello: <span class="type">Text</span>, fab: <span class="type">Circle</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> result = <span class="string">"none"</span> <span class="comment">// the last result</span></span><br><span class="line">    <span class="comment">// counting animation </span></span><br><span class="line">    GlobalScope.launch(Dispatchers.Main) &#123;</span><br><span class="line">        <span class="keyword">var</span> counter = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            hello.text = <span class="string">"<span class="subst">$&#123;++counter&#125;</span>: <span class="variable">$result</span>"</span></span><br><span class="line">            delay(<span class="number">100</span>) <span class="comment">// update the text every 100ms</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// compute the next fibonacci number of each click</span></span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">1</span></span><br><span class="line">    fab.onClick &#123;</span><br><span class="line">        result = <span class="string">"fib(<span class="variable">$x</span>) = <span class="subst">$&#123;fib(x)&#125;</span>"</span></span><br><span class="line">        x++</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>您可以在<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx/test/guide/example-ui-blocking-01.kt" target="_blank" rel="noopener">这里</a>获取完整的 JavaFx 代码。您只需要复制 <code>fib</code> 函数及 <code>setup</code> 函数体内代码到您的 Android 项目即可</p>
+</blockquote>
+<p>试着点击例子中的圆形按钮。大概第在 30~40 次点击后，我们的计算将会变得缓慢，接着您会立刻看到 UI 卡顿，因为倒数动画在 UI 卡顿的时候停止了。</p>
+<h2 id="结构化并发、生命周期和协程亲子继承"><a href="#结构化并发、生命周期和协程亲子继承" class="headerlink" title="结构化并发、生命周期和协程亲子继承"></a>结构化并发、生命周期和协程亲子继承</h2><p>一个典型的 UI 应用程序拥有许多生命周期元素。Windows、UI 控制、activities，views，fragments 以及其他可视化元素将会被创建和销毁。一个长时间运行的协程，在后台执行着诸如 IO 或计算操作，如果它持有 UI 元素的引用，那么可能导致 UI 元素生命周期过长，继而阻止那些已经销毁并且不再显示的 UI 树被 GC 收集和回收。</p>
+<p>一个自然的解决方法是将一个 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-job/index.html" target="_blank" rel="noopener">Job</a>  对象关联到 UI 对象，后者拥有生命周期并在其上下文（Context）中创建协程。但是传递已关联的 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-job/index.html" target="_blank" rel="noopener">Job</a> 对象给所有线程构造器容易出错，而且这个操作容易被遗忘。故此，<a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/index.html" target="_blank" rel="noopener">CoroutineScope</a> 接口可以被 UI 所有者所实现，然后每一个在  <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/index.html" target="_blank" rel="noopener">CoroutineScope</a> 上定义为扩展的协程构造器都将继承 UI 的 Job，而无需显式声明。为了简单起见，可以使用 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-main-scope.html" target="_blank" rel="noopener">MainScope()</a> 工厂方法。它会自动提供  <code>Dispatchers.Main</code> 及其父级 job 。</p>
+<p>举个例子，在 Android 应用程序中，一个 <code>Activity</code> 在 <em>created</em> 中被初始化，而当其不再被需要或者其内存必须被释放时，该对象被<em>销毁<em>（</em>destroyed</em>)。一个自然的解决方法是为一个 <code>Activity</code> 实例对象附加一个 <code>Job</code> 实例对象：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ScopedAppActivity</span>: <span class="type">AppCompatActivity</span></span>(), CoroutineScope <span class="keyword">by</span> MainScope() &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onDestroy</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.onDestroy()</span><br><span class="line">        cancel() <span class="comment">// CoroutineScope.cancel</span></span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在，继承 <code>ScopedAppActivity</code> 来让一个 activity 和一个 job 关联起来：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class MainActivity : ScopedAppActivity() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">fun <span class="title">asyncShowData</span><span class="params">()</span> </span>= launch &#123; <span class="comment">// Is invoked in UI context with Activity's job as a parent</span></span><br><span class="line">        <span class="comment">// actual implementation</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function">suspend fun <span class="title">showIOData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        val deferred = async(Dispatchers.IO) &#123;</span><br><span class="line">            <span class="comment">// impl      </span></span><br><span class="line">        &#125;</span><br><span class="line">        withContext(Dispatchers.Main) &#123;</span><br><span class="line">          val data = deferred.await()</span><br><span class="line">          <span class="comment">// Show data in UI</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>每个从<code>MainActivity</code>中启动（launched）的协程都将拥有它的 job 作为其父亲，当 activity 被销毁时，协程将会被立刻取消（canceled）。</p>
+<p>可以使用多种方法，来将 activtiy 的 scope 传递给它的 Views 及 Presenters：</p>
+<ul>
+<li><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/index.html" target="_blank" rel="noopener">coroutineScope</a> 构造器提供一个嵌套的 scope</li>
+<li>在 presenters 方法中接收一个  <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/index.html" target="_blank" rel="noopener">CoroutineScope</a>  参数</li>
+<li>在 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/index.html" target="_blank" rel="noopener">CoroutineScope</a> 中进行函数扩展（仅适用于顶级函数）</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ActivityWithPresenters</span>: <span class="type">ScopedAppActivity</span></span>() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">val</span> presenter = Presenter()</span><br><span class="line">        <span class="keyword">val</span> presenter2 = ScopedPresenter(<span class="keyword">this</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Presenter</span> </span>&#123;</span><br><span class="line">    <span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">loadData</span><span class="params">()</span></span> = coroutineScope &#123;</span><br><span class="line">        <span class="comment">// Nested scope of outer activity</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">loadData</span><span class="params">(uiScope: <span class="type">CoroutineScope</span>)</span></span> = uiScope.launch &#123;</span><br><span class="line">      <span class="comment">// Invoked in the uiScope</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ScopedPresenter</span></span>(scope: CoroutineScope): CoroutineScope <span class="keyword">by</span> scope &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">loadData</span><span class="params">()</span></span> = launch &#123; <span class="comment">// Extension on ActivityWithPresenters's scope</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> CoroutineScope.<span class="title">launchInIO</span><span class="params">()</span></span> = launch(Dispatchers.IO) &#123;</span><br><span class="line">   <span class="comment">// Launched in the scope of the caller, but with IO dispatcher</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>jobs 间的亲子关系形成了层级结构。一个代表视图在后台执行工作的协程，可以进一步创建子协程。当父级 job 被取消的时候，整个协程树都将被取消。协程指南中的“<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/docs/coroutine-context-and-dispatchers.md#children-of-a-coroutine" target="_blank" rel="noopener">子协程</a>”用一个例子阐述了这些用法。</p>
+<h2 id="阻塞操作-1"><a href="#阻塞操作-1" class="headerlink" title="阻塞操作"></a>阻塞操作</h2><p>使用协程可以非常简单地解决 UI 线程上的阻塞操作。我们将把我们的“阻塞” <code>fib</code> 函数转换为挂起函数，然后通过使用 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/with-context.html" target="_blank" rel="noopener">withContext</a> 函数来将把后台运算部分的线程的执行上下文（execution context）转换为 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/-default.html" target="_blank" rel="noopener">Dispatchers.Default</a> 。 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/-default.html" target="_blank" rel="noopener">Dispatchers.Default</a> 由一个后台线程池（ background pool）实现。请注意，<code>fib</code>函数现在标有 <code>suspend</code> 修饰符。这表示无论它怎么被调用都会不会阻塞协程，而是在后台线程执行计算时，挂起它的操作。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">fib</span><span class="params">(x: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> = withContext(Dispatchers.Default) &#123;</span><br><span class="line">    <span class="keyword">if</span> (x &lt;= <span class="number">1</span>) x <span class="keyword">else</span> fib(x - <span class="number">1</span>) + fib(x - <span class="number">2</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>您可以在<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx/test/guide/example-ui-blocking-02.kt" target="_blank" rel="noopener">这里</a> 获取完整代码。</p>
+</blockquote>
+<p>您可以运行上述代码然后确认在计算较大的斐波那契数时 UI 不会被卡住。然而，这段 <code>fib</code>计算代码速度稍慢，因为每一次都是通过 <code>withContext</code> 来递归调用的。这在练习中并不是什么大问题，因为  <code>withContext</code> 能够机智地检查该协程是否已经在所需的上下文中，然后避免过度分发（dispatching）协程到不同的线程。尽管如此，这仍是一种开销。它在原生代码（primitive code）上是可见的，并且它除了调用  <code>withContext</code>  之间提供整数以外，不做其他工作。对于一些实际性的代码， <code>withContext</code>  的开销不会很明显。</p>
+<p>尽管如此，这个特定实现的可在后台线程工作的 <code>fib</code> 函数也可以变得和没有使用挂起函数时一样快，只需要重命名原来的 <code>fib</code> 函数为 <code>fibBlocking</code> 然后定义一个用  <code>withContext</code>  包装在 <code>fibBlocking</code> 顶部的 <code>fib</code> 函数即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">suspend fun <span class="title">fib</span><span class="params">(x: Int)</span>: Int </span>= withContext(Dispatchers.Default) &#123;</span><br><span class="line">    fibBlocking(x)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">fun <span class="title">fibBlocking</span><span class="params">(x: Int)</span>: Int </span>= </span><br><span class="line">    <span class="keyword">if</span> (x &lt;= <span class="number">1</span>) <span class="function">x <span class="keyword">else</span> <span class="title">fibBlocking</span><span class="params">(x - <span class="number">1</span>)</span> + <span class="title">fibBlocking</span><span class="params">(x - <span class="number">2</span>)</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>您可以在<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx/test/guide/example-ui-blocking-03.kt" target="_blank" rel="noopener">这里</a> 获取完整代码。</p>
+</blockquote>
+<p>您现在可以享受全速（full-speed）的原生斐波那契数计算而不会阻塞 UI 线程了。我们仅仅需要 <code>withContext(Dispatchers.Default)</code> 而已。</p>
+<p>请记住，因为在我们代码中 <code>fib</code> 函数是被单个 actor 所调用的，故而在任何时间都最多只有一个并行运算。所以这份代码在资源利用上有着天然的限制性。它最多只能占用一个 CPU 核心。</p>
+<h1 id="进阶提示"><a href="#进阶提示" class="headerlink" title="进阶提示"></a>进阶提示</h1><p>这个小结覆盖了多种进阶提示。</p>
+<h2 id="不使用分发器在-UI-事件控制器中启动协程"><a href="#不使用分发器在-UI-事件控制器中启动协程" class="headerlink" title="不使用分发器在 UI 事件控制器中启动协程"></a>不使用分发器在 UI 事件控制器中启动协程</h2><p>让我们用下列 <code>setup</code> 函数中的代码来形象展示协程从 UI 中启动的执行步骤：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">setup</span><span class="params">(hello: <span class="type">Text</span>, fab: <span class="type">Circle</span>)</span></span> &#123;</span><br><span class="line">    fab.onMouseClicked = EventHandler &#123;</span><br><span class="line">        println(<span class="string">"Before launch"</span>)</span><br><span class="line">        GlobalScope.launch(Dispatchers.Main) &#123;</span><br><span class="line">            println(<span class="string">"Inside coroutine"</span>)</span><br><span class="line">            delay(<span class="number">100</span>)</span><br><span class="line">            println(<span class="string">"After delay"</span>)</span><br><span class="line">        &#125; </span><br><span class="line">        println(<span class="string">"After launch"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>您可以在<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx/test/guide/example-ui-advanced-01.kt" target="_blank" rel="noopener">这里</a>获取完整的  JavaFx  代码。</p>
+</blockquote>
+<p>当我们运行代码并点击桃红色的圆形按钮，控制台将会打印出如下信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Before launch</span><br><span class="line">After launch</span><br><span class="line">Inside coroutine</span><br><span class="line">After delay</span><br></pre></td></tr></table></figure>
+
+<p>正如您所见，<a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/launch.html" target="_blank" rel="noopener">launch</a> 后的操作被立刻执行了，而发布到 UI 线程的协程则在其之后才执行。所有在  <code>kotlinx.coroutines</code> 的分发器都是如此实现的。为什么要这样呢？</p>
+<p>基本上，这是在 “JavaScript 风格”异步方法（异步操作总是被延迟给事件分发线程执行）和 “C# 风格”异步方法（异步操作在调用者线程遇到第一个挂起函数时被执行）之间的选择。尽管 C# 风格看起来更有效率，但是它最终建议诸如“如果您需要时请使用 <code>yield</code> …”的信息。这样是容易出错的。JavaScript 风格的方法更加一致，它也不要求编程人员去思考什么时候该或不该使用 <code>yield</code> 。</p>
+<p>然而，当协程从事件控制器（event handler）启动，并且没有其周围没有其它的代码，这中特殊情况下，此种额外的分派确实会带来额外的开销，并且没有其他的附加价值。在这样的情况下， <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/launch.html" target="_blank" rel="noopener">launch</a>、<a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/async.html" target="_blank" rel="noopener">async</a> 和 <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/actor.html" target="_blank" rel="noopener">actor</a> 三种协程构造器均可以传递一个可选的  <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-start/index.html" target="_blank" rel="noopener">CoroutineStart</a> 参数来优化性能。传递  <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-start/-u-n-d-i-s-p-a-t-c-h-e-d.html" target="_blank" rel="noopener">CoroutineStart.UNDISPATCHED</a> 参数将会实现：遇到首个挂在函数便立刻执行协程的效果。正如下面代码所示：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">setup</span><span class="params">(hello: <span class="type">Text</span>, fab: <span class="type">Circle</span>)</span></span> &#123;</span><br><span class="line">    fab.onMouseClicked = EventHandler &#123;</span><br><span class="line">        println(<span class="string">"Before launch"</span>)</span><br><span class="line">        GlobalScope.launch(Dispatchers.Main, CoroutineStart.UNDISPATCHED) &#123; <span class="comment">// &lt;--- Notice this change</span></span><br><span class="line">            println(<span class="string">"Inside coroutine"</span>)</span><br><span class="line">            delay(<span class="number">100</span>)                            <span class="comment">// &lt;--- And this is where coroutine suspends      </span></span><br><span class="line">            println(<span class="string">"After delay"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        println(<span class="string">"After launch"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>您可以<a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-javafx/test/guide/example-ui-advanced-02.kt" target="_blank" rel="noopener">在此</a>获取到完整的 JavaFx 代码。</p>
+</blockquote>
+<p>当点击时，下面的信息将会被打印出来，可以确认协程中的代码被立刻执行：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Before launch</span><br><span class="line">Inside coroutine</span><br><span class="line">After launch</span><br><span class="line">After delay</span><br></pre></td></tr></table></figure>
+
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#翻译" >
+    <span class="tag-code">翻译</span>
+  </a>
+
+  <a href="/tags#Coroutine" >
+    <span class="tag-code">Coroutine</span>
+  </a>
+
+  <a href="/tags#协程" >
+    <span class="tag-code">协程</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/01/2018-summary/">
+        <span class="nav-arrow">← </span>
+        
+          2018 总结 &amp; 2019 展望
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2019/02/web-view-ad-blocker/">
+        
+          WebView 广告拦截浅析
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Disqus START -->
+      <div id="disqus_thread"></div>
+      <!-- Disqus END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#目录"><span class="toc-nav-text">目录</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#设置"><span class="toc-nav-text">设置</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#JavaFx"><span class="toc-nav-text">JavaFx</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Android"><span class="toc-nav-text">Android</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#基础-UI-协程"><span class="toc-nav-text">基础 UI 协程</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#启动-UI-协程"><span class="toc-nav-text">启动 UI 协程</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#取消-UI-协程"><span class="toc-nav-text">取消 UI 协程</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#在-UI-Context-中使用-actors"><span class="toc-nav-text">在 UI Context 中使用 actors</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#协程扩展"><span class="toc-nav-text">协程扩展</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#最多只有一个协程-Job"><span class="toc-nav-text">最多只有一个协程 Job</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#事件合并"><span class="toc-nav-text">事件合并</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#阻塞操作"><span class="toc-nav-text">阻塞操作</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#UI-卡顿问题"><span class="toc-nav-text">UI 卡顿问题</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#结构化并发、生命周期和协程亲子继承"><span class="toc-nav-text">结构化并发、生命周期和协程亲子继承</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#阻塞操作-1"><span class="toc-nav-text">阻塞操作</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#进阶提示"><span class="toc-nav-text">进阶提示</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#不使用分发器在-UI-事件控制器中启动协程"><span class="toc-nav-text">不使用分发器在 UI 事件控制器中启动协程</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://blog.rosuh.me/2019/01/coroutines-guide-ui/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+  <script>
+    var disqus_shortname = 'blog-rosuh-me';
+    
+    var disqus_url = 'https://blog.rosuh.me/2019/01/coroutines-guide-ui/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//go.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/03/link-ndk-with-gradle/">将 ndk-build 关联到 Gradle</a>
+      </h2>
+      <p class="article-date">2020年3月8日</p>
+      
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          前言最近在倒腾Mpg123-Android的时候，尝试了把 ndk-build 关联到 Gradle 中。不需要单独执行 ndk-build 指令来构建 so 了。在使用此种方式后，有些小发现，和诸君分享。
+怎么关联在模块级别的build.gradle文件中指定如下：
+12345678910 ...
+        
+      </div>
+      <a class="more" href="/2020/03/link-ndk-with-gradle/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/02/Android-reading-note-summary/">Android 札记系列迁移告知</a>
+      </h2>
+      <p class="article-date">2020年2月10日</p>
+      
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#札记" >
+    <span class="tag-code">札记</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          迁移通知之前在实习期间写的 Android 系列笔记，都迁移至语雀文档。因为后者对于笔记系列的管理和组织会强于博文。再者因为是实习期间的笔记，难免过于粗浅。未免贻笑大方故从博客中移除。在全职工作的一年中，我亦对工作和生活中遇到的问题做了详细记录，待整理后一并分享公开。
+
+        
+      </div>
+      <a class="more" href="/2020/02/Android-reading-note-summary/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/12/2019-12%20%E8%AF%BB%E4%B9%A6%E6%9C%88%E6%8A%A5/">2019-12 读书月报</a>
+      </h2>
+      <p class="article-date">2019年12月30日</p>
+      
+        
+  <a href="/tags#阅读" >
+    <span class="tag-code">阅读</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          经济学通识
+作者：薛兆丰
+评分：7.7分
+链接：https://book.douban.com/subject/26582558/
+
+读后感：
+
+读后感：标题有点夸张，还是叫做《薛兆丰文集》好些。书本身是作者的文章集合，有些是有连贯性的。整体读起来还是很受启发，可以借得经济学人的眼睛看待事物 ...
+        
+      </div>
+      <a class="more" href="/2019/12/2019-12%20%E8%AF%BB%E4%B9%A6%E6%9C%88%E6%8A%A5/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/11/why-can-get-view-size-after-view-post/">为什么使用 View.postDelay() 就可以拿到宽高？</a>
+      </h2>
+      <p class="article-date">2019年11月27日</p>
+      
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          View.postDelay()并不是立刻在 Handler  中被调用的。如果当前 View 还没有依附到一个 Window 上，那么这个消息将会先保存在 View 中，直到dispatchAttachToWindow()方法被调用时才会把消息加到 Handler 队列中。
+下面我们来一步 ...
+        
+      </div>
+      <a class="more" href="/2019/11/why-can-get-view-size-after-view-post/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/03/Manifesto-for-Minimalist-Software-Engineers-CN/">【翻译】极简主义工程师宣言</a>
+      </h2>
+      <p class="article-date">2019年3月16日</p>
+      
+        
+  <a href="/tags#软技能" >
+    <span class="tag-code">软技能</span>
+  </a>
+
+  <a href="/tags#翻译" >
+    <span class="tag-code">翻译</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          【翻译】极简主义工程师宣言🌐 中文翻译
+
+ Manifesto for  Minimalist Software Engineers
+
+〇
+为帕累托法则奋斗
+Fight for Pareto‘s law, look for the 20% of effort that will give  ...
+        
+      </div>
+      <a class="more" href="/2019/03/Manifesto-for-Minimalist-Software-Engineers-CN/">「阅读更多」</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a class="unvisible" href="/"><span class="page-arrow">←</span> Prev</a>
+  
+  
+    <a href="/page/2/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

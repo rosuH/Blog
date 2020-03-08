@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      使用 NW.js 创建简单的桌面应用 | rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>使用 NW.js 创建简单的桌面应用</h2>
+  <p class="post-date">2018-03-08</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>因为早上想用<a href="https://www.memobird.shop/" target="_blank" rel="noopener">咕咕机</a>（Memobird）打印一下天气，发现他还有 Web 版本。然后想着能不能打包成一个<code>.exe</code>，直接丢到桌面执行，不想每次都打开浏览器、网页什么的…</p>
+<p>然后了解了一下<a href="https://electronjs.org/" target="_blank" rel="noopener">Electron</a> 和 <a href="https://nwjs.io/" target="_blank" rel="noopener">NW.js</a>。然后顺着用了后者尝试打包了一下，发现还是挺简单的。</p>
+<p>因为个人不需要添加过多的功能，所以使用门槛较低的 NW.js 来实现。如果你需要添加更多自定义的功能，可以考虑使用前者来完成你的开发工作。</p>
+<p>下面是过程。</p>
+<h1 id="1-软件准备"><a href="#1-软件准备" class="headerlink" title="1. 软件准备"></a>1. 软件准备</h1><p>不太喜欢每到一步就去下载一个软件，个人喜欢把软件和环境先准备好。</p>
+<p>本文章环境为 Win10，使用 Linux 的同学自己应该可以解决这些小问题。</p>
+<ul>
+<li><a href="https://nwjs.io/" target="_blank" rel="noopener">NW.js</a>（*必要）<ul>
+<li>本次工作的主体软件</li>
+<li>需要下载，然后解压</li>
+<li>解压后的目录为我们本次的工作根目录</li>
+</ul>
+</li>
+<li><a href="http://enigmaprotector.com/en/downloads.html" target="_blank" rel="noopener">Enigma Virtual Box</a>（*必要）<ul>
+<li>打包工具，后面用它来打包成可执行<code>.exe</code>文件</li>
+<li>需要下载并安装</li>
+</ul>
+</li>
+<li><a href="https://www.axialis.com/iconworkshop/" target="_blank" rel="noopener">IconWorkshop-Pro</a>（*可选）<ul>
+<li>用于创建程序的图标资源，需要下载并安装</li>
+<li>可以创建各种尺寸一整套图标，如果你没有这样的需求，自己用随便找一张图片转为<code>icon</code>格式的也可以</li>
+<li>或者直接使用默认的图标</li>
+</ul>
+</li>
+<li><a href="http://www.angusj.com/resourcehacker/" target="_blank" rel="noopener">Resource Hacker</a>（*可选）<ul>
+<li>用于修改程序的 <code>icon</code></li>
+<li>需要下载并安装</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-打包"><a href="#2-打包" class="headerlink" title="2. 打包"></a>2. 打包</h1><p>第一步里，我们解压了 NW.js 的压缩包，现在我们进入该目录。然后着手开始我们的工作。</p>
+<p><img src="https://img.ioioi.top/wiki/explorer_2018-03-08_15-43-42.png" alt="pic1"></p>
+<h2 id="2-1-创建一个项目文件夹"><a href="#2-1-创建一个项目文件夹" class="headerlink" title="2.1 创建一个项目文件夹"></a>2.1 创建一个项目文件夹</h2><p>在当前目录下创建一个文件夹并<strong>进入</strong>。文件夹命名随意，比如我命名为<code>memobird</code>。</p>
+<p><img src="https://img.ioioi.top/wiki/explorer_2018-03-08_15-45-08.png" alt="pic2"></p>
+<p>接着我们在当前目录下，创建两个文件：<code>index.html</code>和<code>package.json</code>。</p>
+<p><img src="https://img.ioioi.top/wiki/explorer_2018-03-08_15-47-37.png" alt="pic3"></p>
+<ul>
+<li><code>index.html</code><ul>
+<li>打包后程序的入口文件，你可以在这个文件里设置一个跳转链接到目标网站</li>
+</ul>
+</li>
+</ul>
+<p>我的内容如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>memobird<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">window</span>.location.href = <span class="string">"http://w.memobird.cn/cn/w/login.aspx"</span>;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，我设置了一个跳转，跳到咕咕机的 Web 版页面。你只需要把你的目标网站链接替换进去就行了。</p>
+<ul>
+<li><code>package.json</code><ul>
+<li>NW.js 的配置文件</li>
+</ul>
+</li>
+</ul>
+<p>我的内容如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"Memobird"</span>,</span><br><span class="line">    <span class="attr">"version"</span>: <span class="string">"0.01"</span>,</span><br><span class="line">    <span class="attr">"main"</span>: <span class="string">"index.html"</span>,</span><br><span class="line">    <span class="attr">"window"</span>: &#123;</span><br><span class="line">      <span class="attr">"width"</span>: <span class="number">1024</span>,</span><br><span class="line">      <span class="attr">"height"</span>: <span class="number">768</span>,</span><br><span class="line">      <span class="attr">"title"</span>: <span class="string">"Memobird"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>此处只有几个参数，非常简单。</p>
+<ul>
+<li><code>name</code><ul>
+<li>应用名称</li>
+</ul>
+</li>
+<li><code>version</code><ul>
+<li>版本号</li>
+</ul>
+</li>
+<li><code>main</code><ul>
+<li>程序入口页面</li>
+</ul>
+</li>
+<li><code>windows</code><ul>
+<li>程序窗口设置</li>
+</ul>
+</li>
+</ul>
+<p>这两个文件编辑好之后，将这两个文件打包为一个<code>.zip</code>格式的压缩包，并压缩包后缀改为<code>.nw</code>。</p>
+<p><img src="https://img.ioioi.top/wiki/Snipaste_2018-03-08_15-57-35.png" alt="pic"></p>
+<p><em>图示为使用 7-zip 压缩软件，你可以使用任何能达到同样效果的压缩软件</em>。</p>
+<p><img src="https://img.ioioi.top/wiki/Snipaste_2018-03-08_15-59-19.png" alt="pic"></p>
+<p><img src="https://img.ioioi.top/wiki/Snipaste_2018-03-08_15-59-30.png" alt="pic"></p>
+<p>接着，把<code>.nw</code>后缀的文件，复制到上一目录，也即是我们工作的根目录。</p>
+<p><img src="https://img.ioioi.top/wiki/2018-03-08_16-03-00.png" alt="pic"></p>
+<h2 id="2-2-修改图标"><a href="#2-2-修改图标" class="headerlink" title="2.2 修改图标"></a>2.2 修改图标</h2><p>如果你不需要修改图标，那么可以直接跳过这一步。我们在这里需要先修改<code>nw.exe</code>的图标，因为待会用<code>nw.exe</code>打包之后，默认图标就是<code>nw.exe</code>的图标。</p>
+<p>打开<a href="http://www.iconworkshop.cn/" target="_blank" rel="noopener">IconWorkshop</a>软件，不需要选择创建<code>icon</code>，而是打开一张你选好的图片会比较快。当然，你也可以自己从零开始创建一个<code>icon</code>。</p>
+<p><img src="https://img.ioioi.top/wiki/2018-03-08_16-13-21.png" alt="pic"></p>
+<p>在图片窗口左上角，找到创建<code>icon</code>的功能按钮。</p>
+<p><img src="https://img.ioioi.top/wiki/2018-03-08_16-14-45.png" alt="pic"></p>
+<p>在弹出的对话框中，你可以自定义图标的信息。如果没什么要求直接确定即可。</p>
+<p>点击确定之后，它会回到刚刚的图标窗口，这时候需要保存一下。</p>
+<p><img src="https://img.ioioi.top/wiki/2018-03-08_16-16-41.png" alt="pic"></p>
+<p>这样我们的图标就制作完成了。</p>
+<p>接着使用 Resource Hacker 修改 <code>nw.exe</code> 的图标。</p>
+<ul>
+<li>打开 Resource Hacker</li>
+<li>直接将 <code>nw.exe</code>拖入程序窗口</li>
+<li>在左侧目录中找到<code>Icon Group</code>目录，并在子文件中找到默认图标</li>
+</ul>
+<p><img src="https://img.ioioi.top/wiki/2018-03-08_16-18-52.png" alt="pic"></p>
+<ul>
+<li>接着右击该图标，选择 replace icon<ul>
+<li>然后选择刚刚我们做的图标并替换即可</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://img.ioioi.top/wiki/2018-03-08_16-20-13.png" alt="pic"></p>
+<p>最后保存更改并退出。</p>
+<p><strong>虽然现在已经更改了，但是因为 windows 存在图标缓存，所以并没有发生变化。你可以将<code>nw.exe</code>复制到其他文件夹，就会看到变化了</strong>。</p>
+<h2 id="2-3-打包文件"><a href="#2-3-打包文件" class="headerlink" title="2.3 打包文件"></a>2.3 打包文件</h2><p>在我们工作目录下打开<code>cmd</code>，输入如下格式的命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy /b nw.exe+memobird.nw mimobird.exe</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.ioioi.top/wiki/2018-03-08_16-25-06.png" alt="pic"></p>
+<ul>
+<li><code>memobird.nw</code>是我们创建并复制过来的</li>
+<li><code>memobird.exe</code>  将要是打包后并生成的文件的名字</li>
+</ul>
+<p>你根据你自己的文件吗进行修改即可。</p>
+<p>现在便可以打开<code>memobird.exe</code>看看效果了。</p>
+<p>目前该文件只能在当前目录下运行，因为他需要一些资源文件。</p>
+<p>接着，我们便把资源文件也一并打包进去。</p>
+<h1 id="3-构建单文件执行程序"><a href="#3-构建单文件执行程序" class="headerlink" title="3. 构建单文件执行程序"></a>3. 构建单文件执行程序</h1><ul>
+<li>打开 Enigma Virtual Box<ul>
+<li>“封包主程”选择刚刚生成的 <code>memobird.exe</code></li>
+</ul>
+</li>
+</ul>
+<p>接着打开我们的工作目录，把所有文件都拖进下面的空白中：</p>
+<p><img src="https://img.ioioi.top/wiki/2018-03-08_16-31-06.png" alt="pic4"></p>
+<p>其中：<code>memobird.exe, memobird.nw</code>都是不需要的，你可以自己删掉。</p>
+<p>然后点击“执行封包”按钮开始封包。</p>
+<p><img src="https://img.ioioi.top/wiki/2018-03-08_16-32-40.png" alt="pic5"></p>
+<p>等待封包完成即可。</p>
+<p>这样，我们就简单并且快速地完成了创建了一个桌面程序，内部挂载的是原站点。</p>
+<p>实际上类似于浏览器的模式。</p>
+<p><img src="https://img.ioioi.top/wiki/2018-03-08_16-37-34.png" alt="pic6"></p>
+<hr>
+<p><em>参看</em>：</p>
+<ul>
+<li><a href="https://www.kancloud.cn/mikkle/thinkphp5_study/467061" target="_blank" rel="noopener">使用NW将我们开发的网站打包成桌面应用</a></li>
+<li><a href="http://keenwon.com/1311.html" target="_blank" rel="noopener">修改 node-webkit 的默认图标</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#NWjs" >
+    <span class="tag-code">NWjs</span>
+  </a>
+
+  <a href="/tags#Memobird" >
+    <span class="tag-code">Memobird</span>
+  </a>
+
+  <a href="/tags#日常" >
+    <span class="tag-code">日常</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2017/11/install-android-studio-in-ubuntu/">
+        <span class="nav-arrow">← </span>
+        
+          绕了一大圈的 Android Studio 安装札记
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/04/using-viewpager-to-make-a-banner-1/">
+        
+          手动实现轮播图（一）：ViewPager 入门实践
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Disqus START -->
+      <div id="disqus_thread"></div>
+      <!-- Disqus END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#前言"><span class="toc-nav-text">前言</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-软件准备"><span class="toc-nav-text">1. 软件准备</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-打包"><span class="toc-nav-text">2. 打包</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-1-创建一个项目文件夹"><span class="toc-nav-text">2.1 创建一个项目文件夹</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-2-修改图标"><span class="toc-nav-text">2.2 修改图标</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-3-打包文件"><span class="toc-nav-text">2.3 打包文件</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3-构建单文件执行程序"><span class="toc-nav-text">3. 构建单文件执行程序</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://blog.rosuh.me/2018/03/Use-NW-to-build-a-web-app/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+  <script>
+    var disqus_shortname = 'blog-rosuh-me';
+    
+    var disqus_url = 'https://blog.rosuh.me/2018/03/Use-NW-to-build-a-web-app/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//go.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

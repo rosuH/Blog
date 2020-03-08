@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      Hexo 博客优化入门（一） | rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Hexo 博客优化入门（一）</h2>
+  <p class="post-date">2017-08-06</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>昨晚在本地折腾博客的时候，总是对自己博客的加载速度很不满意。<br>本博客主题用的是 <del><a href="https://material.viosey.com/" target="_blank" rel="noopener">Hexo material theme</a></del> (现在已经改为 <a href="https://github.com/yanm1ng/hexo-theme-vexo" target="_blank" rel="noopener">vexo</a> 了 )，于是想看看 <a href="https://blog.viosey.com/" target="_blank" rel="noopener">viosey</a> 的资源加载情况。<br>令我惊异的是，其博客资源的体积都很小…<br>一张图片竟然在 9k。果然是大佬 hhh。<br>于是查看了我的博客的资源，决定先从图片压缩开始解决。</p>
+<h1 id="1-图片压缩-amp-工具推荐"><a href="#1-图片压缩-amp-工具推荐" class="headerlink" title="1. 图片压缩 &amp; 工具推荐"></a>1. 图片压缩 &amp; 工具推荐</h1><h2 id="图片格式选择"><a href="#图片格式选择" class="headerlink" title="图片格式选择"></a>图片格式选择</h2><ul>
+<li><p><code>JPEG</code>: 作为互联网上使用频度最高的图片格式</p>
+<ul>
+<li>sss</li>
+</ul>
+</li>
+<li><p>无透明效果、颜色丰富的图片</p>
+</li>
+<li><p>因为每一次压缩均为有损压缩，所以对于线条、文字较多的图片不建议使用</p>
+</li>
+<li><p><code>PNG</code> ：有多种格式可选</p>
+<ul>
+<li>需要透明效果</li>
+<li>色块连续、多纯色</li>
+<li>所有有时候颜色丰富的图片其大小要大于 <code>JPEG</code> 格式图片</li>
+<li>可使用无损压缩</li>
+</ul>
+</li>
+<li><p><code>GIF</code>：目前动画效果支持较好的格式</p>
+<ul>
+<li>在 <code>APNG</code> 还未普及的又需要引入动画效果图片的时候可以采用此格式</li>
+</ul>
+</li>
+</ul>
+<p>新的更优秀的图片格式，诸如 <code>WebP</code>, <code>APNG</code>, 仍然未被浏览器很好的支持，所以在此不赘述。</p>
+<h2 id="图片压缩工具"><a href="#图片压缩工具" class="headerlink" title="图片压缩工具"></a>图片压缩工具</h2><p>经过一番查找，发现有如下工具可供使用：</p>
+<ul>
+<li><a href="https://tinypng.com/" target="_blank" rel="noopener">TinyPNG</a>：<code>PNG</code> 格式图片<strong>在线压缩网站</strong></li>
+<li><a href="http://www.nullice.com/limitPNG/" target="_blank" rel="noopener">limitPND</a>：优秀的极限 <code>PNG</code> 图片压缩<strong>软件</strong></li>
+<li><a href="http://isparta.github.io/" target="_blank" rel="noopener">iSparta</a>：开源的 <code>PNG</code> 压缩与格式转换工具</li>
+<li><a href="https://zhitu.isux.us/" target="_blank" rel="noopener">智图</a>：高效优质的图片压缩平台，亦有桌面端软件</li>
+</ul>
+<p>上述软件/平台是经过我尝试之后比较<strong>简易</strong>、<strong>高效</strong>同时<strong>免费</strong>的工具，当然我们也可以选择 Photoshop。不过我自己并不<br>精通 PS，所以效果并没有上述的好。</p>
+<h2 id="压缩前的准备"><a href="#压缩前的准备" class="headerlink" title="压缩前的准备"></a>压缩前的准备</h2><p>有时候我的图片是来自<a href="http://unsplash.com/" target="_blank" rel="noopener">Unsplash</a>的原始图片，原本的品质较高，分辨率也较大，相应的体积也就很大了。<br>这样直接去压缩，就多做了许多重复工作，比如你需要不断压缩压缩…<br>这样的话，对于分辨率要求不高，图片大小比较小的图片，比如非背景图、头像之类。我们可以先经过下面的预处理步骤：</p>
+<ul>
+<li>Windows 自带画图工具调整分辨率</li>
+<li>屏幕截图</li>
+</ul>
+<p>这两者对精度要求较低的图片进行<strong>野蛮</strong>压缩效果可是很明显的。</p>
+<h2 id="开始压缩"><a href="#开始压缩" class="headerlink" title="开始压缩"></a>开始压缩</h2><p>经过一晚上的实验，并且结合我自己的需求，得出如下结论：</p>
+<ul>
+<li>格式转换首选：<strong>iSparta</strong><ul>
+<li>此软件可将 <code>PNG</code> 格式转换为 <code>WebP</code>, <code>APNG</code> 格式的图片，具有其他软件没有的功能</li>
+<li>图片压缩能力一般，某些界面没有进度提示</li>
+</ul>
+</li>
+<li>普通需求首选：<strong>limitPNG</strong><ul>
+<li>界面赏心悦目，交互简易方便</li>
+<li>压缩能力超强！可供选项较多，分无损和有损等等很多细分选项</li>
+<li>极低画质压缩能力稍弱</li>
+</ul>
+</li>
+<li>极普通需求，又不想下载软件首选：<strong>TinyPNG</strong><ul>
+<li>在线无损压缩</li>
+<li>缺点就是无法选择输出质量</li>
+<li>如果你只是想稍微无损压缩一下一张图片，那么可以选这个了</li>
+</ul>
+</li>
+<li>我的首选！<strong>智图</strong><ul>
+<li>客户端界面美观、交互也简便</li>
+<li>压缩能力超强，支持 10~95 等 14 级压缩选项</li>
+<li>多图片操作亦方便</li>
+<li>可“递归压缩” –&gt; 不断压缩同一张图片直至很小很小，上面其他软件最低质量有所保留</li>
+<li>支持图片格式自动转换：根据图片内容自动转换为合适的格式</li>
+</ul>
+</li>
+</ul>
+<p>图片压缩的第一步已经完成了，也就是上传之前的压缩。</p>
+<p>我的图片原来超过 2M，因为之前没去理他…在压缩过后使用首页加载的 4 张图片总体积不超过 70k，虽然离很多优秀的优化还差得远，<br>但是对于目前的我已经比较满意了。</p>
+<h1 id="2-HTML-JS-CSS-amp-Image-压缩插件"><a href="#2-HTML-JS-CSS-amp-Image-压缩插件" class="headerlink" title="2 HTML, JS, CSS &amp; Image 压缩插件"></a>2 HTML, JS, CSS &amp; Image 压缩插件</h1><p>只是压缩图片显然没法满足需求，因为我注意到首页加载的某些 <code>js, css</code> 文件大小也比较大。<br>所以我们亦需要一些压缩代码的工具。所以我找到了 Hexo 的插件 <a href="https://github.com/chenzhutian/hexo-all-minifier" target="_blank" rel="noopener">hexo-all-minifier</a>。<br>这个插件集合了：</p>
+<blockquote>
+<p>hexo-html-minifier, which is based on HTMLMinifier<br>hexo-clean-css, which is based on clean-css<br>hexo-uglify, which is based on UglifyJS<br>hexo-imagemin, which is based on imagemin</p>
+</blockquote>
+<p>四款插件，一次就搞定所有事情。<br>插件安装和配置而已参看<a href="https://github.com/chenzhutian/hexo-all-minifier" target="_blank" rel="noopener">hexo-all-minifier</a>项目首页。<br>该插件生效之后，我惊奇的发现我那些图片又被压缩了一点点，意外惊喜…</p>
+<hr>
+<p>此篇文章属于经验之谈，不具有多少技术性东西。非常感谢上述工具和项目，有许多甚至都是开源的。<br>这是世界因为你们变得更好，感谢~</p>
+<hr>
+<p><em>参看</em>：</p>
+<ul>
+<li><a href="http://www.cnblogs.com/observernotes/p/4806218.html" target="_blank" rel="noopener">前端图片选择问题</a></li>
+<li><a href="https://segmentfault.com/a/1190000008082288" target="_blank" rel="noopener">hexo 博客压缩优化</a></li>
+<li><a href="https://www.zhihu.com/question/20027708" target="_blank" rel="noopener">网站开发中，如何将一张图片压缩得更小？</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Hexo" >
+    <span class="tag-code">Hexo</span>
+  </a>
+
+  <a href="/tags#优化" >
+    <span class="tag-code">优化</span>
+  </a>
+
+  <a href="/tags#压缩" >
+    <span class="tag-code">压缩</span>
+  </a>
+
+  <a href="/tags#网页" >
+    <span class="tag-code">网页</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2017/08/unknow-command-or-service-error-in-oh-my-zsh/">
+        <span class="nav-arrow">← </span>
+        
+          修复 oh-my-zsh 和 Git 的搭配错误
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2017/09/how-to-install-MacOS-on-virtual-machine/">
+        
+          如何在虚拟机安装 MacOS
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Disqus START -->
+      <div id="disqus_thread"></div>
+      <!-- Disqus END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-图片压缩-amp-工具推荐"><span class="toc-nav-text">1. 图片压缩 &amp; 工具推荐</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#图片格式选择"><span class="toc-nav-text">图片格式选择</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#图片压缩工具"><span class="toc-nav-text">图片压缩工具</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#压缩前的准备"><span class="toc-nav-text">压缩前的准备</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#开始压缩"><span class="toc-nav-text">开始压缩</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-HTML-JS-CSS-amp-Image-压缩插件"><span class="toc-nav-text">2 HTML, JS, CSS &amp; Image 压缩插件</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://blog.rosuh.me/2017/08/Introduction-to-optimize-hexo-blog/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+  <script>
+    var disqus_shortname = 'blog-rosuh-me';
+    
+    var disqus_url = 'https://blog.rosuh.me/2017/08/Introduction-to-optimize-hexo-blog/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//go.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

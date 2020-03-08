@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/11/using-proxy-for-desktop-program-on-ubuntu/">如何在 Ubuntu 对桌面程序使用代理</a>
+      </h2>
+      <p class="article-date">2017年11月8日</p>
+      
+        
+  <a href="/tags#desktop" >
+    <span class="tag-code">desktop</span>
+  </a>
+
+  <a href="/tags#Ubuntu" >
+    <span class="tag-code">Ubuntu</span>
+  </a>
+
+  <a href="/tags#proxychains" >
+    <span class="tag-code">proxychains</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          问题是什么？如果你不具备路由器代理的情况，那么我们需要在本地做透明代理。这样的话，对本地代理的使用情况完全取决于第三方程序的支持情况。有一些程序会自动检测代理，有一些提供配置选项。对于两种而言，设置代理都很方便。那么还有一些 GUI 软件，但是并不提供代理设置选项，或者在首次启动的时候就必须 ...
+        
+      </div>
+      <a class="more" href="/2017/11/using-proxy-for-desktop-program-on-ubuntu/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/how-to-install-MacOS-on-virtual-machine/">如何在虚拟机安装 MacOS</a>
+      </h2>
+      <p class="article-date">2017年9月20日</p>
+      
+        
+  <a href="/tags#虚拟机" >
+    <span class="tag-code">虚拟机</span>
+  </a>
+
+  <a href="/tags#Mac OS" >
+    <span class="tag-code">Mac OS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          1.准备阶段
+虚拟机软件 VMware: 链接: https://pan.baidu.com/s/1qYyV5H6 密码: 8xr6
+虚拟机补丁 Unlocker208：链接: https://pan.baidu.com/s/1eRSKE3K 密码: sbq5
+MacOS 懒人版镜像 链接: ...
+        
+      </div>
+      <a class="more" href="/2017/09/how-to-install-MacOS-on-virtual-machine/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/08/Introduction-to-optimize-hexo-blog/">Hexo 博客优化入门（一）</a>
+      </h2>
+      <p class="article-date">2017年8月6日</p>
+      
+        
+  <a href="/tags#Hexo" >
+    <span class="tag-code">Hexo</span>
+  </a>
+
+  <a href="/tags#优化" >
+    <span class="tag-code">优化</span>
+  </a>
+
+  <a href="/tags#压缩" >
+    <span class="tag-code">压缩</span>
+  </a>
+
+  <a href="/tags#网页" >
+    <span class="tag-code">网页</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          昨晚在本地折腾博客的时候，总是对自己博客的加载速度很不满意。本博客主题用的是 Hexo material theme (现在已经改为 vexo 了 )，于是想看看 viosey 的资源加载情况。令我惊异的是，其博客资源的体积都很小…一张图片竟然在 9k。果然是大佬 hhh。于是查看了我的博客 ...
+        
+      </div>
+      <a class="more" href="/2017/08/Introduction-to-optimize-hexo-blog/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/08/unknow-command-or-service-error-in-oh-my-zsh/">修复 oh-my-zsh 和 Git 的搭配错误</a>
+      </h2>
+      <p class="article-date">2017年8月4日</p>
+      
+        
+  <a href="/tags#zsh" >
+    <span class="tag-code">zsh</span>
+  </a>
+
+  <a href="/tags#git" >
+    <span class="tag-code">git</span>
+  </a>
+
+  <a href="/tags#oh-my-zsh" >
+    <span class="tag-code">oh-my-zsh</span>
+  </a>
+
+  <a href="/tags#Cygwin" >
+    <span class="tag-code">Cygwin</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+OS: Win10Shell: Babun 1.2.0
+
+这个问题发生在我执行Git命令之后，错误提示为：
+1compdef: unknown command or service: git
+
+如果执行 zsh 命令，会直接输出.zshrc文件内容并且有以下提示：
+123compdef:  ...
+        
+      </div>
+      <a class="more" href="/2017/08/unknow-command-or-service-error-in-oh-my-zsh/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/08/Github-page-configure-and-enable-HTTPS/">GitHub Page 子域名配置 & 启用 HTTPS</a>
+      </h2>
+      <p class="article-date">2017年8月2日</p>
+      
+        
+  <a href="/tags#Github page" >
+    <span class="tag-code">Github page</span>
+  </a>
+
+  <a href="/tags#HTTPS" >
+    <span class="tag-code">HTTPS</span>
+  </a>
+
+  <a href="/tags#子域名" >
+    <span class="tag-code">子域名</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          因为本博客迁移到了 GitHub Page，加之 个人的 wiki 站点亦是使用 Hexo 托管在 GitHub Page 的，故而想将两个站点都配置到一个域名下面，分为两个子域名：
+12blog.rosuh.mewiki.rosuh.me
+
+下面是具体配置步骤：
+1. 上传 CNAME 到 ...
+        
+      </div>
+      <a class="more" href="/2017/08/Github-page-configure-and-enable-HTTPS/">「阅读更多」</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/page/4/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/page/6/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

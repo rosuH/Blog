@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/02/web-view-ad-blocker/">WebView 广告拦截浅析</a>
+      </h2>
+      <p class="article-date">2019年2月12日</p>
+      
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#WebView" >
+    <span class="tag-code">WebView</span>
+  </a>
+
+  <a href="/tags#ADBlocker" >
+    <span class="tag-code">ADBlocker</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          前言查豆瓣 使用的是 WebView 加载页面，在豆瓣的移动页面中存在两到三个的广告轮播图，比较影响阅读体验。所以开始着手看看怎么屏蔽掉广告。
+在 WebView 中有以下三个方法可以考虑：
+123fun onPageFinished(view: WebView, url: String)f ...
+        
+      </div>
+      <a class="more" href="/2019/02/web-view-ad-blocker/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/01/coroutines-guide-ui/">【翻译】协程在 UI 编程中的使用指南</a>
+      </h2>
+      <p class="article-date">2019年1月9日</p>
+      
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#翻译" >
+    <span class="tag-code">翻译</span>
+  </a>
+
+  <a href="/tags#Coroutine" >
+    <span class="tag-code">Coroutine</span>
+  </a>
+
+  <a href="/tags#协程" >
+    <span class="tag-code">协程</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+原文链接：https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md#basic-ui-coroutines
+原文开源协议：https://github.com/Kotlin/kotl ...
+        
+      </div>
+      <a class="more" href="/2019/01/coroutines-guide-ui/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/01/2018-summary/">2018 总结 & 2019 展望</a>
+      </h2>
+      <p class="article-date">2019年1月4日</p>
+      
+        
+  <a href="/tags#总结" >
+    <span class="tag-code">总结</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          2018 年
+岁月不居，时节如流
+
+想起 17 年年底，我还在纠结接下来的路该如何走时，时间一溜烟就到了 19 年。
+纪17 年 12 月，和老师辞去了某 Android 开发的职责，开始转而阅读《Android 编程权威指南》。彼时我刚读完《第一行代码》，踉踉跄跄地敲开了 Android  ...
+        
+      </div>
+      <a class="more" href="/2019/01/2018-summary/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/09/from-asynchronous-thread-to-rxjava-backpressure/">从异步线程到 RxJava 的背压控制</a>
+      </h2>
+      <p class="article-date">2018年9月28日</p>
+      
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#RxJava" >
+    <span class="tag-code">RxJava</span>
+  </a>
+
+  <a href="/tags#Flowable" >
+    <span class="tag-code">Flowable</span>
+  </a>
+
+  <a href="/tags#背压" >
+    <span class="tag-code">背压</span>
+  </a>
+
+  <a href="/tags#异步" >
+    <span class="tag-code">异步</span>
+  </a>
+
+  <a href="/tags#多线程" >
+    <span class="tag-code">多线程</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          1. RxJava 中的异步控制在以前也遇到了类似的场景，那时候还是再使用AsyncTask的时候。我们知道AsyncTask中有doInBackground()方法是一个子线程的异步方法。我们一般在里面执行耗时操作。但是我们会在doInBackground()中执行一个耗时的异步操作吗？看 ...
+        
+      </div>
+      <a class="more" href="/2018/09/from-asynchronous-thread-to-rxjava-backpressure/">「阅读更多」</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/09/android-get-sd-card-path-and-uuid/">Android 获取 SD 卡路径和 UUID</a>
+      </h2>
+      <p class="article-date">2018年9月27日</p>
+      
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#SD card" >
+    <span class="tag-code">SD card</span>
+  </a>
+
+  <a href="/tags#路径" >
+    <span class="tag-code">路径</span>
+  </a>
+
+  <a href="/tags#UUID" >
+    <span class="tag-code">UUID</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          Android 的存储结构下面的『内外』，是相对应用而言的。应用内部沙盒称为内部存储，其外部称为外部存储。
+内部存储位置Android 内部存储在/data/data/目录下，根据应用的包名划分出来。每个应用都有如下几个子文件夹：
+
+data/data/包名/shared_prefs：存放该 ...
+        
+      </div>
+      <a class="more" href="/2018/09/android-get-sd-card-path-and-uuid/">「阅读更多」</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/page/3/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

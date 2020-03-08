@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      WebView 广告拦截浅析 | rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>WebView 广告拦截浅析</h2>
+  <p class="post-date">2019-02-12</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><a href="https://github.com/rosuH/SearchInDouban" target="_blank" rel="noopener">查豆瓣</a> 使用的是 WebView 加载页面，在豆瓣的移动页面中存在两到三个的广告轮播图，比较影响阅读体验。所以开始着手看看怎么屏蔽掉广告。</p>
+<p>在 WebView 中有以下三个方法可以考虑：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">onPageFinished</span><span class="params">(view: <span class="type">WebView</span>, url: <span class="type">String</span>)</span></span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">shouldInterceptRequest</span><span class="params">(view: <span class="type">WebView</span>, request: <span class="type">WebResourceRequest</span>)</span></span>: WebResourceResponse? </span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">shouldOverrideUrlLoading</span><span class="params">(view: <span class="type">WebView</span>, request: <span class="type">WebResourceRequest</span>)</span></span>: <span class="built_in">Boolean</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>onPageFinished</code>方法会在页面加载完毕后回调</p>
+</li>
+<li><p><code>shouldInterceptRequest</code>方法会通知 <code>host Application</code>，也就是启动 WebView 的应用返回<code>WebResourceResponse</code>。如果本地应用返回<code>null</code>，则<code>webView</code>会正常加载资源</p>
+</li>
+<li><p><code>shouldOverrideUrlLoading</code>会在<code>Url</code>被加载前被回调。实现此方法，返回<code>true</code>时<code>WebView</code>将不会加载该<code>Url</code>，否则将会正常加载<code>Url</code></p>
+<ul>
+<li>此方法仅在<strong>主动或被动调用</strong><code>WebView.load(url)</code>方法时才会回调，而页面中的资源加载时是不会被回调的<ul>
+<li>比如主动显式调用：<code>webview.load(url)</code></li>
+<li>被动则是页面中点击链接之后加载</li>
+</ul>
+</li>
+<li>此方法不适用于<code>POST</code>请求</li>
+</ul>
+<p>基于上述三个方法，我们看看能否做到：</p>
+<ol>
+<li>禁止加载广告域名</li>
+<li>给广告域名请求返回空的数据</li>
+<li>在页面加载完毕后消除广告占位的<code>div</code>或类似元素</li>
+</ol>
+</li>
+</ul>
+<h1 id="1-禁止加载广告域名"><a href="#1-禁止加载广告域名" class="headerlink" title="1. 禁止加载广告域名"></a>1. 禁止加载广告域名</h1><p>根据<code>shouldOverrideUrlLoading()</code>方法的特性，我们几乎无法用之来屏蔽页面中加载的广告。</p>
+<p>  在实践中，一般在这处理网页对本地资源的调用，比如最常见的拉起 APP 的操作。</p>
+  <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">shouldOverrideUrlLoading</span><span class="params">(view: <span class="type">WebView</span>, request: <span class="type">WebResourceRequest</span>)</span></span>: <span class="built_in">Boolean</span> &#123;</span><br><span class="line">    <span class="keyword">val</span> url = request.url.toString()</span><br><span class="line">    <span class="keyword">if</span> (url.startsWith(<span class="string">"douban:"</span>)) &#123;</span><br><span class="line">        <span class="comment">// 拉起豆瓣 APP</span></span><br><span class="line">        handleAppRequest(view, url)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">super</span>.shouldOverrideUrlLoading(view, request)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此方法看起来应该是不行了。这一步也应该没法轻易办到。</p>
+<h1 id="2-给广告域名请求返回空的数据"><a href="#2-给广告域名请求返回空的数据" class="headerlink" title="2. 给广告域名请求返回空的数据"></a>2. 给广告域名请求返回空的数据</h1><p>我们把目光聚集到了<code>shouldInterceptRequest()</code>方法，实际上这个方法的功劳最大。我们很轻易就是实现了广告拦截。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">shouldInterceptRequest</span><span class="params">(view: <span class="type">WebView</span>, request: <span class="type">WebResourceRequest</span>)</span></span>: WebResourceResponse? &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">if</span> (isAdDomain(request.url.toString())) &#123;</span><br><span class="line">        createEmptyResource()</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">super</span>.shouldInterceptRequest(view, request)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">createEmptyResource</span><span class="params">()</span></span>: WebResourceResponse &#123;</span><br><span class="line">    <span class="keyword">return</span> WebResourceResponse(<span class="string">"text/plain"</span>, <span class="string">"utf-8"</span>, ByteArrayInputStream(<span class="string">""</span>.toByteArray()))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">isAdDomain</span><span class="params">(url: <span class="type">String</span>)</span></span>: <span class="built_in">Boolean</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (!url.contains(<span class="string">"douban"</span>)) or url.contains(<span class="string">"baidu"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>前面提起的，此方法会在请求数据前回调。所以我们可以自己构建<code>WebResourceResponse</code>对象返回。</p>
+<p>豆瓣的移动端对接的是百度的推广，所以基本上广告域名都带有<code>baidu</code>的关键字。所以我这样就已经足够了。</p>
+<p>更一般的情况，我们可以自己维护规则列表或者，使用一些公开的<a href="https://easylist.to/easylist/easylist.txt" target="_blank" rel="noopener">规则列表</a>。或者自己收集一下常见的大的推广联盟的链接就可以了。</p>
+<h1 id="3-消除空白广告元素"><a href="#3-消除空白广告元素" class="headerlink" title="3. 消除空白广告元素"></a>3. 消除空白广告元素</h1><p>我们给广告请求返回了空数据，但是原有的广告占位元素依然存在。所以我们要用到</p>
+<p><code>onPageFinished()</code>方法，来删除广告占位标签。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onPageFinished</span><span class="params">(view: <span class="type">WebView</span>, url: <span class="type">String</span>)</span></span> &#123;</span><br><span class="line">    webView.evaluateJavascript(</span><br><span class="line">        <span class="string">"javascript:("</span> +</span><br><span class="line">                <span class="string">"    function() &#123;"</span> +</span><br><span class="line">                <span class="string">"            var len = document.getElementsByClassName('Advertisement').length; "</span> +</span><br><span class="line">                <span class="string">"            for(var i = 0; i &lt; len; i ++)&#123;"</span> +</span><br><span class="line">                <span class="string">"                document.getElementsByClassName('Advertisement')[i].style.display = 'none'"</span> +</span><br><span class="line">                <span class="string">"            &#125;"</span> +</span><br><span class="line">                <span class="string">"        &#125;"</span> +</span><br><span class="line">                <span class="string">")()"</span></span><br><span class="line">    ) &#123;</span><br><span class="line">        print(it)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里利用了<code>WebView.evaluateJavascript()</code>方法，执行了一段 JavaScript 代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">javascript:(</span><br><span class="line">    <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> len = <span class="built_in">document</span>.getElementsByClassName(<span class="string">'Advertisement'</span>).length;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; len; i ++ )&#123;</span><br><span class="line">                <span class="built_in">document</span>.getElementsByClassName(<span class="string">'Advertisement'</span>)[i].style.display = <span class="string">'none'</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">)()</span><br></pre></td></tr></table></figure>
+
+<p>这里的代码需要你根据不同的页面来维护规则。比如豆瓣的移动端广告都用<code>Advertisement</code>作为类名。</p>
+<p>所以获取了个数之后，降之隐藏。</p>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>至此，我们简单地实现了对豆瓣移动端网页的拦截。</p>
+<p>参考链接：</p>
+<ul>
+<li><p><a href="https://developer.android.com/reference/android/webkit/WebView" target="_blank" rel="noopener">WebView Android Developer</a></p>
+</li>
+<li><p><a href="https://stackoverflow.com/questions/8200945/how-to-get-html-content-from-a-webview" target="_blank" rel="noopener">how to get html content from a webview?</a></p>
+</li>
+<li><p><a href="https://stackoverflow.com/questions/3029926/any-way-to-hide-elements-from-webview-android" target="_blank" rel="noopener">Any way to hide elements from webview? (android)</a></p>
+</li>
+<li><p><a href="https://stackoverflow.com/questions/24547446/android-block-ads-in-webview" target="_blank" rel="noopener">Android block ads in webview</a></p>
+</li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#WebView" >
+    <span class="tag-code">WebView</span>
+  </a>
+
+  <a href="/tags#ADBlocker" >
+    <span class="tag-code">ADBlocker</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/01/coroutines-guide-ui/">
+        <span class="nav-arrow">← </span>
+        
+          【翻译】协程在 UI 编程中的使用指南
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2019/03/Manifesto-for-Minimalist-Software-Engineers-CN/">
+        
+          【翻译】极简主义工程师宣言
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Disqus START -->
+      <div id="disqus_thread"></div>
+      <!-- Disqus END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#前言"><span class="toc-nav-text">前言</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-禁止加载广告域名"><span class="toc-nav-text">1. 禁止加载广告域名</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-给广告域名请求返回空的数据"><span class="toc-nav-text">2. 给广告域名请求返回空的数据</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3-消除空白广告元素"><span class="toc-nav-text">3. 消除空白广告元素</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#结语"><span class="toc-nav-text">结语</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://blog.rosuh.me/2019/02/web-view-ad-blocker/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+  <script>
+    var disqus_shortname = 'blog-rosuh-me';
+    
+    var disqus_url = 'https://blog.rosuh.me/2019/02/web-view-ad-blocker/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//go.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      手动实现轮播图（一）：ViewPager 入门实践 | rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>手动实现轮播图（一）：ViewPager 入门实践</h2>
+  <p class="post-date">2018-04-20</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p><code>Viewpager</code>是 Android 提供的布局管理器，常被用来实现左右滑动的页面、视图。</p>
+<p>在实际工程中，有许多都是用来实现轮播图功能的。</p>
+<p>今天，我们从零开始造一个简易轮播图组件。</p>
+<p>本系列文章面向的读者，是刚学完 Android 教材的初学者，旨在：</p>
+<ul>
+<li>简单介绍<code>ViewPager</code>原理并如何快速上手</li>
+<li>使用简单的代码结构，完成一个初级的轮播图组件</li>
+</ul>
+<blockquote>
+<p>文章作者毕竟经验不多，水平有限，所以缺漏在所难免，希望路过读到本文的前辈们不吝赐教，谢谢~</p>
+</blockquote>
+<p>接下来，我们就从<code>Viewpager</code>是什么开始，慢慢来了解他。</p>
+<h1 id="1-Viewpager-上手"><a href="#1-Viewpager-上手" class="headerlink" title="1. Viewpager 上手"></a>1. Viewpager 上手</h1><p><a href="https://developer.android.com/reference/android/support/v4/view/ViewPager.html" target="_blank" rel="noopener">官方开发文档：android.support.v4.view.ViewPager</a></p>
+<ul>
+<li><p><code>ViewPager</code>是一个布局管理器，可以作为根布局</p>
+<ul>
+<li>因为他继承于<code>ViewGroup</code>，常见的布局管理器还有<code>FrameLayout</code>, <code>LinearLayout</code>等</li>
+<li>当他作为根布局时，每一个页面都将占据整个布局</li>
+</ul>
+</li>
+<li><p><code>ViewPager</code>该怎么使用</p>
+<ul>
+<li>在布局文件中添加一个<code>&lt;ViewPager&gt;</code>标签，此位置作为<code>ViewPager</code>容器主体所在</li>
+<li>创建一个新的布局文件，作为内嵌页面的布局<ul>
+<li>如果使用<code>fragment</code>的话，我们只需要创建一个模板，之后所有内嵌页面都使用这个模板来生成即可</li>
+<li>如果单单使用布局文件，那么我们每一个页面项都要创建一个布局文件，之后手动添加<code>ViewPager</code>容器</li>
+<li>所以本文章均使用<code>fragment</code>来实现</li>
+</ul>
+</li>
+<li>在<code>activity</code>中，实例化<code>ViewPager</code></li>
+<li>为<code>ViewPager</code>设置<code>Adapter</code><ul>
+<li>类似于<code>RecyclerView</code>，我们也是使用<code>Adapter</code>来和<code>ViewPager</code>进行通信</li>
+<li>这样大大方便了我们使用</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>上述步骤中，前几步几乎是组件/布局实例化的常规操作，所以我们真正要做的其实非常少。</p>
+<p>接下来我们开始动手来使用<code>ViewPager</code>。</p>
+<h2 id="创建-ViewPager-容器和子页面布局文件"><a href="#创建-ViewPager-容器和子页面布局文件" class="headerlink" title="创建 ViewPager 容器和子页面布局文件"></a>创建 ViewPager 容器和子页面布局文件</h2><p>我们新建一个项目之后，打开默认创建的<code>activity_main.xml</code>布局文件中，将内容改为以下代码：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">RelativeLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">android.support.v4.view.ViewPager</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">"@+id/view_pager_inside"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"400dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"400dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:background</span>=<span class="string">"@android:color/darker_gray"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_centerInParent</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">android.support.v4.view.ViewPager</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">RelativeLayout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，布局文件中仅有一个根布局<code>RelativeLayout</code>和一个<code>ViewPager</code>。</p>
+<p>这里的<code>ViewPager</code>就是容器主体所在。</p>
+<p>接着我们创建嵌入的页面布局文件：</p>
+<p>新建一个<code>view_pager_fragment.xml</code>文件，内容如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">LinearLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:gravity</span>=<span class="string">"center"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:orientation</span>=<span class="string">"vertical"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">android.support.v7.widget.CardView</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">"@+id/card_view"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"300dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"300dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">app:cardCornerRadius</span>=<span class="string">"10dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:elevation</span>=<span class="string">"5dp"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">TextView</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:id</span>=<span class="string">"@+id/text_view_fragment"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:layout_gravity</span>=<span class="string">"center"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">android.support.v7.widget.CardView</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里面是常规布局，有一个卡片<code>CardView</code>和内藏一个的<code>TextView</code>。</p>
+<p>到时候，滑动的每一个页面的布局模板都来自这个文件，我们只需要在代码里稍微修改，就可以生成特定的页面了。</p>
+<p>现在，我们回到<code>MainActivity.java</code>文件中，实例化我们刚刚的<code>ViewPager</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 定义一个 Viewpager 变量</span></span><br><span class="line">    <span class="keyword">private</span> ViewPager mViewPager;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">// 实例化 ViewPager</span></span><br><span class="line">        mViewPager = findViewById(R.id.view_pager_inside);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来我们该干什么呢？当然是为<code>ViewPager</code>添加页面了。</p>
+<p>那么页面从哪里来呢？当然是我们之前创建的那个布局<code>view_page_fragment.xml</code>了。</p>
+<ul>
+<li>我们的<code>ViewPager</code>主体位于<code>activity_main.xml</code>布局中<ul>
+<li>我们在<code>MainActivity.java</code>中使用<code>setContentView(R.layout.activity_main);</code> 设置两者关联</li>
+<li>然后我们可以在<code>MainActivity.java</code>里面实例化<code>ViewPager</code>并使用它</li>
+</ul>
+</li>
+<li>同理，我们要创建一个<code>Fragment</code>，将它和<code>view_page_fragment.xml</code>关联起来，并在它里面实例化页面的布局</li>
+</ul>
+<p>不理解<code>Fragment</code>的同学，可以看一下文档里的 <a href="https://developer.android.com/guide/components/fragments.html" target="_blank" rel="noopener">片段</a> 哦。</p>
+<p>创建一个<code>PageFragment.java</code>类，继承于<code>android.support.v4.app.Fragment</code>，这里特别注意要使用<code>v4</code>包里的<code>Fragment</code>。</p>
+<p>现在这个类里空荡荡，让我们来填充一些有意思的内容。</p>
+<ol>
+<li>关联<code>PageFragment.java</code>和<code>view_page_fragment.xml</code></li>
+</ol>
+<p>使用<code>Alt + Insert</code>，选择<code>Override Methods</code>，然后重写<code>onCreateView</code>如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> TextView mTextView;</span><br><span class="line"><span class="keyword">private</span> CardView mCardView;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> View <span class="title">onCreateView</span><span class="params">(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    View view = inflater.inflate(R.layout.view_pager_fragment, container, <span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">    mTextView = view.findViewById(R.id.text_view_fragment);</span><br><span class="line">    mCardView = view.findViewById(R.id.card_view);</span><br><span class="line">    <span class="keyword">return</span> view;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们使用了<code>LayoutInflater</code>来将<code>view_page_fragment.xml</code>加载为代码里的<code>View</code>对象，然后再从<code>view</code>对象里，找到我们放置的两个组件：<code>CardView</code>和<code>TextView</code>。</p>
+<p>如果不理解<code>LayoutInflater</code>可以看看如下两位的文章：</p>
+<ul>
+<li><a href="https://blog.csdn.net/sinyu890807/article/details/12921889" target="_blank" rel="noopener">Android LayoutInflater原理分析，带你一步步深入了解View(一)</a></li>
+<li><a href="https://www.jianshu.com/p/81a698aaf05c" target="_blank" rel="noopener">理解Android中的LayoutInflater</a></li>
+</ul>
+<p>这样就算是关联起来了，系统在创建<code>PageFrament.java</code>对象的时候，就会实例化<code>view_page_fragment.xml</code>布局了。</p>
+<p>接着我们为<code>PageFragment.java</code>创建一个静态生成器（方法）。为什么要静态生产类呢？</p>
+<p>因为我们每生成一个页面，其实就是创建一个<code>PageFragment.java</code>的对象，然后我们还要向这个对象传递数据。</p>
+<p>为了不做重复的工作，我们写一个静态生成器，这样每次外部类只要调用这个静态生成器，就可以很简单地创建对象了。</p>
+<p>看看代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PageFragment</span> <span class="keyword">extends</span> <span class="title">Fragment</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Fragment <span class="title">newInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> PageFragment();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> View onCreateView ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果你写过静态<code>Intent</code>生成方法，相信这个类生成器也很容易理解了。</p>
+<p>上面代码就是在返回时，先创建一个<code>PageFragment</code>对象再返回去。就这一句代码，有必要写一个静态方法吗？</p>
+<p>当然有，因为我们还没有把他真正的用处挖掘出来呢！</p>
+<p>前面说到的，我们之所以只需要创建一个布局模板文件，而不需要每一个页面就定制一个，就是我们要在代码里动态定制页面。</p>
+<p>我们这里子页面模板里，只有一个<code>TextView</code>可以写东西，所以我们用它来作为区分页面的标志，比如<code>T1</code>、<code>T2</code>这样。</p>
+<p>那问题就是，我们如何动态定制页面呢？</p>
+<p>我们来看看现在的情况吧：</p>
+<p><img src="https://img.ioioi.top/wiki/chrome_2018-04-20_22-28-55.png" alt="pic"></p>
+<p>可以看到，这是典型的 MVC 结构，在这里面呢，<code>PageFragment</code>唯一地通过<code>MainActivity.java</code>来创建，虽然我们还没有实现这一步。</p>
+<p>也即是说，我们要在这一步里，向<code>PageFragment</code>传递定制化的数据，比如页面一传递<code>T1</code>，页面二传递<code>T2</code>这样子。</p>
+<p>接着在<code>PageFragment</code>只需要使用同一套代码就可以生成不同的页面了。</p>
+<p>问题的难点在于如何向一个<code>Fragment</code>传递数据。当然，这样的文章已经写了很多了，相信你稍微搜索一下，就知道我们即将使用的是<code>Fragment Arguement</code>的方法。其实就是在<code>fragment</code>对象上附加一个参数。</p>
+<p>这种方法是不是很像<code>Intent</code>的附加参数呢？</p>
+<p>下面是实现代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PageFragment</span> <span class="keyword">extends</span> <span class="title">Fragment</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String ARGS_TITLE = <span class="string">"argsTitle"</span>;</span><br><span class="line">    <span class="keyword">private</span> CardView mCardView;</span><br><span class="line">    <span class="keyword">private</span> TextView mTextView;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Fragment <span class="title">newInstance</span><span class="params">(String title)</span></span>&#123;</span><br><span class="line">        Bundle args = <span class="keyword">new</span> Bundle();</span><br><span class="line">        args.putString(ARGS_TITLE, title);</span><br><span class="line">        PageFragment pageFragment = <span class="keyword">new</span> PageFragment();</span><br><span class="line">        pageFragment.setArguments(args);</span><br><span class="line">        <span class="keyword">return</span> pageFragment;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> View onCreateView ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这里面，我们使用了<code>Bundle</code>对象来存储要传递的数据，然后使用<code>setArguement()</code>方法来把参数附加到新建的<code>pageFragment</code>对象里面。</p>
+<p>最后返回这个对象即可。</p>
+<p>接下来我们就可以在<code>MainActivity.java</code>里面使用这个静态生成器。（我只列出了新增的代码哦）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String[] mStringList = &#123;</span><br><span class="line">            <span class="string">"T1"</span>, <span class="string">"T2"</span>, <span class="string">"T3"</span>, <span class="string">"T4"</span>, <span class="string">"T5"</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">        FragmentManager fm = getSupportFragmentManager();      </span><br><span class="line">        mViewPager.setAdapter(<span class="keyword">new</span> FragmentPagerAdapter(fm) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Fragment <span class="title">getItem</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">                String title = mStringList[position];</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> PageFragment.newInstance(title);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> mStringList.length;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里我们先定义了一个字符串数组，来存储文字字符串。也就是之前图片的【模型】区域。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FragmentManager fm = getSupportFragmentManager();</span><br></pre></td></tr></table></figure>
+
+<p>这句代码是获取一个<code>FragmentManager</code>，也就是<code>fragment</code>的管理器。接下来在<code>ViewPager</code>中需要用这个管理器来管理<code>fragment</code>。（别担心，这里系统已经帮你做好了，你只要传入一个管理器就行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mViewPager.setAdapter(<span class="keyword">new</span> FragmentPagerAdapter(fm) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这一句也好理解，前面说了，<code>ViewPager</code>也需要一个对应的<code>Adapter</code>来和他通信，幸运的是系统已经为我们提供了两个非常好用的<code>Fragment</code>的<code>Adapter</code>。</p>
+<ul>
+<li><code>FragmentPagerAdapter</code><ul>
+<li>会提前自动创建：前中后，三个页面</li>
+<li>适合页面布局简单的情况</li>
+</ul>
+</li>
+<li><code>FragmentStatePagerAdapter</code><ul>
+<li>只会创建一个页面</li>
+<li>适合页面布局复杂的情况</li>
+</ul>
+</li>
+</ul>
+<p>所以我们这里使用了<code>FragmentPagerAdapter</code>咯。</p>
+<p>使用这个<code>FragmentPagerAdapter</code>，最少只需要重写两个方法：</p>
+<ul>
+<li><code>getItem()</code><ul>
+<li>通过<code>position</code>参数，返回一个创建好的页面</li>
+<li>我们就要在这里面做页面的创建工作哦</li>
+</ul>
+</li>
+<li><code>getCount()</code><ul>
+<li>要创建的页面的数量</li>
+</ul>
+</li>
+</ul>
+<p>理解到这里，我们只需要在这段代码后面，轻轻加上一句：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mViewPager.setCurrentItem(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>然后构建、运行，这个 Demo 就做好啦！</p>
+<p>快试试效果吧~</p>
+<p>试完了吗？是不是感觉哪里不对劲？</p>
+<h3 id="TextView-呢？"><a href="#TextView-呢？" class="headerlink" title="TextView 呢？"></a>TextView 呢？</h3><p>对啊，因为你虽然在<code>newInstance</code>里存放了数据，但是你并没有取出来呀~</p>
+<p>来到<code>PageFragment</code>里取出来吧。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> View <span class="title">onCreateView</span><span class="params">(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        View view = inflater.inflate(R.layout.view_pager_fragment, container, <span class="keyword">false</span>);</span><br><span class="line">        mTextView = view.findViewById(R.id.text_view_fragment);</span><br><span class="line">        mCardView = view.findViewById(R.id.card_view);</span><br><span class="line"></span><br><span class="line">        String title = getArguments().getString(ARGS_TITLE);</span><br><span class="line">        mTextView.setText(title);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> view;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在不就可以了嘛~</p>
+<p>什么？你嫌一个<code>TextView</code>太单调？…</p>
+<p>那你干嘛不加一个<code>ImageView</code>进去啊，然后传入一些令人<strong>心旷神怡</strong>的图片还不是美滋滋？</p>
+<p><img src="https://img.ioioi.top/wiki/viewpagerdemo.gif" alt="Viewpager"></p>
+<hr>
+<ul>
+<li><p>本项目地址<a href="https://github.com/rosuH/ViewPagerDemo" target="_blank" rel="noopener"><strong>ViewPagerDemo</strong></a></p>
+</li>
+<li><p>感谢下列参考文章</p>
+<ul>
+<li><p><a href="https://blog.csdn.net/u012760183/article/details/52230786" target="_blank" rel="noopener">Android ViewPager 无限循环左右滑动（可自动） 实现</a></p>
+</li>
+<li><p><a href="https://www.jianshu.com/p/8744f1ace3be" target="_blank" rel="noopener">Android ViewPager实现循环滚动</a></p>
+<p>​</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>接下来的文章会实现<strong>无限循环滑动</strong>、<strong>页面指示器</strong>，敬请期待~</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#viewpager" >
+    <span class="tag-code">viewpager</span>
+  </a>
+
+  <a href="/tags#轮播图" >
+    <span class="tag-code">轮播图</span>
+  </a>
+
+  <a href="/tags#banner" >
+    <span class="tag-code">banner</span>
+  </a>
+
+  <a href="/tags#fragment" >
+    <span class="tag-code">fragment</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/03/Use-NW-to-build-a-web-app/">
+        <span class="nav-arrow">← </span>
+        
+          使用 NW.js 创建简单的桌面应用
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/04/using-viewpager-to-make-a-banner-2/">
+        
+          手动实现轮播图（二）：循环滚动、定时切换与指示器
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Disqus START -->
+      <div id="disqus_thread"></div>
+      <!-- Disqus END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#简介"><span class="toc-nav-text">简介</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-Viewpager-上手"><span class="toc-nav-text">1. Viewpager 上手</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#创建-ViewPager-容器和子页面布局文件"><span class="toc-nav-text">创建 ViewPager 容器和子页面布局文件</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#TextView-呢？"><span class="toc-nav-text">TextView 呢？</span></a></li></ol></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://blog.rosuh.me/2018/04/using-viewpager-to-make-a-banner-1/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+  <script>
+    var disqus_shortname = 'blog-rosuh-me';
+    
+    var disqus_url = 'https://blog.rosuh.me/2018/04/using-viewpager-to-make-a-banner-1/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//go.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

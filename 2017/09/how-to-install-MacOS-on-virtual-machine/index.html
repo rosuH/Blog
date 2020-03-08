@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      如何在虚拟机安装 MacOS | rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>如何在虚拟机安装 MacOS</h2>
+  <p class="post-date">2017-09-20</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="1-准备阶段"><a href="#1-准备阶段" class="headerlink" title="1.准备阶段"></a>1.准备阶段</h1><ul>
+<li>虚拟机软件 VMware: 链接: <a href="https://pan.baidu.com/s/1qYyV5H6" target="_blank" rel="noopener">https://pan.baidu.com/s/1qYyV5H6</a> 密码: 8xr6</li>
+<li>虚拟机补丁 Unlocker208：链接: <a href="https://pan.baidu.com/s/1eRSKE3K" target="_blank" rel="noopener">https://pan.baidu.com/s/1eRSKE3K</a> 密码: sbq5</li>
+<li>MacOS 懒人版镜像 链接: <a href="https://pan.baidu.com/s/1nuTmucL" target="_blank" rel="noopener">https://pan.baidu.com/s/1nuTmucL</a> 密码: 3ur2</li>
+<li>安装 Python2.7 到你的电脑。记住安装路径</li>
+</ul>
+<p><strong>友情提示：虚拟机最好保存在 SSD 固态硬盘中，若是在机械硬盘…能把你卡到不能自理</strong>。</p>
+<h2 id="2-开始安装"><a href="#2-开始安装" class="headerlink" title="2.开始安装"></a>2.开始安装</h2><h2 id="2-1-安装-VMware-并打补丁"><a href="#2-1-安装-VMware-并打补丁" class="headerlink" title="2.1 安装 VMware 并打补丁"></a>2.1 安装 VMware 并打补丁</h2><ul>
+<li>首先正常安装 VMware，然后输入某神秘代码：<code>GU388-0PG5J-481EZ-ZEQNC-YKU98</code>（『盗版可耻』XD）</li>
+<li>打开任务管理器 –&gt; 服务：右键停止 VMware 的服务</li>
+</ul>
+<p><img src="https://img.ioioi.top/blog-img/191822520.png" alt="停用 VMware 服务"></p>
+<p>其中某一些需要先结束其余服务才能结束。</p>
+<ul>
+<li>解压 Unlocker208 文件夹，用编辑器编辑<code>win-install.cmd</code>这个文件：</li>
+</ul>
+<p>找到下面一行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo Patching...</span><br><span class="line">unlocker.exe</span><br></pre></td></tr></table></figure>
+
+<p>改为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo Patching...</span><br><span class="line">C:\Python27\python.exe unlocker.py</span><br></pre></td></tr></table></figure>
+
+<p>你可以看到，第二行中<code>unlocker.py</code>前面的就是我的 Python2.7 的安装路径了。</p>
+<p>保存退出，然后<strong>以管理员身份运行</strong><code>win-install.py</code>进行打补丁操作。</p>
+<p>类似输出如下：</p>
+<p><img src="https://img.ioioi.top/blog-img/192332540.png" alt="win-install/py"></p>
+<ul>
+<li>为什么要打补丁？</li>
+</ul>
+<p>VMware 本身并没有 MacOS 系统安装环境，所以国外某些大神写了这个脚本，为 VMware 加了一个 MacOS 环境模板，这样在后面选择系统的时候就会出现 Apple MacOS 的模板了。</p>
+<h2 id="2-2-创建-MacOS-虚拟机"><a href="#2-2-创建-MacOS-虚拟机" class="headerlink" title="2.2 创建 MacOS 虚拟机"></a>2.2 创建 MacOS 虚拟机</h2><ul>
+<li>打开你的 VMware，选择新建一个虚拟机。</li>
+</ul>
+<p>配置类型选择【经典】即可。</p>
+<p><img src="https://img.ioioi.top/blog-img/192648213.png" alt="新建虚拟机"></p>
+<ul>
+<li>在【安装程序光盘镜像文件】中选择第一步下载的懒人镜像</li>
+<li>在打开的【选择文件对话框】，应该选择【所有文件】</li>
+</ul>
+<p><img src="https://img.ioioi.top/blog-img/192759933.png" alt="选择镜像"></p>
+<p><img src="https://img.ioioi.top/blog-img/193013555.png" alt="mark"></p>
+<ul>
+<li>选择<code>Apple Mac OS</code>操作系统，下面的版本选择 OS X 10.11 就行</li>
+<li>如果这一步没有<code>Apple Mac OS</code>给你选择，那么说明你的补丁并没有打上去</li>
+</ul>
+<p><img src="https://img.ioioi.top/blog-img/193101253.png" alt="mark"></p>
+<ul>
+<li>命名虚拟机与设置虚拟机的保存路径</li>
+<li>记住这个路径，后面我们需要用到</li>
+</ul>
+<p><img src="https://img.ioioi.top/blog-img/193232522.png" alt="mark"></p>
+<p>后面的步骤可以选择默认，也可以自行配置，无碍。</p>
+<p>如果你现在就启动虚拟机的话，会出现如下错误：</p>
+<p><img src="https://img.ioioi.top/blog-img/193415078.png" alt="mark"></p>
+<p>从错误信息看，是 CPU 没有校验通过。也有的说，是因为引导没有设置好。</p>
+<p>我们打开虚拟机保存的路径，也就是上面一步那个路径。找到以<code>.vmx</code>结尾的配置文件。比如我是 <code>Mac.vmx</code>这个东西，因为我的虚拟机名字为 <code>Mac</code> 。</p>
+<p>打开该文件，找到<code>smc.present = &quot;TRUE&quot;</code>这一行，在该行<strong>下面</strong>加上<code>smc.version = 0</code>，保存之后退出。</p>
+<p>现在重启虚拟机，你将会看到美妙的苹果商标了。</p>
+<h2 id="2-3-安装"><a href="#2-3-安装" class="headerlink" title="2.3 安装"></a>2.3 安装</h2><p>安装这一步很简单：</p>
+<ul>
+<li>进去之后点击继续，然后在左上角看到工具 –&gt; 磁盘工具</li>
+<li>进行分区，然后将 MacOS 安装到该分区即可</li>
+</ul>
+<p>下面多图预警：</p>
+<p><img src="https://img.ioioi.top/blog-img/194731319.png" alt="mark"></p>
+<p><img src="https://img.ioioi.top/blog-img/194750417.png" alt="mark"></p>
+<p><img src="https://img.ioioi.top/blog-img/194810854.png" alt="mark"></p>
+<p><img src="https://img.ioioi.top/blog-img/194757735.png" alt="mark"></p>
+<p>接下来就是等待了。</p>
+<p>至此，我们的安装步骤基本结束了。当然，进入之后，你可能仍要自行设置一下网络。</p>
+<p>那些步骤麻烦自行搜索 Vmware 网络模式。</p>
+<hr>
+<ul>
+<li>本文章所涉及之软件均来自网络，仅供学习使用，不得用于商业用途！</li>
+<li>懒人版镜像来自：<a href="http://bbs.pcbeta.com/viewthread-1741950-1-1.html" target="_blank" rel="noopener">U_macOS S10.12.5正式版(16f73).dmg原版+cdr懒人版来了！</a></li>
+<li>参看：<ul>
+<li><a href="https://xuanwo.org/2015/08/09/vmware-mac-os-x-intro/" target="_blank" rel="noopener">史上最详细的虚拟机安装 MacOS 图文教程</a></li>
+<li><a href="https://www.sysceo.com/Article-article_info-id-1552.html" target="_blank" rel="noopener">让你在windows系统也可以用上Mac OS X</a></li>
+</ul>
+</li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#虚拟机" >
+    <span class="tag-code">虚拟机</span>
+  </a>
+
+  <a href="/tags#Mac OS" >
+    <span class="tag-code">Mac OS</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2017/08/Introduction-to-optimize-hexo-blog/">
+        <span class="nav-arrow">← </span>
+        
+          Hexo 博客优化入门（一）
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2017/11/using-proxy-for-desktop-program-on-ubuntu/">
+        
+          如何在 Ubuntu 对桌面程序使用代理
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Disqus START -->
+      <div id="disqus_thread"></div>
+      <!-- Disqus END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-准备阶段"><span class="toc-nav-text">1.准备阶段</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-开始安装"><span class="toc-nav-text">2.开始安装</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-1-安装-VMware-并打补丁"><span class="toc-nav-text">2.1 安装 VMware 并打补丁</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-2-创建-MacOS-虚拟机"><span class="toc-nav-text">2.2 创建 MacOS 虚拟机</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-3-安装"><span class="toc-nav-text">2.3 安装</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://blog.rosuh.me/2017/09/how-to-install-MacOS-on-virtual-machine/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+  <script>
+    var disqus_shortname = 'blog-rosuh-me';
+    
+    var disqus_url = 'https://blog.rosuh.me/2017/09/how-to-install-MacOS-on-virtual-machine/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//go.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

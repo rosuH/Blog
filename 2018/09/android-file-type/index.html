@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      如何判断萤石云视频是否可以播放 | rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>如何判断萤石云视频是否可以播放</h2>
+  <p class="post-date">2018-09-26</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>最近遇到一个问题，需要判断视频文件是否是真正的视频文件。<br>什么意思呢？萤石的摄像头是将视频写入 TF 卡的：</p>
+<blockquote>
+<p>通过萤石云视频平台将TF卡格式化后，程序会采用预占空间的方式预先将1/4的空间作为视频或者图片的存储空间。</p>
+</blockquote>
+<p>然后他预写入的文件是<code>.mp4</code>后缀的，但是是不可播放的文件。所以一旦播放器播放它，可能就会出错了。为了避免这样的情况发生，我们能否在检索视频的时候就识别出无法播放的视频呢？</p>
+<p>我一开始的思路是，能否通过判断文件类型的方式来判断是否播放呢？有可能他预格式化的视频文件，虽然后缀是<code>.mp4</code>，但是本质上不是一个视频文件呢？</p>
+<h1 id="判断文件类型"><a href="#判断文件类型" class="headerlink" title="判断文件类型"></a>判断文件类型</h1><p>在 Java 中，比较常见的用来判断文件类型的库，就是<a href="http://tika.apache.org/" target="_blank" rel="noopener">Apache Tika</a>。<br>引入依赖后，使用起来也十分简单：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">File file = <span class="keyword">new</span> File(System.getProperty(<span class="string">"user.home"</span>)+ <span class="string">"/Downloads/"</span>);</span><br><span class="line">        <span class="keyword">if</span> (file.exists())&#123;</span><br><span class="line">            <span class="keyword">for</span> (File file1 : Objects.requireNonNull(file.listFiles()))&#123;</span><br><span class="line">                <span class="keyword">if</span> (file1.isDirectory())&#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    String type = <span class="keyword">new</span> Tika().detect(file1);</span><br><span class="line">                    System.out.println(file1.getName() + <span class="string">" ======&gt;&gt;&gt; "</span> + type);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面是输出结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">background.svg ======&gt;&gt;&gt; image/svg+xml</span><br><span class="line">new.json ======&gt;&gt;&gt; application/json</span><br><span class="line">mid_top_1.jpg ======&gt;&gt;&gt; image/jpeg</span><br><span class="line">.DS_Store ======&gt;&gt;&gt; application/octet-stream</span><br><span class="line">apache-maven-3.5.4-bin.tar.1.gz ======&gt;&gt;&gt; application/x-gzip</span><br><span class="line">这本来是张 png 图片.mp4 ======&gt;&gt;&gt; image/png</span><br><span class="line">.localized ======&gt;&gt;&gt; application/octet-stream</span><br><span class="line">old.json ======&gt;&gt;&gt; application/json</span><br><span class="line">不学无数 — Java 中 IO 和 NIO - 掘金.pdf ======&gt;&gt;&gt; application/pdf</span><br><span class="line">Layout_Mobile_Whiteframe.ai ======&gt;&gt;&gt; application/pdf</span><br><span class="line">Snipaste_2018-09-22_22-36-21.png ======&gt;&gt;&gt; image/png</span><br><span class="line">background.png ======&gt;&gt;&gt; image/png</span><br><span class="line">hiv00014.mp4 ======&gt;&gt;&gt; video/mp4</span><br><span class="line">SeimiCrawler-master.1.zip ======&gt;&gt;&gt; application/zip</span><br><span class="line">cn_windows_10_business_editions_version_1803_updated_march_2018_x64_dvd_12063730.iso ======&gt;&gt;&gt; application/x-iso9660-image</span><br><span class="line">i_con_permission.png ======&gt;&gt;&gt; image/png</span><br><span class="line">错误.png ======&gt;&gt;&gt; image/png</span><br><span class="line">open_gapps-arm64-9.0-pico-20180923.zip ======&gt;&gt;&gt; application/zip</span><br><span class="line">forPush.sh ======&gt;&gt;&gt; application/x-sh</span><br><span class="line">adbIn.sh ======&gt;&gt;&gt; application/x-sh</span><br><span class="line">Havoc-OS-v2.0-20180923-oneplus3-Official.zip ======&gt;&gt;&gt; application/zip</span><br><span class="line">MockingBot.dmg ======&gt;&gt;&gt; application/octet-stream</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，几乎全部格式都识别出来了。而且我这里有一个『浑水摸鱼』的『家伙』，那就是<code>这本来是张 png 图片.mp4</code>，人如其名。<br>这个也识别出来了（<code>octet-stream</code>指的是二进制文件）。<br>那 Tika 究竟是怎么做的呢？让我们来看看源码呗。<br>篇幅所限，如果你对这个部分有兴趣，可以移步我的另一篇文章<a href="https://blog.rosuh.me/2018/09/tika-source-code-analysis/">Tika 源码浅析</a>。</p>
+<p><em>这里假设你已经看过了 Tika 源码…</em></p>
+<p>现在我们知道了 Tika 通过文件的首部字节、文件后缀判断文件的类型。但是这样依旧无法判断视频是否可以播放。<br>因为在实际使用中，我发现，有一些个视频文件，虽然是无法播放的，但是它们的首部已经被写入了，成为另一个『空视频文件』。<br>真的蛋疼。如果单纯使用 Tika 的话，显然会有误差。<br>那么有没有其他应用层面的 trick 呢？</p>
+<p>答案就是 <a href="https://github.com/wseemann/FFmpegMediaMetadataRetriever" target="_blank" rel="noopener">FFmpegMediaMetadataRetriever</a>。</p>
+<h1 id="FFmpegMediaMetadataRetriever-是什么？"><a href="#FFmpegMediaMetadataRetriever-是什么？" class="headerlink" title="FFmpegMediaMetadataRetriever 是什么？"></a>FFmpegMediaMetadataRetriever 是什么？</h1><p>之所以说是 trick…是因为 FFmpegMediaMetadataRetriever 是一个获取媒体文件信息的库。<br>我在使用时发现，如果一个视频只被写了头部，但是没有实际内容的话，该视频是没有编码信息的。<br>这个想法是来自<a href="https://zh.wikipedia.org/zh-hans/MediaInfo" target="_blank" rel="noopener">MediaInfo</a>这个软件。因为我是先用这个软件测试了一遍，发现是可行的。<br>然后我找到了在 Android 平台可用的一个类似的库，也就是 FFmpegMediaMetadataRetriever</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>我们引入依赖</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">implementation <span class="string">'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'</span></span><br></pre></td></tr></table></figure>
+
+<p>然后开始使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">getAvailableVideoList</span><span class="params">(String SDCardPath)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (TextUtils.isEmpty(SDCardPath))&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; pathList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    FFmpegMediaMetadataRetriever mediaMetadataRetriever = <span class="keyword">new</span> FFmpegMediaMetadataRetriever();</span><br><span class="line">    File fileList = <span class="keyword">new</span> File(SDCardPath);</span><br><span class="line">    <span class="keyword">if</span> (fileList.exists()) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (File file : fileList.listFiles()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (file.getName().endsWith(<span class="string">"mp4"</span>))&#123;</span><br><span class="line">                    mediaMetadataRetriever.setDataSource(file.getPath());</span><br><span class="line">                    mediaMetadataRetriever.extractMetadata(METADATA_KEY_VIDEO_CODEC);</span><br><span class="line">                    pathList.add(file.getPath());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalArgumentException iae) &#123;</span><br><span class="line">            iae.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> pathList;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果视频文件无效的，FFmpegMediaMetadataRetriever 会抛出一个异常：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.IllegalArgumentException: setDataSource failed: status = 0xFFFFFFFF</span><br></pre></td></tr></table></figure>
+
+<p>然后我们捕获这个异常，做一些其他的工作就可以。<br>这个方法就目前的使用来看，是最稳定和准确的方法。<br>缺点是：</p>
+<ul>
+<li><p><code>setDataSource()</code>过程有一些耗时，实际上测试，256MB 的视频文件，调用一次需要将近 1s 的时间</p>
+</li>
+<li><p>会抛异常…</p>
+</li>
+</ul>
+<h1 id="还有其他办法吗？"><a href="#还有其他办法吗？" class="headerlink" title="还有其他办法吗？"></a>还有其他办法吗？</h1><p>最一开始想的，其实是开一个 VideoPlayer，然后在<code>onError()</code>设一个监听器，如果播放错误就说明该文件无效。<br>但是经过我自己的评估，这样的性能实际上更差。</p>
+<p>也不知道是否有其他更优的方法，如果有的话，还请不吝赐教~</p>
+<hr>
+<p><em>参看</em></p>
+<ul>
+<li><p><a href="https://stackoverflow.com/questions/9738597/how-to-reliably-detect-file-types" target="_blank" rel="noopener">How to reliably detect file types?</a></p>
+</li>
+<li><p><a href="https://zh.wikipedia.org/wiki/MediaInfo" target="_blank" rel="noopener">MediaInfo</a></p>
+</li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#视频" >
+    <span class="tag-code">视频</span>
+  </a>
+
+  <a href="/tags#文件类型" >
+    <span class="tag-code">文件类型</span>
+  </a>
+
+  <a href="/tags#萤石云" >
+    <span class="tag-code">萤石云</span>
+  </a>
+
+  <a href="/tags#Tika" >
+    <span class="tag-code">Tika</span>
+  </a>
+
+  <a href="/tags#FFmpegMediaMetadataRetriever" >
+    <span class="tag-code">FFmpegMediaMetadataRetriever</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/08/hexo-code-block-style-mess/">
+        <span class="nav-arrow">← </span>
+        
+          Hexo prism 插件导致代码格式错乱
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/09/tika-source-code-analysis/">
+        
+          Tika 源码浅析
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Disqus START -->
+      <div id="disqus_thread"></div>
+      <!-- Disqus END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#判断文件类型"><span class="toc-nav-text">判断文件类型</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#FFmpegMediaMetadataRetriever-是什么？"><span class="toc-nav-text">FFmpegMediaMetadataRetriever 是什么？</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#使用"><span class="toc-nav-text">使用</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#还有其他办法吗？"><span class="toc-nav-text">还有其他办法吗？</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://blog.rosuh.me/2018/09/android-file-type/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+  <script>
+    var disqus_shortname = 'blog-rosuh-me';
+    
+    var disqus_url = 'https://blog.rosuh.me/2018/09/android-file-type/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//go.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

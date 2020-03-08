@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      「译」Java Thread vs AsyncTask：该用哪个？ | rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>「译」Java Thread vs AsyncTask：该用哪个？</h2>
+  <p class="post-date">2018-05-15</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><blockquote>
+<p>本文发布于<a href="https://blog.rosuh.me/2018/05/java-threads-vs-android-asynctask-which-to-use/">我的博客</a></p>
+<p>此文章为「译文」，原文链接：<a href="http://www.mergeconflict.net/2012/05/java-threads-vs-android-asynctask-which.html" target="_blank" rel="noopener">http://www.mergeconflict.net/2012/05/java-threads-vs-android-asynctask-which.html</a></p>
+<p>翻译已获原作者授权。水平有限，如有缺漏，恳请指正，谢谢~</p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在 Android 开发中，有一个非常重要但是较少被讨论到的问题：UI 的响应。这个问题一部分由 Android 系统本身决定，但更多时候是还是开发者的责任。抛开其他问题而言，解决 Android 应用 UI 响应问题的关键，就是尽可能地让大部分耗时工作转移到后台执行。众所周知，将耗时任务或是 CPU 密集型任务放到后台运行的方法，基本上只有两个：</p>
+<ul>
+<li>Java Thread</li>
+<li>Android 原生<code>AsyncTask</code>辅助类</li>
+</ul>
+<p>两者不一定能分出个孰优孰劣，因此了解他们各自的使用场景，对您的优化性能是有一定的好处的。</p>
+<h2 id="AsyncTask-的使用场景"><a href="#AsyncTask-的使用场景" class="headerlink" title="AsyncTask 的使用场景"></a>AsyncTask 的使用场景</h2><ul>
+<li>不需要下载大量数据的简单网络操作</li>
+<li>I/O 密集型任务，耗时可能几个毫秒以上</li>
+</ul>
+<h2 id="Java-Thread-使用场景"><a href="#Java-Thread-使用场景" class="headerlink" title="Java Thread 使用场景"></a>Java Thread 使用场景</h2><ul>
+<li>涉及中等或大量的网络数据操作（包括上传和下载）</li>
+<li>需要在后台执行的 CPU 密集型任务</li>
+<li>当你想要在 UI 线程控制 CPU 占用率时</li>
+</ul>
+<p>还有一个老生常谈的问题就是，千万不要在 UI 线程（主线程）执行网络操作。你需要使用上述两种方式之一来访问网络。</p>
+<h1 id="关键点"><a href="#关键点" class="headerlink" title="关键点"></a>关键点</h1><p>Java Thread 和 <code>AsyncTask</code>最关键的不同点在于，<code>AsyncTask</code>运行在 GUI 线程¹  上，所以繁重的 CPU 任务都可能导致 UI 响应性下降。Java Thread  可以拥有不同的线程优先级，使用低优先级的线程来完成非实时运算任务能够很好地为 GUI 操作释放 CPU 时间。这是提高 GUI 响应性的关键点之一。</p>
+<p>然而，正如很多 Android 开发者所了解的，你无法在后台线程更新 UI 组件，不然就会抛出异常。这对于 <code>AsyncTask</code>来说并不是什么大事² ，但是当你使用的是 Java Thread，那么你必须在你操作结束的时候使用<code>post()</code>来更新 UI³ 。</p>
+<hr>
+<p>译者按原文查找资料注：</p>
+<ol>
+<li><code>AsyncTask</code>必须在主线程加载，其中除了<code>doInBackground(Object [])</code>方法外，其余三个方法都在 UI 线程运行</li>
+<li>基于第一点，<code>AsyncTask</code>可以在其余三个方法中更新 UI 组件</li>
+<li>可以使用<code>view.post()</code>方法来更新 UI 组件，这个方法和使用<code>Activity.runOnUiThread()</code>方法区别不大</li>
+</ol>
+<p><em>参看</em>：</p>
+<ul>
+<li><a href="http://www.mergeconflict.net/2012/05/java-threads-vs-android-asynctask-which.html" target="_blank" rel="noopener">Java threads vs. Android AsyncTask: Which to use?</a></li>
+<li><a href="https://developer.android.com/reference/android/os/AsyncTask" target="_blank" rel="noopener">AsyncTask Android Developers</a></li>
+<li><a href="https://stackoverflow.com/questions/4369537/update-ui-from-thread" target="_blank" rel="noopener">Update UI from Thread</a></li>
+<li><a href="https://stackoverflow.com/questions/10558208/android-whats-the-difference-between-activity-runonuithread-and-view-post" target="_blank" rel="noopener">Android: What’s the difference between Activity.runOnUiThread and View.post?</a> </li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#线程" >
+    <span class="tag-code">线程</span>
+  </a>
+
+  <a href="/tags#AsyncTask" >
+    <span class="tag-code">AsyncTask</span>
+  </a>
+
+  <a href="/tags#Thread" >
+    <span class="tag-code">Thread</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/04/using-viewpager-to-make-a-banner-2/">
+        <span class="nav-arrow">← </span>
+        
+          手动实现轮播图（二）：循环滚动、定时切换与指示器
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/06/implement-a-star-in-Java/">
+        
+          A*（A星） 算法 Java 实现
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Disqus START -->
+      <div id="disqus_thread"></div>
+      <!-- Disqus END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#前言"><span class="toc-nav-text">前言</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#AsyncTask-的使用场景"><span class="toc-nav-text">AsyncTask 的使用场景</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Java-Thread-使用场景"><span class="toc-nav-text">Java Thread 使用场景</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#关键点"><span class="toc-nav-text">关键点</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://blog.rosuh.me/2018/05/java-threads-vs-android-asynctask-which-to-use/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+  <script>
+    var disqus_shortname = 'blog-rosuh-me';
+    
+    var disqus_url = 'https://blog.rosuh.me/2018/05/java-threads-vs-android-asynctask-which-to-use/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//go.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

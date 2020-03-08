@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="『任何足夠先進的科技，皆與魔法無異』">
+  <meta name="keyword" content="android, rosuh">
+  
+    <link rel="shortcut icon" type="image/ico" href="/css/images/icon.png"/>
+  
+  <title>
+    
+      从小事情看大问题 | rosu 的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-82992902-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-82992902-3');
+    </script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>rosu 的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">关于我</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">关于我</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>从小事情看大问题</h2>
+  <p class="post-date">2017-07-31</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>最近生活简直可以使用腐朽来形容…&gt;_&gt;</p>
+<p>Android 没怎么看，一门心思投入到美化 Gnome 桌面上。真是罪过。然而 Ubuntu 对我的无线网卡支持有问题，总是断流，加上 CS:GO 一直闪退。实在不能忍，于是又转回 Win10 了。</p>
+<p>但是很多开发环境在 Linux 下比较好用呐，所以还是使用虚拟机的模式。</p>
+<h1 id="1-问题-amp-用什么来实现？"><a href="#1-问题-amp-用什么来实现？" class="headerlink" title="1. 问题 &amp; 用什么来实现？"></a>1. 问题 &amp; 用什么来实现？</h1><p>言归正传。就在我折腾的时候，以前的一位老师找到我，想让我帮他解决一个小问题：</p>
+<blockquote>
+<p>写一个随机排列座位表的程序</p>
+</blockquote>
+<p>一开始我以为是得写一个桌面程序，得用 Java（我只会这个…总不能写个命令行吧？</p>
+<p>然后听他说了一阵，说什么以前某个老师说用的是 Excel？</p>
+<p>难道是二次开发？类似 Solidwork 和 AutoCAD？</p>
+<p>然后我自己看了一下，应该是使用 VBA 进行 Excel 操作。</p>
+<p>于是我在网上找了一些例子和 VBA 的基础语法，发现利用 VBA 来操作 Excel 简直不要太方便啊  。</p>
+<p>于是我便开始了入门 VBA 的过程…</p>
+<h1 id="2-VBA-和-Excel-的友情"><a href="#2-VBA-和-Excel-的友情" class="headerlink" title="2. VBA 和 Excel 的友情"></a>2. VBA 和 Excel 的友情</h1><p>大致浏览了语法和实例，发现 VBA 在操作 Excel 方面简直就是神器。各种单元格、区域、行列，各种复制、剪切、粘贴等等基础操作，结合上 VBA 的一些编程特性比如变量、控制语句等，就可以很便利地完成这个任务啦。</p>
+<p>我参考的资料有以下：</p>
+<ul>
+<li>入门：<a href="https://www.zhihu.com/question/26078625" target="_blank" rel="noopener">如何能有效地学习 VBA？</a> ，一个知乎问答<ul>
+<li>问答的形式，会让答案更加规整、形式化和结构化</li>
+</ul>
+</li>
+<li>基础索引：<a href="https://msdn.microsoft.com/zh-cn/library/office/ee814737(v=office.14).aspx" target="_blank" rel="noopener">Excel 2010 中的 VBA 入门</a><ul>
+<li>来自 MSDN 的基础介绍，里面内容虽然基础，但是对理解很有帮助</li>
+</ul>
+</li>
+<li>高级索引：<a href="https://msdn.microsoft.com/zh-cn/library/ee861528.aspx" target="_blank" rel="noopener">Excel VBA 参考</a><ul>
+<li>同样来自 MSDN 的官方资料，内容较多，较全。</li>
+<li>建议辅以搜索引擎，多查看实例</li>
+</ul>
+</li>
+<li><a href="http://www.cnblogs.com/liudong/archive/2008/06/11/1217186.html" target="_blank" rel="noopener">vba 的单元格引用的总结</a><ul>
+<li>这篇文章的总结很到位，对于语法不熟的我来说可以直接查找实例</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-实现过程"><a href="#3-实现过程" class="headerlink" title="3. 实现过程"></a>3. 实现过程</h1><h2 id="V1-0-菜鸡的自我救赎"><a href="#V1-0-菜鸡的自我救赎" class="headerlink" title="V1.0 菜鸡的自我救赎"></a>V1.0 菜鸡的自我救赎</h2><p>如何实现？这是编程最开始的问题。</p>
+<ul>
+<li>分析问题</li>
+</ul>
+<p>如何从 “学生名单” –&gt; “随机座位表” 呢？</p>
+<p>立刻浮现在脑海里的是：</p>
+<ol>
+<li>通过 VBA 生成随机数</li>
+<li>以随机数为索引获取某个学生（即某个单元格）</li>
+<li>将该学生作为单元格剪切，粘贴到座位表里面</li>
+<li>循环上述 3 步，直到所有学生被移到座位表中<ul>
+<li>座位表其实就是从左到右排列，每三人隔 2 列，每 9 人换一行</li>
+<li>需要一个循环判断，并对行列做出变化</li>
+</ul>
+</li>
+</ol>
+<p>思路应该就是这样，所以我立刻动手开始实现。</p>
+<p>实现过程耗时最大的板块不是逻辑实现，而是语法问题。（无奈</p>
+<p>第一个版本实现之后，便交付给老师了。</p>
+<p>然后老师提了一个问题：</p>
+<blockquote>
+<p>如果他以后学生名单有所变动该如何？</p>
+</blockquote>
+<h2 id="V2-0-提高健壮性"><a href="#V2-0-提高健壮性" class="headerlink" title="V2.0 提高健壮性"></a>V2.0 提高健壮性</h2><p>收到这个问题之后，我在心里骂了自己几句，为什么一开始没有想到呢！所以说明我实际项目经验真是好差…</p>
+<p>于是我动手开始改代码，把函数主体中的关键确切数字使用变量替代，并在反复审查之后重新交付给老师。</p>
+<p>然后…问题是没问题，但是我突然注意到一个问题！</p>
+<p><strong>每次学生人数有变动，要修改的时候就必须跑到代码里去修改</strong>？？</p>
+<p>这怎么可以呢！但是如果写一个交互对话框就显得杀鸡用牛刀了。</p>
+<p>于是我转念一想，直接计算学生名单中的非空单元格就行啦。</p>
+<h2 id="V3-0-让程序“可用”"><a href="#V3-0-让程序“可用”" class="headerlink" title="V3.0 让程序“可用”"></a>V3.0 让程序“可用”</h2><p>我于是立刻开始添加一个计数功能，然后自动判断学生人数。</p>
+<p>最后把这个最后版本提交过去。这样的话，老师就不用跑到代码里修改人数了，即开即用还不是美滋滋…</p>
+<p><em>附上菜鸡的最终程序</em>：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">Sub 编排座位()</span><br><span class="line"><span class="comment">'</span></span><br><span class="line"><span class="comment">' 学生人数</span></span><br><span class="line"><span class="comment">'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">'</span></span><br><span class="line">    Dim stuNum</span><br><span class="line">    stuNum = Application.WorksheetFunction.CountA(Sheet1.Range("B1:B1000"))</span><br><span class="line"></span><br><span class="line"><span class="comment">'</span></span><br><span class="line"><span class="comment">' 将数据从表 1 复制到表2</span></span><br><span class="line"><span class="comment">'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">'</span></span><br><span class="line">    Sheets("Sheet2").Select</span><br><span class="line">    Cells.Clear</span><br><span class="line">    Sheets("Sheet1").Select</span><br><span class="line">    Range("B1" &amp; ":B" &amp; stuNum).Select</span><br><span class="line">    Selection.Copy</span><br><span class="line">    Sheets("Sheet2").Select</span><br><span class="line">    Range("A1").Select</span><br><span class="line">    ActiveSheet.Paste</span><br><span class="line"></span><br><span class="line"><span class="comment">'</span></span><br><span class="line"><span class="comment">' 产生随机数字并随机编排顺序</span></span><br><span class="line"><span class="comment">'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">'</span></span><br><span class="line">    Dim ranNum, index, DisplayRow, row, col</span><br><span class="line">    col = 4</span><br><span class="line">    row = 4</span><br><span class="line">    Sheets("Sheet2").Select</span><br><span class="line"></span><br><span class="line"><span class="comment">' 设置讲台</span></span><br><span class="line"></span><br><span class="line">    Range("I1:K1").Select</span><br><span class="line">    With Selection</span><br><span class="line">        .HorizontalAlignment = xlCenter</span><br><span class="line">        .VerticalAlignment = xlCenter</span><br><span class="line">        .WrapText = False</span><br><span class="line">        .Orientation = 0</span><br><span class="line">        .AddIndent = False</span><br><span class="line">        .IndentLevel = 0</span><br><span class="line">        .ShrinkToFit = False</span><br><span class="line">        .ReadingOrder = xlContext</span><br><span class="line">        .MergeCells = False</span><br><span class="line">    End With</span><br><span class="line">    Selection.Merge</span><br><span class="line">    Range("I1:K1").Select</span><br><span class="line">    ActiveCell.FormulaR1C1 = "讲台"</span><br><span class="line">    Range("I1:K1").Select</span><br><span class="line">    With Selection.Interior</span><br><span class="line">        .Pattern = xlSolid</span><br><span class="line">        .PatternColorIndex = xlAutomatic</span><br><span class="line">        .ThemeColor = xlThemeColorDark1</span><br><span class="line">        .TintAndShade = -0.249977111117893</span><br><span class="line">        .PatternTintAndShade = 0</span><br><span class="line">    End With</span><br><span class="line">    With Selection.Font</span><br><span class="line">        .Color = -16776961</span><br><span class="line">        .TintAndShade = 0</span><br><span class="line">    End With</span><br><span class="line"></span><br><span class="line"><span class="comment">' 编排座位</span></span><br><span class="line"></span><br><span class="line">    Range("I2").Select</span><br><span class="line">    For index = 1 To stuNum</span><br><span class="line">        Randomize</span><br><span class="line">        ranNum = Int(Rnd() * stuNum) + 1</span><br><span class="line">        Sheets("Sheet2").Cells(ranNum, 3).Select    ' 选中单元格</span><br><span class="line">        If Cells(ranNum, 1) &lt;&gt; "" Then  ' 如果单元格不为空，则剪切单元格内容到座位表</span><br><span class="line">            Range("A" &amp; ranNum).Select  ' 选中该单元格</span><br><span class="line">            Selection.Cut               ' 剪切</span><br><span class="line">            Cells(row, col).Select      ' 选中座位表位置</span><br><span class="line">            ActiveSheet.Paste            ' 粘贴</span><br><span class="line">            Select Case col                  ' 座位表列数变化</span><br><span class="line">                Case 6, 11</span><br><span class="line">                    col = col + 3</span><br><span class="line">                Case 16</span><br><span class="line">                    col = 4</span><br><span class="line">                    row = row + 1</span><br><span class="line">                Case Else</span><br><span class="line">                    col = col + 1</span><br><span class="line">            End Select</span><br><span class="line">        Else</span><br><span class="line">            index = index - 1</span><br><span class="line">        End If</span><br><span class="line">    Next index</span><br><span class="line"></span><br><span class="line">End Sub</span><br></pre></td></tr></table></figure>
+
+<h1 id="反思-amp-总结"><a href="#反思-amp-总结" class="headerlink" title="反思 &amp; 总结"></a>反思 &amp; 总结</h1><p>直到真正开始写一个东西，才会发现自己的问题在哪里。</p>
+<ul>
+<li>我桌面上甚至连一本草稿纸都没有<ul>
+<li>可见我前段时间的学习态度确实很一般。</li>
+</ul>
+</li>
+<li>对基础逻辑语句不熟悉<ul>
+<li>在进行格式转换、行数判断的时候，屡次犯低级错误</li>
+<li>说明自己手生</li>
+</ul>
+</li>
+</ul>
+<p>直到写完本篇所谓总结，心里依旧七上八下。出现问题、犯错并不是什么大事，更大的问题在于你是否会正视自己的错误进而改正他。</p>
+<hr>
+<p>将这么简单的小程序的过程写出来，脸上甚至有点发烫。</p>
+<p>但是不写出来，就不会击破自己的幻想，就不会让自己长记性。</p>
+<p>所以本篇其实算是“耻辱柱”了。今天记下来，发表出去，警以为戒。</p>
+<p><em>2017-7-31 12:19:06</em>.</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#日志" >
+    <span class="tag-code">日志</span>
+  </a>
+
+  <a href="/tags#耻辱柱" >
+    <span class="tag-code">耻辱柱</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2017/07/restart-journey/">
+        <span class="nav-arrow">← </span>
+        
+          重新开始
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2017/08/Github-page-configure-and-enable-HTTPS/">
+        
+          GitHub Page 子域名配置 &amp; 启用 HTTPS
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Disqus START -->
+      <div id="disqus_thread"></div>
+      <!-- Disqus END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-问题-amp-用什么来实现？"><span class="toc-nav-text">1. 问题 &amp; 用什么来实现？</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-VBA-和-Excel-的友情"><span class="toc-nav-text">2. VBA 和 Excel 的友情</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3-实现过程"><span class="toc-nav-text">3. 实现过程</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#V1-0-菜鸡的自我救赎"><span class="toc-nav-text">V1.0 菜鸡的自我救赎</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#V2-0-提高健壮性"><span class="toc-nav-text">V2.0 提高健壮性</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#V3-0-让程序“可用”"><span class="toc-nav-text">V3.0 让程序“可用”</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#反思-amp-总结"><span class="toc-nav-text">反思 &amp; 总结</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://blog.rosuh.me/2017/07/I-am-a-rookie/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+  <script>
+    var disqus_shortname = 'blog-rosuh-me';
+    
+    var disqus_url = 'https://blog.rosuh.me/2017/07/I-am-a-rookie/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//go.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>
