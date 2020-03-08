@@ -14,17 +14,19 @@ description: "最近在倒腾 Mpg123-Android 的时候，尝试了把 ndk-build 
 ## 怎么关联
 在模块级别的`build.gradle`文件中指定如下：
 
-    android {
-    	...
-    	externalNativeBuild {
-            ndkBuild {
-    						// native 编译配置文件位置
-                path file('src/main/jni/Android.mk')
-    						// so 产物输出文件夹，编译后会输出到 $buildStagingDirectory/ndkBuild/.. 下面
-                buildStagingDirectory "src/main/libs"
-            }
+```xml
+android {
+    ...
+    externalNativeBuild {
+        ndkBuild {
+                        // native 编译配置文件位置
+            path file('src/main/jni/Android.mk')
+                        // so 产物输出文件夹，编译后会输出到 $buildStagingDirectory/ndkBuild/.. 下面
+            buildStagingDirectory "src/main/libs"
         }
     }
+}
+```
 
 ## 优劣
 
