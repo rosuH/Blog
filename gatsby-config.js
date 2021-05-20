@@ -39,6 +39,7 @@ module.exports = {
             url: `https://github.com/rosuH`,
           },
         ],
+        formatString: "YYYY-MM-DD"
       },
     },
     {
