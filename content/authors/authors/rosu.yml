@@ -1,0 +1,9 @@
+name: rosu
+bio: |
+  『任何足夠先進的科技，初看皆與魔法無異』。
+avatar: ./avatars/avatar_rosu.jpeg
+featured: true
+social:
+  - url: https://rosuh.me
+  - url: https://github.com/rosuH
+  - url: https://twitter.com/rosu_h

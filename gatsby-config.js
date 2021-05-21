@@ -1,95 +1,58 @@
-require(`dotenv`).config({
-  path: `.env`,
-})
-
-const shouldAnalyseBundle = process.env.ANALYSE_BUNDLE
-
 module.exports = {
   siteMetadata: {
-    siteTitle: `rosu 的博客`,
-    siteTitleAlt: `『任何足夠先進的科技，皆與魔法無異』`,
+    title: `rosu 的博客`,
+    name: `rosu`,
     siteUrl: `https://blog.rosuh.me`,
+    description: `你好，这是我的个人博客。`,
+    hero: {
+      heading: `Checkout this Blog.kt`,
+      maxWidth: 652,
+    },
+    social: [
+      {
+        name: `HomePage`,
+        url: `https://rosuh.me`,
+      },
+      {
+        name: `twitter`,
+        url: `https://twitter.com/rosu_h`,
+      },
+      {
+        name: `github`,
+        url: `https://github.com/rosuH`,
+      },
+    ],
   },
   plugins: [
     {
-      resolve: `@lekoarts/gatsby-theme-minimal-blog`,
-      // See the theme's README for all available options
+      resolve: "@narative/gatsby-theme-novela",
       options: {
-        navigation: [
-          {
-            title: `Blog`,
-            slug: `/blog`,
-          },
-          {
-            title: `About`,
-            slug: `/about`,
-          },
-        ],
-        externalLinks: [
-          {
-            name: `HomePage`,
-            url: `https://rosuh.me`,
-          },
-          {
-            name: `Twitter`,
-            url: `https://twitter.com/rosu_h`,
-          },
-          {
-            name: `Github`,
-            url: `https://github.com/rosuH`,
-          },
-        ],
-        formatString: "YYYY-MM-DD"
+        contentPosts: "content/posts",
+        contentAuthors: "content/authors",
+        basePath: "/",
+        authorsPage: true,
+        sources: {
+          local: true,
+          // contentful: true,
+        },
       },
     },
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        trackingId: process.env.GOOGLE_ANALYTICS_ID,
-      },
-    },
-    `gatsby-plugin-sitemap`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `minimal-blog - @lekoarts/gatsby-theme-minimal-blog`,
-        short_name: `minimal-blog`,
-        description: `Typography driven, feature-rich blogging theme with minimal aesthetics. Includes tags/categories support and extensive features for code blocks such as live preview, line numbers, and code highlighting.`,
+        name: `rosu's Blog`,
+        short_name: `Novela`,
         start_url: `/`,
         background_color: `#fff`,
-        theme_color: `#6B46C1`,
+        theme_color: `#fff`,
         display: `standalone`,
-        icons: [
-          {
-            src: `/android-chrome-192x192.png`,
-            sizes: `192x192`,
-            type: `image/png`,
-          },
-          {
-            src: `/android-chrome-512x512.png`,
-            sizes: `512x512`,
-            type: `image/png`,
-          },
-        ],
-      },
-    },
-    `gatsby-plugin-offline`,
-    `gatsby-plugin-gatsby-cloud`,
-    `gatsby-plugin-netlify`,
-    shouldAnalyseBundle && {
-      resolve: `gatsby-plugin-webpack-bundle-analyser-v2`,
-      options: {
-        analyzerMode: `static`,
-        reportFilename: `_bundle.html`,
-        openAnalyzer: false,
+        icon: `src/assets/favicon.png`,
+        articlePermalinkFormat: ":year/:month/:day/:slug",
       },
     },
     {
-      resolve: "gatsby-transformer-remark",
-      options: {
-        plugins: [
-        ],
-      },
-    }
-  ].filter(Boolean),
+      resolve: `gatsby-plugin-netlify-cms`,
+      options: {},
+    },
+  ],
 };

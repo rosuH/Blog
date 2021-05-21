@@ -2,7 +2,7 @@
 title: '2018 总结 & 2019 展望'
 date: 2019-01-04
 author: rosu
-layout: 'post'
+slug: "2018-summary"
 tags:
   - "总结"
 
