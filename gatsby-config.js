@@ -31,9 +31,10 @@ module.exports = {
         contentAuthors: "content/authors",
         basePath: "/",
         authorsPage: true,
+        pageLength: 10,
+        articlePermalinkFormat: ":year/:month/:day/:slug",
         sources: {
-          local: true,
-          // contentful: true,
+          local: true
         },
       },
     },
@@ -47,12 +48,17 @@ module.exports = {
         theme_color: `#fff`,
         display: `standalone`,
         icon: `src/assets/favicon.png`,
-        articlePermalinkFormat: ":year/:month/:day/:slug",
       },
     },
     {
       resolve: `gatsby-plugin-netlify-cms`,
       options: {},
+    },
+    {
+      resolve: `gatsby-plugin-typography`,
+      options: {
+        pathToConfigModule: `src/utils/typography`,
+      },
     },
   ],
 };

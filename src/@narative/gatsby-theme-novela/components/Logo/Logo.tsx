@@ -8,8 +8,8 @@ import { Icon } from "@types";
 const Logo: Icon = ({ fill = "white" }) => {
   return (
     <LogoContainer>
-      <img className="Logo__Desktop" src={logo} alt="logo"></img>
-      <img className="Logo__Mobile" src={logo} alt="logo"></img>
+      <img className="Logo__Desktop" src={logo} alt="logo" width="192" height="192"></img>
+      <img className="Logo__Mobile" src={logo} alt="logo" width="23" height="23"></img>
     </LogoContainer>
   );
 };
