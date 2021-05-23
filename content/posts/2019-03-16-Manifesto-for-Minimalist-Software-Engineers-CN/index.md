@@ -1,13 +1,14 @@
 ---
-title: "【翻译】极简主义工程师宣言"
-date: 2019-03-16
+title: 【翻译】极简主义工程师宣言
 author: rosu
-slug: "Manifesto-for-Minimalist-Software-Engineers-CN"
+date: 2019-03-16
+slug: Manifesto-for-Minimalist-Software-Engineers-CN
 tags:
-  - "软技能"
-  - "翻译"
+  - 软技能
+  - 翻译
 categories:
-  - "技术"
+  - 技术
+hero: https://unsplash.com/photos/R9OS29xJb-8/download?force=true&w=640
 ---
 
 # 【翻译】极简主义工程师宣言
