@@ -7,7 +7,7 @@ tags:
   - 阅读
 categories:
   - 生活
-hero: images/hero.webp
+hero: https://unsplash.com/photos/iyKVGRu79G4/download?force=true&w=640
 ---
 
 ## 经济学通识
