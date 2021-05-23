@@ -1,13 +1,14 @@
 ---
-title: "为什么使用 View.postDelay() 就可以拿到宽高？"
-date: 2019-11-27
 author: rosu
-slug: "why-can-get-view-size-after-view-post"
+slug: why-can-get-view-size-after-view-post
+title: 为什么使用 View.postDelay() 就可以拿到宽高？
+date: 2019-11-27
 tags:
-  - 'Android'
+  - Android
+hero: https://unsplash.com/photos/jnuiQZixZNg/download?force=true&w=640
 categories:
-  - "技术"
-description: "本系列是笔者在实践过程中学习或复习到的一些 tips，为了避免忘记，特地记下来"
+  - 技术
+description: 本系列是笔者在实践过程中学习或复习到的一些 tips，为了避免忘记，特地记下来
 ---
 
 `View.postDelay()`并不是立刻在 `Handler`  中被调用的。如果当前 View 还没有依附到一个 Window 上，那么这个消息将会先保存在 View 中，直到`dispatchAttachToWindow()`方法被调用时才会把消息加到 Handler 队列中。
