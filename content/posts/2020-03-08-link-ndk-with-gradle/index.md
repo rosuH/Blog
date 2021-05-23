@@ -5,7 +5,7 @@ title: 将 ndk-build 关联到 Gradle
 date: 2020-03-08
 tags:
   - Android
-hero: https://unsplash.com/photos/iyKVGRu79G4/download?force=true&w=640
+hero: images/group-1.png
 categories:
   - 技术
 description: 最近在倒腾 Mpg123-Android 的时候，尝试了把 ndk-build 关联到 Gradle 中。不需要单独执行
