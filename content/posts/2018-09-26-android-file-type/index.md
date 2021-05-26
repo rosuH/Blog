@@ -99,7 +99,7 @@ MockingBot.dmg ======>>> application/octet-stream
 
 我们引入依赖
 
-```gradle
+```groovy
 implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
 ```
 
