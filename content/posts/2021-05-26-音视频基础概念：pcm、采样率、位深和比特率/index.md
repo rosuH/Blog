@@ -1,5 +1,6 @@
 ---
 title: 音视频基础概念：PCM、采样率、位深和比特率
+slug: av-basic-pcm-sample-rate-bitrate-bit-depth-and-more
 date: 2021-05-26
 ---
 ## PCM
