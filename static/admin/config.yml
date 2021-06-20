@@ -1,9 +1,9 @@
-# backend: # Set up your backend
-#   name: github
-#   repo: rosuH/Blog
-#   branch: feat_migrate_to_gatsby
-backend:
-  name: git-gateway
+backend: # Set up your backend
+  name: github
+  repo: rosuH/Blog
+  branch: feat_migrate_to_gatsby
+# backend:
+  # name: git-gateway
 
 
 local_backend: true # Optional if you want to use the local proxy mode
