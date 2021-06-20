@@ -3,7 +3,7 @@ name: Gatsby Publish
 on:
   push:
     branches:
-      - feat_migrate_to_gatsby
+      - gatsby
 
 jobs:
   build:
