@@ -1,13 +1,18 @@
-backend: # Set up your backend
-  name: github
-  repo: rosuH/Blog
-  branch: feat_migrate_to_gatsby
+# backend: # Set up your backend
+#   name: github
+#   repo: rosuH/Blog
+#   branch: feat_migrate_to_gatsby
+backend:
+  name: git-gateway
+
 
 local_backend: true # Optional if you want to use the local proxy mode
 
 publish_mode: editorial_workflow
 media_folder: media    # I'm not using these default media directories at the moment.
 public_folder: /media
+show_preview_links: true
+
 
 collections:
   - name: "posts"
@@ -15,10 +20,12 @@ collections:
     folder: "content/posts"
     create: true
     delete: true
-    path: "{{slug}}/index"
+    filename: "{{year}}-{{month}}-{{day}}-{{filename.slug}}"
+    path: "{{filename}}/index"
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
+      - { label: "FileName", name: "filename", widget: "string" }
       - { label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", dateFormat: "YYYY-MM-DD", timeFormat: false }
       - { label: "Excerpt", name: "excerpt", widget: "string", required: false }
       - { label: "Body", name: "body", widget: "markdown" }

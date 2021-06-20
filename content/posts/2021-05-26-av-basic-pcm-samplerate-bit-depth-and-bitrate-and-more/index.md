@@ -1,5 +1,7 @@
 ---
 title: 音视频基础概念：PCM、采样率、位深和比特率
+filename: 2021-05-26-av-basic-pcm-samplerate-bit-depth-and-bitrate-and-more
+slug: av-basic-pcm-samplerate-bit-depth-and-bitrate-and-more
 date: 2021-05-26
 ---
 ## PCM
@@ -152,10 +154,10 @@ $$
 
 **音频压缩主要从两方面入手**：
 
-- 依赖 Psychoacoustics 心理声学理论
-	- 一方面移除掉人耳物理上无法听到高低频声音
-	- 另一方面探究人耳如何解析声音的频率，依次来决定哪些频率的声音是最重要的频率
-- [数据压缩](https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9)
+* 依赖 Psychoacoustics 心理声学理论
+  		- 一方面移除掉人耳物理上无法听到高低频声音
+  		- 另一方面探究人耳如何解析声音的频率，依次来决定哪些频率的声音是最重要的频率
+* [数据压缩](https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9)
   		- 把音频看作文件进行压缩，是常规的压缩思路
   		- 比如 FLAC 使用的 [线性预测编码](https://zh.wikipedia.org/wiki/%E7%BA%BF%E6%80%A7%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81)
 
