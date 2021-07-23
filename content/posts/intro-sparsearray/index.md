@@ -3,9 +3,7 @@ title: SparseArray 简介
 filename: intro-sparsearray
 date: 2021-07-23
 ---
-
-
-## SparseArray 基础原理
+## 基础原理
 
 SparseArray 其实代码非常简短：
 
@@ -14,7 +12,7 @@ SparseArray 其实代码非常简短：
 
 SparseArray 内存占用是 $2n$（忽略单独对象、基础类型所占用空间，仅考虑数据规模），会比 HashMap 更省内存吗？
 
-## SparseArray 的优势
+## 优势
 
 1. 避免自动装箱
 2. 不需要额外存储 `next` 对象的引用
@@ -22,11 +20,23 @@ SparseArray 内存占用是 $2n$（忽略单独对象、基础类型所占用空
 虽然自动装箱的值范围只要仍在 JVM 缓存范围内，JVM 就会优化为基础类型，但是避免自动装箱总是性能更优的选择。内存方面，自动装箱会带来额外的内存占用。在 64bit 的 JVM 上，基础类型 `int` 将占用 $4 Bytes$ 的内存，而一个（未缓存的） `Integer` 将占据 $16 Bytes$。这是 4 倍的内存占用。
 说说第二点，HashMap 每个元素都是一个 Node 对象：
 
+```java
+
+static class Node<K,V> implements Map.Entry<K,V> {
+    final int hash;
+    final K key;
+    V value;
+    Node<K,V> next;
+    //...
+}
+
+```
+
 暂时不论 Node 本身所占据的空间，单单其内部拥有 `hash`，`key`，`value` 和 `next` 四个成员变量。可以保守地说 HashMap 的空间占用至少是 $4n$。
 
 此处仅做数据规模举例，详细内存比较可以参见： [SparseArray vs HashMap](https://stackoverflow.com/questions/25560629/sparsearray-vs-hashmap)。
 
-## SparseArray 的劣势
+## 劣势
 
 SparseArray 存取数据时，需要对整个 Key 数组进行二分查找，时间复杂度为 $O(logn)$）。数据量较大的时候，存取性能明显弱于 `HashMap`。因为 `HashMap` 存储了 `hash` 作为 Value 索引位置，存取数据都是 $O(1)$。
 
