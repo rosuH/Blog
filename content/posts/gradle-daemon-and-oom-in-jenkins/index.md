@@ -9,7 +9,7 @@ date: 2021-07-23
 
 第一种情况构建日志中可供参考的信息几乎为无：
 > Build step 'Invoke Gradle script' changed build result to FAILURE
-Build step 'Invoke Gradle script' marked build as failure
+> Build step 'Invoke Gradle script' marked build as failure
 
 第二种情况会在构建开始抛出警告：
 
@@ -50,6 +50,9 @@ Gradle 利用一个持续存在的 daemon 进程来避免重复初始化导致�
 每个 daemon 运行后，会在 `/var/lib/Jenkins/.gradle/daemon` 中写入注册表和 log 文件，我在机器中看到这个文件夹中一共有多个 Gradle 版本，包括异常状态的 daemon 版本，他们将不会被 Gradle 默认的清除策略所清除。
 
 在我直接删除 `.gradle/daemon` 下的所有版本，重新开启构建即可。经过多日测试，发现再无 OOM 的情况发生。
+
+## 2021/08/10 更新
+一段时间后该 OOM 还是 OOM，考虑可能是 Gradle 版本升级后对内存占用提升了。建议升级机器... >_<
 
 ---
 - [java.lang.OutOfMemoryError: GC overhead limit exceeded on Android 1.4](https://stackoverflow.com/questions/32133013/java-lang-outofmemoryerror-gc-overhead-limit-exceeded-on-android-1-4)
