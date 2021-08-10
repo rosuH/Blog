@@ -51,6 +51,9 @@ Gradle 利用一个持续存在的 daemon 进程来避免重复初始化导致�
 
 在我直接删除 `.gradle/daemon` 下的所有版本，重新开启构建即可。经过多日测试，发现再无 OOM 的情况发生。
 
+## 2021/08/10 更新
+一段时间后该 OOM 还是 OOM，考虑可能是 Gradle 版本升级后对内存占用提升了。建议升级机器... >_<
+
 ---
 - [java.lang.OutOfMemoryError: GC overhead limit exceeded on Android 1.4](https://stackoverflow.com/questions/32133013/java-lang-outofmemoryerror-gc-overhead-limit-exceeded-on-android-1-4)
 - [Starting a Gradle Daemon, 1 busy and 6 stopped Daemons could not be reused, use --status for details](https://stackoverflow.com/a/58195352/7293728)
