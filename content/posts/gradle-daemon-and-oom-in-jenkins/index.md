@@ -9,7 +9,7 @@ date: 2021-07-23
 
 第一种情况构建日志中可供参考的信息几乎为无：
 > Build step 'Invoke Gradle script' changed build result to FAILURE
-Build step 'Invoke Gradle script' marked build as failure
+> Build step 'Invoke Gradle script' marked build as failure
 
 第二种情况会在构建开始抛出警告：
 
