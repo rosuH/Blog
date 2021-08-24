@@ -146,7 +146,7 @@ public static int getDefaultSize(int size, int measureSpec) {
 
 ```
 // 水平布局
-[[CustomViewGroup, w: 50, orientation: horizontal]
+[CustomViewGroup, w: 50, orientation: horizontal]
     <TextView_1, w: 20> --> available 50, widthUsed 20, actual 20
     <TextView_2, w: 20> --> available 30, widthUsed 40, actual 20
     <TextView_3, w: 20> --> available 10, widthUsed 50, actual 10
