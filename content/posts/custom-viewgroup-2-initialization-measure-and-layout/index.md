@@ -231,8 +231,9 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 measure 的理论知识部分到这里就差不多了。更多的需要自己动手去尝试，去真正的实现，才能有更深的体会。后续会有文章介绍部分实践内容，敬请期待。接下来我们可以看下 layout 部分。
 
 
-#### 最后，如果你遇到...
-> android.view.ViewGroup$LayoutParams cannot be cast to android.view.ViewGroup$MarginLayoutParams
+**最后，如果你遇到**...
+
+> java.lang.ClassCastException: android.view.ViewGroup$LayoutParams cannot be cast to android.view.ViewGroup$MarginLayoutParams
 
 不用担心，这个是因为我们在前面都没有讨论 margin 测量问题。其实这个也很简单。
 如果你的子 View 都是自己构建的，那么给子 View 设置 `layoutParams` 为 `MarginLayoutParams` 即可。或者重写 `generateDefaultLayoutParams` 方法：
