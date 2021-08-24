@@ -157,7 +157,7 @@ public static int getDefaultSize(int size, int measureSpec) {
 - TextView_1 ：ViewGroup 已经被使用了 $0dp$，有 $50dp$ 的可用空间，最后只用了 $20dp$
 	- `measureChildWithMargins(it, widthMeasureSpec, 0, heightMeasureSpec, heightUsed)`
 - TextView_2 ：ViewGroup 已经被使用了 $20dp$，可用空间有 $30dp$，但只用了 $20dp$
-	- `measureChildWithMargins(it, widthMeasureSpec, 20.dp, heightMeasureSpec, heightUsed)``
+	- `measureChildWithMargins(it, widthMeasureSpec, 20.dp, heightMeasureSpec, heightUsed)`
 - TextView_3：ViewGroup 已经被使用了 $40dp$；期望 $20dp$，但只有 $10dp$ 可用，所以只能用 $10dp$
 	- `measureChildWithMargins(it, widthMeasureSpec, 40.dp, heightMeasureSpec, heightUsed)`
 
