@@ -2,6 +2,7 @@
 title: 自定义布局其一：优劣势与使用场景
 filename: custom-viewgroup-1-cons-and-pros
 date: 2021-08-23
+excerpt: 我将在「自定义布局」系列文章介绍我对「自定义布局」的理解、实践经验和个人总结。文章系列可能会有三到四篇，本文是第一篇，介绍一点前置知识。
 ---
 我将在「自定义布局」系列文章介绍我对「自定义布局」的理解、实践经验和个人总结。文章系列可能会有三到四篇，本文是第一篇，介绍一点前置知识。如果您看到本文且对内容有任何意见或建议，都可以随时在网站首页找到方式联系我，我热切期盼能和更多的人交流想法💡！
 
@@ -102,6 +103,7 @@ date: 2021-08-23
 
 ---
 REF:
+- [Performance and view hierarchies](https://developer.android.com/topic/performance/rendering/optimizing-view-hierarchies)
 - [Layout Once, Layout Twice — Sold!](https://medium.com/@britt.barak/layout-once-layout-twice-sold-aef156ff16a4)
 - [ConstraintLayout, Inside and Out: Part 2](https://wiresareobsolete.com/2016/07/constraintlayout-part-2/)
 - [AutoLayout 中的线性规划 - Simplex 算法](https://www.desgard.com/iOS-Source-Probe/Objective-C/UIKit/AutoLayout%20%E4%B8%AD%E7%9A%84%E7%BA%BF%E6%80%A7%E8%A7%84%E5%88%92%20-%20Simplex%20%E7%AE%97%E6%B3%95.html)
