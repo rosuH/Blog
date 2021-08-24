@@ -199,29 +199,26 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 	// 遍历所有子控件
     children
         .filter {
-            // 过滤 View.GONE 控件
-            it.visibility != View.GONE
+            // 过滤留下优先级最高的，且非 View.GONE 的控件
+            it.visibility != View.GONE && it.constraint == Force
         }
         .forEach {
-            // 先测量优先级最高的
-            if (it.constraint == Force) {
-                // 按照无限制尺寸去测量
-                measureChildWithMargins(it, widthMeasureSpec, 0, heightMeasureSpec, heightUsed)
-                // 垂直布局，所以高度叠加，
-                heightUsed += it.measuredHeight
-                // 垂直布局，宽度以最大子控件宽度为准
-                widthUsed = Math.max(widthUsed, it.measuredWidth)
-            }
+            // 按照无限制尺寸去测量
+            measureChildWithMargins(it, widthMeasureSpec, 0, heightMeasureSpec, heightUsed)
+            // 垂直布局，所以高度叠加，
+            heightUsed += it.measuredHeight
+            // 垂直布局，宽度以最大子控件宽度为准
+            widthUsed = Math.max(widthUsed, it.measuredWidth)
         }
 	// 再测量优先级较低的 optional 列表
 	getOptionsList().forEach {
-		// 传递 widthUsed，子控件自己根据剩余空空间来计算尺寸
-		// 而不再是无限制测量
-		measureChildWithMargins(it, widthMeasureSpec, widthUsed, heightMeasureSpec, heightUsed)	
-		// 垂直布局，所以高度叠加，
-		heightUsed += it.measuredHeight
-		// 垂直布局，宽度以最大子控件宽度为准
-		widthUsed = Math.max(widthUsed, it.measuredWidth)
+            // 传递 widthUsed，子控件自己根据剩余空空间来计算尺寸
+            // 而不再是无限制测量
+            measureChildWithMargins(it, widthMeasureSpec, widthUsed, heightMeasureSpec, heightUsed)	
+            // 垂直布局，所以高度叠加，
+            heightUsed += it.measuredHeight
+            // 垂直布局，宽度以最大子控件宽度为准
+            widthUsed = Math.max(widthUsed, it.measuredWidth)
 
 	}
 	// 保存当前 ViewGroup 的尺寸
