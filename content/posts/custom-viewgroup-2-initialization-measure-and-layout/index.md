@@ -212,7 +212,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         }
 	// 再测量优先级较低的 optional 列表
 	getOptionsList().forEach {
-            // 传递 widthUsed，子控件自己根据剩余空空间来计算尺寸
+            // 传递 widthUsed，子控件自己根据剩余空间来计算尺寸
             // 而不再是无限制测量
             measureChildWithMargins(it, widthMeasureSpec, widthUsed, heightMeasureSpec, heightUsed)	
             // 垂直布局，所以高度叠加，
