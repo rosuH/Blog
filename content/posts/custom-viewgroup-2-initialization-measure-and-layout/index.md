@@ -123,11 +123,11 @@ public static int getDefaultSize(int size, int measureSpec) {
 
 ```
 [LinearLayout, w: 50]
-	[ViewGroup_1, w: wrap_content, orientation: horizontal]
-		<TextView_1, w: 20>
-		<TextView_2, w: 20>
-		<TextView_3, w: 20>
-	[ViewGroup_1]
+    [ViewGroup_1, w: wrap_content, orientation: horizontal]
+        <TextView_1, w: 20>
+        <TextView_2, w: 20>
+        <TextView_3, w: 20>
+    [ViewGroup_1]
 [LinearLayout]
 ```
 
