@@ -156,11 +156,11 @@ public static int getDefaultSize(int size, int measureSpec) {
 在构建水平布局时，`CustomViewGroup` 宽度只有 $50dp$。三个 TextView 优先级相等。那么：
 
 - TextView_1 ：`CustomViewGroup` 已经被使用了 $0dp$，有 $50dp$ 的可用空间，最后只用了 $20dp$
-	- `measureChildWithMargins(it, widthMeasureSpec, 0, heightMeasureSpec, heightUsed)`
+    - `measureChildWithMargins(it, widthMeasureSpec, 0, heightMeasureSpec, heightUsed)`
 - TextView_2 ：`CustomViewGroup` 已经被使用了 $20dp$，可用空间有 $30dp$，但只用了 $20dp$
-	- `measureChildWithMargins(it, widthMeasureSpec, 20.dp, heightMeasureSpec, heightUsed)`
+    - `measureChildWithMargins(it, widthMeasureSpec, 20.dp, heightMeasureSpec, heightUsed)`
 - TextView_3：`CustomViewGroup` 已经被使用了 $40dp$；期望 $20dp$，但只有 $10dp$ 可用，所以只能用 $10dp$
-	- `measureChildWithMargins(it, widthMeasureSpec, 40.dp, heightMeasureSpec, heightUsed)`
+    - `measureChildWithMargins(it, widthMeasureSpec, 40.dp, heightMeasureSpec, heightUsed)`
 
 一句话总结：**`widthUsed` 和 `heightUsed` 就是已经被使用的空间。如果剩下的控件是按剩余空间分配的，那么就需要传递这两个值以便计算；如果不是按剩余空间分配，那么这两个值就是 0**。
 
