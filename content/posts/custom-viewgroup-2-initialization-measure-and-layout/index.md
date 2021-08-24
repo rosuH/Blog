@@ -275,7 +275,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 ## layout
 layout 比 measure 更加简单。不需要做太多的比较和判断。我们在重写 `onLayout` 的过程中，一般关注：
 1. 控件的排列顺序与互相位置约束
-2. `margin` 和 `padding` 的处理
+2. `margin` 和 `padding` 的处理：`View.measureWidth` 和 `View.measureHeight` 是不含 `margin` 的，所以你需要视情况来加上或减去 `margin` 值。同样的，我们也需要处理 ViewGroup 的 `padding` 对子 View 的影响。如果你的 `ViewGroup` 存在 `padding`，那么记得做好处理哦。
 
 对于 child 的布局，直接调用 `child.layout(0, 0, 0, 0)` 即可完成。在此部分更关注业务上的 UI 实现。比如一个简单的垂直的布局，可以这么写：
 
