@@ -199,17 +199,17 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 	// 遍历所有子控件
     children
         .filter {
-			// 过滤 View.GONE 控件
+            // 过滤 View.GONE 控件
             it.visibility != View.GONE
         }
         .forEach {
-			// 先测量优先级最高的
+            // 先测量优先级最高的
             if (it.constraint == Force) {
-				// 按照无限制尺寸去测量
+                // 按照无限制尺寸去测量
                 measureChildWithMargins(it, widthMeasureSpec, 0, heightMeasureSpec, heightUsed)
-				// 垂直布局，所以高度叠加，
+                // 垂直布局，所以高度叠加，
                 heightUsed += it.measuredHeight
-				// 垂直布局，宽度以最大子控件宽度为准
+                // 垂直布局，宽度以最大子控件宽度为准
                 widthUsed = Math.max(widthUsed, it.measuredWidth)
             }
         }
