@@ -57,7 +57,7 @@ val ivPhoto: ImageView =
 测量难吗？其实大部分业务场景并不难。很多人也看过自定 View 的相关文档和文章，尤其对测量模式（[MeasureSpec](https://developer.android.com/reference/android/view/View.MeasureSpec)）印象深刻。其中的 `UNSPECIFIED`、`EXACTLY` 和 `AT_MOST` 以及各种情况排列组合形成了一张复杂的 $4 \times 4$ 表格，让人头昏眼花 😵‍💫 。
 
 但实际上我们在大部分情况下，并不需要去处理相关逻辑。在此文章中，我也让不会将上述测量模式全都讲清楚，但是我们至少需要知道如下知识：
-1. `onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)` 中的 `widthMeasureSpec` 和 `heightMeasureSpec` 保存了测量模式（高两位）和 ViewGroup 的父布局对当前 ViewGroup 的尺寸要求（低 30 位）。
+1. `onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)` 中的 `widthMeasureSpec` 和 `heightMeasureSpec` 保存了测量模式 `mode`（高两位）和 尺寸 `size`（低 30 位）。
 2. `onMeasure` 的两个参数，代表当前 View 的父布局对当前 View 的尺寸要求。父布局并不知道我们最终的尺寸，他只是给我们一个预期要求，希望我们遵守。如果我们不遵守，那他可能强行修改我们的尺寸。所以我们尽量遵守父布局的要求，这样对大家都好 :)
 3. View 的尺寸是结合父布局的要求来确定的。什么是父布局的「要求」呢？父布局会根据它自己的父布局的要求，以及在 XML 中取到的要被测量的子 View 的 `layout_width` 和 `layout_height` 这两个属性；根据其布局的特性（比如 LinearLayout 和 FrameLayout 就是不同的）计算出最后的 MeasureSpec。后面我们会举例子详述。
 
