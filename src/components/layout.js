@@ -41,7 +41,7 @@ const Layout = ({ location, title, children}) => {
       <footer>
         © {sineYear}-{new Date().getFullYear()} Powered by
         {` `}
-        <a href="https://www.gatsbyjs.com">Gatsby</a>
+        <a href="https://www.gatsbyjs.com">Gatsby</a> with Custom Theme.
       </footer>
     </div>
   )

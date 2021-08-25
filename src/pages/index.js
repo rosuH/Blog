@@ -13,24 +13,23 @@ const BlogIndex = ({ data, location }) => {
   if (posts.length === 0) {
     return (
       <Layout location={location} title={siteTitle}>
-        <Seo title="All posts" />
+        <Seo title="rosu's Blog" />
         <Bio />
         <p>
-          No blog posts found. Add markdown posts to "content/blog" (or the
-          directory you specified for the "gatsby-source-filesystem" plugin in
-          gatsby-config.js).
+          「積學以儲寶，酌理以富才，研閱以窮照，馴致以懌辭，然后使元解之宰，尋聲律而定墨；獨照之匠，窺意象而運斤」。
         </p>
+        <p>——《神思》-《文心雕龍》</p>
       </Layout>
-    )
+    );
   }
 
   return (
     <Layout location={location} title={siteTitle}>
-      <Seo title="All posts" />
+      <Seo title="rosu's Blog" />
       <Bio />
       <ol style={{ listStyle: `none` }}>
-        {posts.map(post => {
-          const title = post.frontmatter.title || post.fields.slug
+        {posts.map((post) => {
+          const title = post.frontmatter.title || post.fields.slug;
 
           return (
             <li key={post.fields.slug}>
@@ -45,23 +44,23 @@ const BlogIndex = ({ data, location }) => {
                       <span itemProp="headline">{title}</span>
                     </Link>
                   </h2>
-                  <small>{post.frontmatter.date}</small>
+                  <p>{post.frontmatter.date}</p>
                 </header>
                 <section>
                   <p
                     dangerouslySetInnerHTML={{
-                      __html: post.frontmatter.description || post.excerpt,
+                      __html: post.frontmatter.excerpt || post.excerpt,
                     }}
                     itemProp="description"
                   />
                 </section>
               </article>
             </li>
-          )
+          );
         })}
       </ol>
     </Layout>
-  )
+  );
 }
 
 export default BlogIndex
@@ -75,7 +74,7 @@ export const pageQuery = graphql`
     }
     allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
       nodes {
-        excerpt
+        excerpt(truncate: true, pruneLength:70)
         fields {
           slug
         }
@@ -83,8 +82,9 @@ export const pageQuery = graphql`
           date(formatString: "YYYY-MM-DD")
           title
           description
+          excerpt
         }
       }
     }
   }
-`
+`;
