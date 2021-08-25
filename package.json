@@ -13,7 +13,7 @@
     "gatsby-plugin-dark-mode": "^1.1.2",
     "gatsby-plugin-excerpts": "^1.1.0",
     "gatsby-plugin-feed": "^3.12.0",
-    "gatsby-plugin-gatsby-cloud": "^2.11.0",
+    "gatsby-plugin-gatsby-cloud": "^3.0.0",
     "gatsby-plugin-google-analytics": "^3.12.0",
     "gatsby-plugin-image": "^1.12.0",
     "gatsby-plugin-manifest": "^3.12.0",
@@ -35,19 +35,19 @@
     "katex": "^0.13.13",
     "netlify-cms-app": "^2.15.39",
     "prismjs": "^1.24.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
     "react-typography": "^0.16.20",
-    "remark-math": "^4.0.0",
+    "remark-math": "^5.0.0",
     "typeface-merriweather": "1.1.13",
     "typeface-montserrat": "1.1.13",
     "typography": "^0.16.21",
     "typography-theme-funston": "^0.16.19",
-    "unist-util-visit": "^2.0.3"
+    "unist-util-visit": "^4.0.0"
   },
   "devDependencies": {
-    "prettier": "2.2.1"
+    "prettier": "2.3.2"
   },
   "homepage": "https://github.com/gatsbyjs/gatsby-starter-blog#readme",
   "keywords": [
