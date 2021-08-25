@@ -20,9 +20,9 @@ collections:
     folder: "content/posts"
     create: true
     delete: true
-    filename: "{{year}}-{{month}}-{{day}}-{{filename.slug}}"
-    path: "{{filename}}/index"
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{filename}}"
+    path: "{{year}}-{{month}}-{{day}}-{{filename}}/index"
+    preview_path: "preview/{{filename}}/index"
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "FileName", name: "filename", widget: "string" }

@@ -57,7 +57,7 @@ const Bio = () => {
             <a href={`https://rosuh.me`} className="bio-link">
               <svg
                 t="1624199594135"
-                class="icon"
+                className="icon"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"

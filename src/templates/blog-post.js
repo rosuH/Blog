@@ -4,7 +4,6 @@ import { Link, graphql } from "gatsby"
 import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
-import "katex/dist/katex.min.css";
 
 const BlogPostTemplate = ({ data, location }) => {
   const post = data.markdownRemark
@@ -15,7 +14,7 @@ const BlogPostTemplate = ({ data, location }) => {
     <Layout location={location} title={siteTitle}>
       <Seo
         title={post.frontmatter.title}
-        description={post.frontmatter.description || post.excerpt}
+        description={post.frontmatter.excerpt || post.excerpt}
       />
       <article
         className="blog-post"
@@ -62,7 +61,7 @@ const BlogPostTemplate = ({ data, location }) => {
         </ul>
       </nav>
     </Layout>
-  )
+  );
 }
 
 export default BlogPostTemplate
@@ -86,6 +85,7 @@ export const pageQuery = graphql`
         title
         date(formatString: "YYYY-MM-DD")
         description
+        excerpt
       }
     }
     previous: markdownRemark(id: { eq: $previousPostId }) {
@@ -105,4 +105,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;
