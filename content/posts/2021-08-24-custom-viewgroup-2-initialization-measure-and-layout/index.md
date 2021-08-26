@@ -300,7 +300,9 @@ ooverride fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
 - 对于我们前面提到的 Chip 之类的标签布局，还需要考虑换行。这种时候就需要根据行的剩余宽度，与即将 layout 的子 View 比较，如果放不下，那么就要移到下一行去处理。
 - 对于约束在右边的控件，比如对其右边界此种，需要做一下减法计算。
 
-$x = CustomViewGroup.measuredWidth - CustomViewGroup.paddingEnd - (it.measuredWidth + it.marginStart + it.marginEnd)$
+$$
+x = CustomViewGroup.measuredWidth - CustomViewGroup.paddingEnd - (it.measuredWidth + it.marginStart + it.marginEnd)
+$$
 
 你可以抽象成一个函数，不过可能不便于其他维护者理解，这里就不赘述了。
 
