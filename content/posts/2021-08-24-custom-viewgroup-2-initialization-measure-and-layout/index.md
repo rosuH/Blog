@@ -13,7 +13,7 @@ excerpt: 首先说一下思路，自定义布局其实不难，核心点就是�
 3. 重写 layout
 4. 根据业务内容重写其他方法或定制接口。比如[触摸事件处理](https://github.com/rosuH/EasyWatermark/blob/732fb957ca47a58148ff42d6dc4db7c61af58e0c/app/src/main/java/me/rosuh/easywatermark/widget/LaunchView.kt#L347-L378)、[布局转换](https://github.com/rosuH/EasyWatermark/blob/732fb957ca47a58148ff42d6dc4db7c61af58e0c/app/src/main/java/me/rosuh/easywatermark/widget/LaunchView.kt#L332-L345)等
 
-## 确定控件和初始化
+## 1. 确定控件以及初始化
 这一步说的是如何贴合业务确定子控件及其初始化时机。一般我们使用如下方式来声明一个子控件：
 
 ```kotlin
@@ -52,7 +52,7 @@ val ivPhoto: ImageView =
 
 在 ViewGroup 创建时，同时创建子控件，并且调用 `addView()`。此时的 `addView` 并不会触发 `requestLayout`，因为 ViewGroup 还未 attach 到 window 中。
 
-## measure
+## 2. 重写 measure
 
 测量难吗？其实大部分业务场景并不难。很多人也看过自定 View 的相关文档和文章，尤其对测量模式（[MeasureSpec](https://developer.android.com/reference/android/view/View.MeasureSpec)）印象深刻。其中的 `UNSPECIFIED`、`EXACTLY` 和 `AT_MOST` 以及各种情况排列组合形成了一张复杂的 $4 \times 4$ 表格，让人头昏眼花 😵‍💫 。
 
@@ -112,13 +112,13 @@ public static int getDefaultSize(int size, int measureSpec) {
 1. ViewGroup 是 View 的子类，测量方法也是用的 View 的测量方法，所以默认实现不会根据子 View 的最终大小来实现。
 2. `setMeasuredDimension` 保存当前 View 的计算尺寸。如果我们重写了 `onMeasure`，自定义尺寸后，需要调用它来保存。
 
-### 测量流程
+### 2.1 测量流程
 测量我们需要解决三个问题：
 1. 要怎么测量？
 2. 测量哪些？
 3. 测量顺序？
 
-#### 1. 要怎么实现测量？
+#### 2.1.1 要怎么实现测量？
 来看一个简单的布局：
 
 ```
@@ -166,14 +166,14 @@ public static int getDefaultSize(int size, int measureSpec) {
 
 讲完 `measureChildWithMargins` 其实就已经差不多了。测量的核心就在这里。一般情况下我们都不需要自己判断测量模式。如果真到了需要自己判断测量模式的时候，再去仔细研究也不迟。
 
-#### 2. 需要测量哪些？
+#### 2.1.2 需要测量哪些？
 
 View 的显隐性不会影响其宽高，我们依然可以测量 `View.GONE` 的控件并获得正确尺寸。所以我们需要根据业务场景自己判断哪些不需要被测量。
 
 - 一般来说我们需要忽略 `View.GONE` 的控件，这样才符合大多数开发者的习惯。
 - 根据业务需求，延迟测量不需要显示的控件。这个是可选的，如果在此时延迟测量，那么后续视情况可能需要重新布局，要看具体场景和取舍。
 
-#### 3. 测量顺序
+#### 2.1.3 测量顺序
 
 在 Android 布局中，总是需要约束来决定控件的优先级。举个例子：
 
@@ -275,7 +275,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 ```
 
 
-## layout
+## 3. 重写 layout
 layout 比 measure 更加简单。不需要做太多的比较和判断。我们在重写 `onLayout` 的过程中，一般关注：
 1. 控件的排列顺序与互相位置约束
 2. `margin` 和 `padding` 的处理：`View.measureWidth` 和 `View.measureHeight` 是不含 `margin` 的，所以你需要视情况来加上或减去 `margin` 值。同样的，我们也需要处理 ViewGroup 的 `padding` 对子 View 的影响。如果你的 `ViewGroup` 存在 `padding`，那么记得做好处理哦。
@@ -306,5 +306,5 @@ $x = CustomViewGroup.measuredWidth - CustomViewGroup.paddingEnd - (it.measuredWi
 
 当然，还有更复杂的布局。比如环绕、圆形、瀑布流等等异型布局，就需要我们根据实际情况去实现啦。但是原理都是类似的。
 
-## 总结
+## 4. 总结
 我们从子控件初始化开始，讲到如何利用 `measureChild` 实现测量，以及如何布局。几乎把（我遇到的）常见的业务 UI 都包含在内。如果你能看到这里，我相信即便你还没有完全掌握渲染流程，但也能了解了六七分了😋 。不过仅有理论总归是不够的，后续我将会分享实践相关的文章，用一些简单方便入手的例子，帮助你快速掌握自定义 ViewGroup 的渲染流程。期待与你再见～

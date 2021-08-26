@@ -11,8 +11,8 @@
   --maxWidth-3xl: 48rem;
   --maxWidth-4xl: 56rem;
   --maxWidth-full: "100%";
-  --maxWidth-wrapper: var(--maxWidth-2xl);
-  --spacing-px: "1px";
+  --maxWidth-wrapper: 831px;
+  --spacing-px: 1px;
   --spacing-0: 0;
   --spacing-1: 0.25rem;
   --spacing-2: 0.5rem;
@@ -27,12 +27,13 @@
   --spacing-20: 5rem;
   --spacing-24: 6rem;
   --spacing-32: 8rem;
+  --spacing-40: 10rem;
   --fontFamily-sans: Montserrat, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --fontFamily-serif: "Merriweather", "Georgia", Cambria, "Times New Roman",
     Times, serif;
-  --font-body: var(--fontFamily-serif);
+  --font-body: var(--fontFamily-sans);
   --font-heading: var(--fontFamily-sans);
   --fontWeight-normal: 400;
   --fontWeight-medium: 500;
@@ -40,29 +41,31 @@
   --fontWeight-bold: 700;
   --fontWeight-extrabold: 800;
   --fontWeight-black: 900;
-  --fontSize-root: 16px;
   --lineHeight-none: 1;
   --lineHeight-tight: 1.1;
-  --lineHeight-normal: 1.5;
-  --lineHeight-relaxed: 1.625;
+  --lineHeight-normal: 1.45;
+  --lineHeight-relaxed: 1.52947;
   /* 1.200 Minor Third Type Scale */
-  --fontSize-0: 0.833rem;
+  --fontSize-root: min(1.9vw, 17px);
+  --fontSize-0: 0.825rem;
   --fontSize-1: 1rem;
-  --fontSize-2: 1.2rem;
-  --fontSize-3: 1.44rem;
-  --fontSize-4: 1.728rem;
-  --fontSize-5: 2.074rem;
-  --fontSize-6: 2.488rem;
-  --fontSize-7: 2.986rem;
+  --fontSize-2: 1.125rem;
+  --fontSize-3: 1.225rem;
+  --fontSize-4: 1.425rem;
+  --fontSize-5: 1.625rem;
+  --fontSize-6: 2.025rem;
+  --fontSize-7: 2.425rem;
   --color-primary: #005b99;
   --color-background: #fbfaff;
-  --color-text: #1717171;
+  --color-text: #333333;
   --color-text-sub: #525252;
-  --color-text-light: #4f5969a4;
+  --color-text-third: #888;
+  --color-text-light: #999;
   --color-heading: #1a202c;
   --color-heading-black: black;
   --color-accent: #d1dce5;
   --link-highlight: #ffce2a;
+  --link-dotted: #171717;
 }
 
 /* HTML elements */
@@ -82,7 +85,7 @@ html {
 }
 
 body {
-  font-weight: 500;
+  font-weight: var(--fontWeight-normal);
   color: var(--color-text);
 }
 
@@ -166,8 +169,6 @@ p {
   line-height: var(--lineHeight-relaxed);
   --baseline-multiplier: 0.179;
   --x-height-multiplier: 0.35;
-  margin: var(--spacing-0) var(--spacing-0) var(--spacing-8) var(--spacing-0);
-  padding: var(--spacing-0);
 }
 
 ul,
@@ -234,10 +235,39 @@ table thead tr th {
 
 a {
   text-decoration: none;
-  color: var(--color-text-sub);
 }
 
-a:hover {
+a:hover,
+a:active, 
+a:focus {
+  text-decoration: none;
+  color: var(--color-text);
+  background: linear-gradient(
+    to top,
+    var(--link-highlight) 35%,
+    transparent 3%
+  );
+}
+
+.article-post-body a {
+  text-decoration: dotted underline var(--link-dotted) 2px;
+}
+
+.article-post-body a:hover {
+  text-decoration: none;
+  color: var(--color-text);
+  background: linear-gradient(
+    to top,
+    var(--link-highlight) 35%,
+    transparent 3%
+  );
+}
+
+footer a {
+  text-decoration: dotted underline var(--link-dotted) 2px;
+}
+
+footer a:hover {
   text-decoration: none;
   color: var(--color-text);
   background: linear-gradient(
@@ -250,9 +280,9 @@ a:hover {
 /* Custom classes */
 
 .global-wrapper {
-  margin: var(--spacing-0) auto;
+  margin: auto auto;
   max-width: var(--maxWidth-wrapper);
-  padding: var(--spacing-10) var(--spacing-5);
+  padding: var(--spacing-16) var(--spacing-16);
 }
 
 .global-wrapper[data-is-root-path="true"] .bio {
@@ -269,13 +299,21 @@ a:hover {
 }
 
 .post-list-item {
-  margin-bottom: var(--spacing-8);
-  margin-top: var(--spacing-8);
+  margin-bottom: var(--spacing-10);
+  margin-top: var(--spacing-10);
+}
+
+.post-list-item header {
+  margin-bottom: var(--spacing-4);
 }
 
 .post-list-item p {
   margin-bottom: var(--spacing-0);
   color: var(--color-text-sub);
+}
+
+.post-list-item header p {
+  color: var(--color-text-third);
 }
 
 .post-list-item h2 {
@@ -284,15 +322,16 @@ a:hover {
   margin-top: var(--spacing-0);
 }
 
-.post-list-item header {
-  margin-bottom: var(--spacing-4);
-}
-
 .header-link-home {
   font-weight: var(--fontWeight-bold);
   font-family: var(--font-heading);
   text-decoration: none;
   font-size: var(--fontSize-2);
+  background: linear-gradient(
+    to top,
+    var(--link-highlight) 35%,
+    transparent 3%
+  );
 }
 
 .bio {
@@ -356,4 +395,10 @@ a:hover {
   ol {
     list-style-position: inside;
   }
+}
+
+.katex-display {
+  border: var(--spacing-1) dotted var(--color-accent);
+  overflow: auto hidden;
+  padding: var(--spacing-8) var(--spacing-8) var(--spacing-8) var(--spacing-8);
 }
