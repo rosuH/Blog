@@ -292,15 +292,11 @@ footer a:hover {
 .global-wrapper {
   margin: auto auto;
   max-width: var(--maxWidth-wrapper);
-  padding: var(--spacing-8) var(--spacing-8);
-}
-
-.global-wrapper[data-is-root-path="true"] .bio {
-  margin-bottom: var(--spacing-20);
 }
 
 .global-header {
   margin-bottom: var(--spacing-12);
+  padding: var(--spacing-8) var(--spacing-8);
 }
 
 .main-heading {
@@ -347,6 +343,8 @@ footer a:hover {
 .bio {
   display: flex;
   margin-bottom: var(--spacing-16);
+  padding-left: var(--spacing-8);
+  padding-right: var(--spacing-8);
 }
 
 .bio p {
@@ -403,6 +401,10 @@ footer a:hover {
 .bio-link:hover {
   background: none;
   opacity: 1;
+}
+
+.blog-post {
+  padding: var(--spacing-4) var(--spacing-4);
 }
 
 .blog-post header h1 {
