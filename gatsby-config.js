@@ -6,13 +6,14 @@ module.exports = {
       summary: `An Android Developer.`,
       avatar: "../images/profile-pic.jpeg",
     },
-    description: ``,
+    description: "An Android Developer and his life_",
     siteUrl: `https://blog.rosuh.me`,
     social: {
       twitter: `rosu_h`,
       github: `rosuh`,
     },
     sineYear: "2016",
+    image: "../images/rosu-banner.jpg",
   },
   plugins: [
     `gatsby-plugin-image`,
@@ -128,12 +129,6 @@ module.exports = {
     },
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-netlify-cms`,
-    {
-      resolve: `gatsby-plugin-typography`,
-      options: {
-        pathToConfigModule: `src/utils/typography`,
-      },
-    },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
