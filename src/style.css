@@ -28,10 +28,10 @@
   --spacing-24: 6rem;
   --spacing-32: 8rem;
   --spacing-40: 10rem;
-  --fontFamily-sans: Montserrat, system-ui, -apple-system, BlinkMacSystemFont,
+  --fontFamily-sans: -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --fontFamily-serif: "Merriweather", "Georgia", Cambria, "Times New Roman",
+  --fontFamily-serif: "FZFWZhuZiAOldMinchoR", "Merriweather", "Georgia", Cambria, "Times New Roman",
     Times, serif;
   --font-body: var(--fontFamily-sans);
   --font-heading: var(--fontFamily-sans);
@@ -46,26 +46,26 @@
   --lineHeight-normal: 1.45;
   --lineHeight-relaxed: 1.52947;
   /* 1.200 Minor Third Type Scale */
-  --fontSize-root: 17px;
+  --fontSize-root: 15px;
   --fontSize-0: 0.825rem;
   --fontSize-1: 1rem;
-  --fontSize-2: 1.125rem;
-  --fontSize-3: 1.225rem;
-  --fontSize-4: 1.425rem;
-  --fontSize-5: 1.625rem;
-  --fontSize-6: 2.025rem;
-  --fontSize-7: 2.425rem;
+  --fontSize-2: 1.1rem;
+  --fontSize-3: 1.2rem;
+  --fontSize-4: 1.4rem;
+  --fontSize-5: 1.6rem;
+  --fontSize-6: 1.8rem;
+  --fontSize-7: 2.0rem;
   --color-primary: #ffcd2a;
   --color-background: #fbfaff;
-  --color-text: #333333;
-  --color-text-sub: #525252;
+  --color-text: #000;
+  --color-text-sub: #333;
   --color-text-third: #888;
   --color-text-light: #999;
   --color-heading: #1a202c;
   --color-heading-black: black;
   --color-accent: #d1dce5;
   --link-highlight: #ffce2a;
-  --link-dotted: #171717;
+  --link-dotted: #291b1b;
 }
 
 /* HTML elements */
@@ -87,6 +87,7 @@ html {
 body {
   font-weight: var(--fontWeight-normal);
   color: var(--color-text);
+  font-family: var(--font-body);
 }
 
 footer {
@@ -108,8 +109,8 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading);
-  margin-top: var(--spacing-12);
-  margin-bottom: var(--spacing-6);
+  margin-top: var(--spacing-10);
+  margin-bottom: var(--spacing-4);
   line-height: var(--lineHeight-tight);
   letter-spacing: -0.025em;
 }
@@ -165,12 +166,6 @@ h6 > a {
 
 /* Prose */
 
-p {
-  line-height: var(--lineHeight-relaxed);
-  --baseline-multiplier: 0.179;
-  --x-height-multiplier: 0.35;
-}
-
 ul,
 ol {
   margin-left: var(--spacing-4);
@@ -185,15 +180,15 @@ ul li,
 ol li {
   counter-increment: step-counter;
   padding-left: var(--spacing-0);
-  margin-bottom: calc(var(--spacing-8) / 2);
+  margin-bottom: var(--spacing-2);
 }
 ul li {
   padding-left: var(--spacing-0);
-  margin-bottom: calc(var(--spacing-8) / 2);
+  margin-bottom: var(--spacing-2);
 }
 
 li > p {
-  margin-bottom: calc(var(--spacing-8) / 2);
+  margin-bottom: var(--spacing-2);
 }
 
 li *:last-child {
@@ -244,6 +239,7 @@ table thead tr th {
 /* Link */
 
 a {
+  color: var(--color-text);
   text-decoration: none;
 }
 
@@ -260,7 +256,7 @@ a:focus {
 }
 
 .article-post-body a {
-  text-decoration: dotted underline var(--link-dotted) 2px;
+  text-decoration: solid underline var(--link-dotted) 2px;
 }
 
 .article-post-body a:hover {
