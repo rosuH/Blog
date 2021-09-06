@@ -345,7 +345,14 @@ footer a:hover {
 
 .bio p {
   margin-bottom: var(--spacing-0);
+  margin-top: var(--spacing-0);
 }
+
+.bio-summary p {
+  margin-bottom: var(--spacing-2);
+  margin-top: var(--spacing-0);
+}
+
 
 .bio svg:hover,
 .bio svg:active,
