@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Helmet } from "react-helmet";
 import { useLocation } from "@reach/router";
 import { useStaticQuery, graphql } from "gatsby";
+import ogImage from "../images/seo-og-image.jpg";
 
 const SEO = ({ title, description, image, article }) => {
   const { pathname } = useLocation();
@@ -15,6 +16,7 @@ const SEO = ({ title, description, image, article }) => {
     defaultImage,
     twitterUsername,
   } = site.siteMetadata;
+  
 
   const seo = {
     title: title || defaultTitle,
@@ -24,7 +26,7 @@ const SEO = ({ title, description, image, article }) => {
   };
 
   return (
-    <Helmet title={seo.title} >
+    <Helmet title={seo.title}>
       <meta name="description" content={seo.description} />
       <meta name="image" content={seo.image} />
 
@@ -38,7 +40,7 @@ const SEO = ({ title, description, image, article }) => {
         <meta property="og:description" content={seo.description} />
       )}
 
-      {seo.image && <meta property="og:image" content={seo.image} />}
+      {seo.image && <meta property="og:image" content={ogImage} />}
 
       <meta name="twitter:card" content="summary_large_image" />
 
@@ -52,7 +54,7 @@ const SEO = ({ title, description, image, article }) => {
         <meta name="twitter:description" content={seo.description} />
       )}
 
-      {seo.image && <meta name="twitter:image" content={seo.image} />}
+      {seo.image && <meta name="twitter:image" content={ogImage} />}
     </Helmet>
   );
 };
@@ -62,14 +64,12 @@ export default SEO;
 SEO.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
-  image: PropTypes.string,
   article: PropTypes.bool,
 };
 
 SEO.defaultProps = {
   title: null,
   description: null,
-  image: null,
   article: false,
 };
 
@@ -80,7 +80,6 @@ const query = graphql`
         defaultTitle: title
         defaultDescription: description
         siteUrl: siteUrl
-        defaultImage: image
         twitterUsername
       }
     }
