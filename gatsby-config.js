@@ -13,7 +13,8 @@ module.exports = {
       github: `rosuh`,
     },
     sineYear: "2016",
-    image: "../images/rosu-banner.jpg",
+    image: "/images/rosu-banner.jpg",
+    twitterUsername: "@rosuh_h",
   },
   plugins: [
     `gatsby-plugin-image`,
