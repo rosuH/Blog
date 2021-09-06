@@ -28,11 +28,11 @@
   --spacing-24: 6rem;
   --spacing-32: 8rem;
   --spacing-40: 10rem;
-  --fontFamily-sans: -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --fontFamily-serif: "FZFWZhuZiAOldMinchoR", "Merriweather", "Georgia", Cambria, "Times New Roman",
-    Times, serif;
+  --fontFamily-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --fontFamily-serif: "FZFWZhuZiAOldMinchoR", "Merriweather", "Georgia", Cambria,
+    "Times New Roman", Times, serif;
   --font-body: var(--fontFamily-sans);
   --font-heading: var(--fontFamily-sans);
   --fontWeight-normal: 400;
@@ -54,7 +54,7 @@
   --fontSize-4: 1.4rem;
   --fontSize-5: 1.6rem;
   --fontSize-6: 1.8rem;
-  --fontSize-7: 2.0rem;
+  --fontSize-7: 2rem;
   --color-primary: #ffcd2a;
   --color-background: #fbfaff;
   --color-text: #000;
@@ -257,6 +257,37 @@ a:focus {
 
 .article-post-body a {
   text-decoration: solid underline var(--link-dotted) 2px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.article-post-body p {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 
 .article-post-body a:hover {
@@ -312,6 +343,21 @@ footer a:hover {
 .post-list-item p {
   margin-bottom: var(--spacing-0);
   color: var(--color-text-sub);
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 
 .post-list-item header p {
@@ -352,7 +398,6 @@ footer a:hover {
   margin-bottom: var(--spacing-2);
   margin-top: var(--spacing-0);
 }
-
 
 .bio svg:hover,
 .bio svg:active,
