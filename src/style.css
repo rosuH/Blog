@@ -43,18 +43,18 @@
   --fontWeight-black: 900;
   --lineHeight-none: 1;
   --lineHeight-tight: 1.1;
-  --lineHeight-normal: 1.45;
+  --lineHeight-normal: 1.75;
   --lineHeight-relaxed: 1.52947;
   /* 1.200 Minor Third Type Scale */
-  --fontSize-root: 15px;
+  --fontSize-root: 18px;
   --fontSize-0: 0.825rem;
   --fontSize-1: 1rem;
   --fontSize-2: 1.1rem;
-  --fontSize-3: 1.2rem;
-  --fontSize-4: 1.4rem;
-  --fontSize-5: 1.6rem;
-  --fontSize-6: 1.8rem;
-  --fontSize-7: 2rem;
+  --fontSize-3: 1.3rem;
+  --fontSize-4: 1.5rem;
+  --fontSize-5: 2rem;
+  --fontSize-6: 2.5rem;
+  --fontSize-7: 2.7rem;
   --color-primary: #ffcd2a;
   --color-background: #fbfaff;
   --color-text: #000;
@@ -78,7 +78,7 @@
 
 html {
   line-height: var(--lineHeight-normal);
-  font-size: var(--fontSize-root);
+  font-size: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-background);
@@ -490,3 +490,10 @@ footer a:hover {
   overflow: auto hidden;
   padding: var(--spacing-8) var(--spacing-8) var(--spacing-8) var(--spacing-8);
 }
+
+@media (min-width: 64em) {
+  html {
+    font-size: 112.5%;
+  }
+}
+
