@@ -46,7 +46,7 @@
   --lineHeight-normal: 1.75;
   --lineHeight-relaxed: 1.52947;
   /* 1.200 Minor Third Type Scale */
-  --fontSize-root: 18px;
+  --fontSize-root: 19px;
   --fontSize-0: 0.825rem;
   --fontSize-1: 1rem;
   --fontSize-2: 1.1rem;
@@ -79,6 +79,7 @@
 html {
   line-height: var(--lineHeight-normal);
   font-size: 100%;
+  letter-spacing: 0.05em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-background);
