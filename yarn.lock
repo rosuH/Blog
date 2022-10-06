@@ -12438,9 +12438,9 @@ snake-case@^3.0.4:
     tslib "^2.0.3"
 
 snyk@^1.267.0:
-  version "1.992.0"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.992.0.tgz#3ae719661aa0ed8999139ae9969c7306a12a3271"
-  integrity sha512-pmSy0uFJiX73a62LnSLLILv9B5A1/iJgj9Wmq9EJZg03qLn+XctNNOyVezOuEEjo74EJQs3HEfHzrHO1otNEGw==
+  version "1.1024.0"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.1024.0.tgz#f9ff2c8660da9cda34ea5807ee8731164b94ab0a"
+  integrity sha512-j0Hk/6kVV4pah3TwnhDCHEDnnIK+SkSYp6F/krz0Z+KfvG0fz3nORuufevjCV1ErIvcuZAnqQdRUVBPYTwfS6g==
 
 socket.io-adapter@~2.1.0:
   version "2.1.0"
