@@ -1,14 +1,15 @@
-import * as React from "react"
-import { Link, graphql } from "gatsby"
+import * as React from "react";
+import { Link, graphql } from "gatsby";
 
-import Bio from "../components/bio"
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+import Bio from "../components/bio";
+import Layout from "../components/layout";
+import Seo from "../components/seo";
 import "katex/dist/katex.min.css";
+import DarkMode from "../components/darkMode";
 
 const BlogIndex = ({ data, location }) => {
-  const siteTitle = data.site.siteMetadata?.title || `Title`
-  const posts = data.allMarkdownRemark.nodes
+  const siteTitle = data.site.siteMetadata?.title || `Title`;
+  const posts = data.allMarkdownRemark.nodes;
 
   if (posts.length === 0) {
     return (
@@ -25,8 +26,13 @@ const BlogIndex = ({ data, location }) => {
 
   return (
     <Layout location={location} title={siteTitle}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Bio />
+        <div style={{ marginLeft: "auto" }}>
+          <DarkMode/>
+        </div>
+      </div>
       <Seo title="rosu's Blog" />
-      <Bio />
       <ol style={{ listStyle: `none` }}>
         {posts.map((post) => {
           const title = post.frontmatter.title || post.fields.slug;
@@ -61,9 +67,9 @@ const BlogIndex = ({ data, location }) => {
       </ol>
     </Layout>
   );
-}
+};
 
-export default BlogIndex
+export default BlogIndex;
 
 export const pageQuery = graphql`
   query {
@@ -72,9 +78,9 @@ export const pageQuery = graphql`
         title
       }
     }
-    allMarkdownRemark(sort: {frontmatter: {date: DESC}}) {
+    allMarkdownRemark(sort: { frontmatter: { date: DESC } }) {
       nodes {
-        excerpt(truncate: true, pruneLength:70)
+        excerpt(truncate: true, pruneLength: 70)
         fields {
           slug
         }

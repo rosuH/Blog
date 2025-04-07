@@ -55,6 +55,12 @@
   --fontSize-5: 2rem;
   --fontSize-6: 2.5rem;
   --fontSize-7: 2.7rem;
+}
+
+body {
+  font-weight: var(--fontWeight-normal);
+  color: var(--color-text);
+  font-family: var(--font-body);
   --color-primary: #ffcd2a;
   --color-background: #fbfaff;
   --color-text: #000;
@@ -66,6 +72,30 @@
   --color-accent: #d1dce5;
   --link-highlight: #ffce2a;
   --link-dotted: #291b1b;
+  --image: url("./images/sun.svg");
+  --color-hover-blur: rgba(0, 0, 0, 0.7);
+  background-color: var(--color-background);
+}
+
+body.dark {
+  font-weight: var(--fontWeight-normal);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  --color-primary: #477a9b; /* 替代颜色 */
+  --color-background: #1a202c; /* 替代颜色 */
+  --color-text: #f2f2f2; /* 替代颜色 */
+  --color-text-sub: #c4c4c4; /* 替代颜色 */
+  --color-text-third: #888; /* 保留原颜色 */
+  --color-text-light: #999; /* 保留原颜色 */
+  --color-heading: #f2f2f2; /* 替代颜色 */
+  --color-heading-black: #f2f2f2; /* 替代颜色 */
+  --color-accent: #1a202c; /* 替代颜色 */
+  --link-highlight: #53420b; /* 保留原颜色 */
+  --link-dotted: #ffce2a; /* 保留原颜色 */
+  --image: url("./images/moon.svg"); /* 替代图像 */
+  --color-hover-blur: rgba(255, 255, 255, 0.7); /* 替代颜色 */
+  background-color: var(--color-background);
+
 }
 
 /* HTML elements */
@@ -83,12 +113,6 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-background);
-}
-
-body {
-  font-weight: var(--fontWeight-normal);
-  color: var(--color-text);
-  font-family: var(--font-body);
 }
 
 footer {
@@ -423,7 +447,7 @@ footer a:hover {
 @keyframes identifier-bio-blur {
   100% {
     color: transparent;
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
+    text-shadow: 0 0 2px var(--color-hover-blur);
     -webkit-filter: blur(2px);
   }
 }
