@@ -5,7 +5,9 @@ import Bio from "../components/bio";
 import Layout from "../components/layout";
 import Seo from "../components/seo";
 import "katex/dist/katex.min.css";
-import DarkMode from "../components/darkMode";
+
+const isBrowser = typeof window !== "undefined"; // 检查是否在浏览器环境
+const DarkMode = isBrowser ? require("../components/darkMode").default : null;
 
 const BlogIndex = ({ data, location }) => {
   const siteTitle = data.site.siteMetadata?.title || `Title`;
@@ -29,7 +31,7 @@ const BlogIndex = ({ data, location }) => {
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Bio />
         <div style={{ marginLeft: "auto" }}>
-          <DarkMode/>
+          {DarkMode && <DarkMode />}
         </div>
       </div>
       <Seo title="rosu's Blog" />
