@@ -136,7 +136,7 @@ module.exports = {
       },
     },
     `gatsby-plugin-react-helmet`,
-    `gatsby-plugin-netlify-cms`,
+    'gatsby-plugin-decap-cms',
     {
       resolve: `gatsby-plugin-google-gtag`,
       options: {
