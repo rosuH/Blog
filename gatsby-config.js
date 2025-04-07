@@ -136,7 +136,6 @@ module.exports = {
       },
     },
     `gatsby-plugin-react-helmet`,
-    'gatsby-plugin-decap-cms',
     {
       resolve: `gatsby-plugin-google-gtag`,
       options: {

@@ -21,7 +21,6 @@
         "gatsby-plugin-google-gtag": "^5.12.0",
         "gatsby-plugin-image": "^3.12.0",
         "gatsby-plugin-manifest": "^5.12.0",
-        "gatsby-plugin-netlify-cms": "^7.12.0",
         "gatsby-plugin-offline": "^6.12.0",
         "gatsby-plugin-react-helmet": "^6.12.0",
         "gatsby-plugin-sharp": "^5.12.0",
@@ -36,8 +35,8 @@
         "gatsby-source-filesystem": "^5.12.0",
         "gatsby-transformer-remark": "^6.12.0",
         "gatsby-transformer-sharp": "^5.12.0",
-        "graphql": "^16.8.0",
-        "katex": "^0.16.21",
+        "graphql": "^16.10.0",
+        "katex": "^0.13.3",
         "netlify-cms-app": "^2.15.40",
         "prism-react-renderer": "^2.1.0",
         "prismjs": "^1.24.1",
@@ -52,7 +51,8 @@
         "typescript": "^5.8.3",
         "typography": "^0.16.24",
         "typography-theme-funston": "^0.16.19",
-        "unist-util-visit": "^5.0.0"
+        "unist-util-visit": "^5.0.0",
+        "webpack": "^5.89.0"
     },
     "devDependencies": {
         "prettier": "3.5.3"
@@ -78,10 +78,6 @@
     },
     "resolutions": {
         "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "graphql": "^16.8.0",
-        "@typescript-eslint/eslint-plugin": "^5.62.0",
-        "@typescript-eslint/parser": "^5.62.0",
-        "webpack": "^5.89.0"
+        "react-dom": "^18.2.0"
     }
 }
