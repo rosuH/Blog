@@ -70,5 +70,13 @@
         "serve": "gatsby serve",
         "clean": "gatsby clean",
         "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
-    }
+    },
+    "resolutions": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "graphql": "^16.8.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "webpack": "^5.89.0"
+  }
 }
