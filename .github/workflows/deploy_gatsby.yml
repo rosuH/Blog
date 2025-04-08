@@ -24,4 +24,4 @@ jobs:
             ${{ runner.os }}-
       - uses: enriikke/gatsby-gh-pages-action@v2
         with:
-          access-token: ${{ secrets.ACCESS_TOKEN }}
+          access-token: x-access-token:${{ secrets.GITHUB_TOKEN }}
