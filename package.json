@@ -12,7 +12,7 @@
         "@babel/runtime": "^7.23.1",
         "@mdx-js/react": "^3.1.0",
         "@types/react": "^18.2.0",
-        "eslint": "^9.24.0",
+        "eslint": "^9.26.0",
         "gatsby": "^5.14.1",
         "gatsby-plugin-dark-mode": "^1.1.2",
         "gatsby-plugin-excerpts": "^1.1.0",
