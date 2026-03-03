@@ -6,7 +6,7 @@ date: 2020-02-10
 tags:
   - Android
   - 札记
-hero: https://unsplash.com/photos/MeHfMhG2xhc/download?force=true&w=640
+hero: /images/posts/android-reading-note-summary-hero.jpg
 categories:
   - Android
 description: 本系列是笔者在实践过程中学习或复习到的一些 tips，为了避免忘记，特地记下来

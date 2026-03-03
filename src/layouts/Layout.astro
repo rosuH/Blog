@@ -7,11 +7,14 @@ interface Props {
   description?: string;
   image?: string;
   article?: boolean;
+  robots?: string;
 }
 
-const { title, description, image, article = false } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const ogImage = image || '/seo-og-image.jpg';
+const { title, description, image, article = false, robots = 'index,follow' } = Astro.props;
+const siteBase = Astro.site ?? Astro.url;
+const canonicalURL = new URL(Astro.url.pathname, siteBase);
+const metaDescription = description || 'An Android Developer and his life_';
+const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
 ---
 
 <!DOCTYPE html>
@@ -26,21 +29,23 @@ const ogImage = image || '/seo-og-image.jpg';
     <!-- Primary Meta Tags -->
     <title>{title} | Blog.kt</title>
     <meta name="title" content={title} />
-    <meta name="description" content={description || 'An Android Developer and his life_'} />
+    <meta name="description" content={metaDescription} />
+    <meta name="robots" content={robots} />
+    <meta name="googlebot" content={robots} />
     <link rel="canonical" href={canonicalURL} />
 
     <!-- Open Graph -->
     <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={metaDescription} />
     <meta property="og:image" content={ogImage} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={canonicalURL} />
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={metaDescription} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:creator" content="@rosu_h" />
 
@@ -96,7 +101,12 @@ const ogImage = image || '/seo-og-image.jpg';
   .header-link-home {
     font-size: 1.5rem;
     font-weight: 700;
-    background: linear-gradient(to top, var(--link-highlight) 35%, transparent 3%);
+    background-image: linear-gradient(
+      to bottom,
+      transparent 52%,
+      var(--link-highlight) 52%
+    );
+    background-repeat: no-repeat;
   }
 
   footer {

@@ -1,0 +1,34 @@
+---
+// src/pages/blog/[slug].astro
+// 兼容旧迁移版本中的 /blog/{slug}/ 链接，统一跳转到 SEO 主路由 /{slug}/
+import { getCollection } from 'astro:content';
+
+// 生成静态路径
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id }
+  }));
+}
+
+const { slug = '' } = Astro.params;
+const destination = `/${slug}/`;
+const canonical = new URL(destination, Astro.site ?? 'https://blog.rosuh.me').toString();
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,follow" />
+    <link rel="canonical" href={canonical} />
+    <meta http-equiv="refresh" content={`0;url=${destination}`} />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>
+      页面已迁移至 <a href={destination}>{destination}</a>
+    </p>
+  </body>
+</html>

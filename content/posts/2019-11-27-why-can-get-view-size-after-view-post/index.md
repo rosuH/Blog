@@ -5,7 +5,7 @@ title: 为什么使用 View.postDelay() 就可以拿到宽高？
 date: 2019-11-27
 tags:
   - Android
-hero: https://unsplash.com/photos/jnuiQZixZNg/download?force=true&w=640
+hero: /images/posts/why-can-get-view-size-after-view-post-hero.jpg
 categories:
   - 技术
 description: 本系列是笔者在实践过程中学习或复习到的一些 tips，为了避免忘记，特地记下来
