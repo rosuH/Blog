@@ -1,0 +1,131 @@
+---
+// src/pages/[slug].astro
+// 博客文章页面 - 保持与 Gatsby 一致的根路径路由：/{slug}/
+import Layout from '../layouts/Layout.astro';
+import Bio from '../components/Bio.astro';
+import { getCollection, render } from 'astro:content';
+
+// 生成静态路径
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// 获取相邻文章
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const currentIndex = sortedPosts.findIndex((p) => p.id === post.id);
+const prevPost = sortedPosts[currentIndex + 1]; // 更早的文章
+const nextPost = sortedPosts[currentIndex - 1]; // 更新的文章
+---
+
+<Layout
+  title={post.data.title}
+  description={post.data.description || post.data.excerpt}
+  image={post.data.hero}
+  article={true}
+>
+  <article
+    class="blog-post"
+    itemscope
+    itemtype="http://schema.org/BlogPosting"
+  >
+    <header>
+      <h1 itemprop="headline">{post.data.title}</h1>
+      <p class="post-date">
+        <time datetime={post.data.date.toISOString()} itemprop="datePublished">
+          {post.data.date.toLocaleDateString('zh-CN')}
+        </time>
+      </p>
+
+      {post.data.tags.length > 0 && (
+        <div class="tags">
+          {post.data.tags.map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <section class="article-post-body" itemprop="articleBody">
+      <Content />
+    </section>
+
+    <hr />
+
+    <footer>
+      <Bio />
+    </footer>
+  </article>
+
+  <nav class="blog-post-nav" aria-label="文章导航">
+    <ul>
+      {prevPost && (
+        <li>
+          <a href={`/${prevPost.id}/`} rel="prev">
+            ← {prevPost.data.title}
+          </a>
+        </li>
+      )}
+      {nextPost && (
+        <li>
+          <a href={`/${nextPost.id}/`} rel="next">
+            {nextPost.data.title} →
+          </a>
+        </li>
+      )}
+    </ul>
+  </nav>
+</Layout>
+
+<style>
+  .blog-post {
+    padding: var(--spacing-4);
+  }
+
+  .blog-post h1 {
+    margin: 0 0 var(--spacing-4) 0;
+  }
+
+  .post-date {
+    font-size: var(--fontSize-2);
+    font-family: var(--font-heading);
+    color: var(--color-text-third);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: var(--spacing-8);
+  }
+
+  .tag {
+    background: var(--color-accent);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+  }
+
+  .blog-post-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    list-style: none;
+    padding: 0;
+    gap: 1rem;
+  }
+
+  .blog-post-nav a {
+    color: var(--color-text-sub);
+  }
+</style>
