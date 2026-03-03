@@ -7,7 +7,7 @@ tags:
   - 阅读
 categories:
   - 生活
-hero: https://unsplash.com/photos/iyKVGRu79G4/download?force=true&w=640
+hero: /images/posts/2019-12-reading-report-hero.jpg
 ---
 
 ## 经济学通识

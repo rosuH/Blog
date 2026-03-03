@@ -8,7 +8,7 @@ tags:
   - 翻译
 categories:
   - 技术
-hero: https://unsplash.com/photos/R9OS29xJb-8/download?force=true&w=640
+hero: /images/posts/manifesto-for-minimalist-software-engineers-cn-hero.jpg
 ---
 
 # 【翻译】极简主义工程师宣言

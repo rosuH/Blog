@@ -1,0 +1,45 @@
+---
+// src/pages/404.astro
+// 404 页面
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 - 页面未找到" robots="noindex,follow">
+  <div class="not-found">
+    <h1>404</h1>
+    <p>页面未找到</p>
+    <a href="/">返回首页</a>
+  </div>
+</Layout>
+
+<style>
+  .not-found {
+    text-align: center;
+    padding: var(--spacing-16) var(--spacing-4);
+  }
+
+  .not-found h1 {
+    font-size: 6rem;
+    margin: 0;
+    color: var(--color-text-third);
+  }
+
+  .not-found p {
+    font-size: 1.5rem;
+    color: var(--color-text-sub);
+    margin-bottom: var(--spacing-8);
+  }
+
+  .not-found a {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-primary);
+    color: var(--color-text);
+    border-radius: 4px;
+    text-decoration: none;
+  }
+
+  .not-found a:hover {
+    opacity: 0.9;
+  }
+</style>
