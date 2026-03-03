@@ -1,0 +1,86 @@
+---
+// src/pages/index.astro
+// 首页 - 文章列表
+import Layout from '../layouts/Layout.astro';
+import Bio from '../components/Bio.astro';
+import DarkMode from '../components/DarkMode.astro';
+import { getCollection } from 'astro:content';
+
+// 获取所有非草稿文章
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+// 按日期排序（最新在前）
+const sortedPosts = posts.sort((a, b) =>
+  b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<Layout title="rosu's Blog">
+  <div class="bio-section">
+    <Bio />
+    <DarkMode />
+  </div>
+
+  <p class="quote">
+    「積學以儲寶，酌理以富才，研閱以窮照，馴致以懌辭，然后使元解之宰，尋聲律而定墨；獨照之匠，窺意象而運斤」。
+  </p>
+  <p class="quote-source">——《神思》-《文心雕龍》</p>
+
+  <ol class="post-list">
+    {sortedPosts.map((post) => (
+      <li>
+        <article
+          class="post-list-item"
+          itemscope
+          itemtype="http://schema.org/Article"
+        >
+          <header>
+            <h2 itemprop="headline">
+              <a href={`/${post.id}/`}>{post.data.title}</a>
+            </h2>
+            <p>
+              <time datetime={post.data.date.toISOString()} itemprop="datePublished">
+                {post.data.date.toLocaleDateString('zh-CN')}
+              </time>
+            </p>
+          </header>
+          <section>
+            <p
+              itemprop="description"
+              set:html={post.data.excerpt || post.data.description}
+            />
+          </section>
+        </article>
+      </li>
+    ))}
+  </ol>
+</Layout>
+
+<style>
+  .bio-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .quote {
+    font-style: italic;
+    color: var(--color-text-sub);
+    padding: 0 var(--spacing-8);
+    margin-bottom: 0;
+  }
+
+  .quote-source {
+    text-align: right;
+    color: var(--color-text-third);
+    padding: 0 var(--spacing-8);
+    margin-top: 0.5rem;
+    margin-bottom: var(--spacing-16);
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+</style>

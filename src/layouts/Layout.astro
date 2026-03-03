@@ -1,0 +1,111 @@
+---
+// src/layouts/Layout.astro
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  article?: boolean;
+}
+
+const { title, description, image, article = false } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image || '/seo-og-image.jpg';
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <!-- Primary Meta Tags -->
+    <title>{title} | Blog.kt</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description || 'An Android Developer and his life_'} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:creator" content="@rosu_h" />
+
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+
+    <!-- Google Analytics -->
+    <script is:inline src="https://www.googletagmanager.com/gtag/js?id=G-1F0F92B00T"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1F0F92B00T');
+    </script>
+
+    <!-- 深色模式初始化（防止闪烁） -->
+    <script is:inline>
+      const theme = (() => {
+        const stored = localStorage?.getItem('theme');
+        if (stored === 'dark' || stored === 'light') return stored;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      })();
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+    </script>
+  </head>
+
+  <body>
+    <div class="global-wrapper">
+      <header class="global-header">
+        <a href="/" class="header-link-home">Blog.kt</a>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+
+      <footer>
+        <p>
+          © 2016-{new Date().getFullYear()} Powered by
+          <a href="https://astro.build">Astro</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  .global-header {
+    padding: var(--spacing-8) var(--spacing-8);
+    margin-bottom: var(--spacing-12);
+  }
+
+  .header-link-home {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(to top, var(--link-highlight) 35%, transparent 3%);
+  }
+
+  footer {
+    padding: var(--spacing-8) 0;
+    text-align: center;
+    color: var(--color-text-third);
+  }
+
+  footer a {
+    text-decoration: underline dotted var(--link-dotted) 2px;
+  }
+</style>
