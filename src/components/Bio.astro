@@ -102,28 +102,36 @@ const { compact = false } = Astro.props;
 <script>
 const CHARSET = 'abcdefghijklmnopqrstuvwxyz0123456789!@#?';
 
-function scramble(el: HTMLElement, duration = 480): void {
-  const target = el.textContent ?? '';
+// Track the active timer so rapid re-hovers cancel the previous run
+let activeTimer: ReturnType<typeof setInterval> | null = null;
+
+function scramble(el: HTMLElement, original: string, duration = 480): void {
+  if (activeTimer) clearInterval(activeTimer);
+
   const totalFrames = Math.round(duration / 40);
   let frame = 0;
-  const timer = setInterval(() => {
-    const resolved = Math.floor((frame / totalFrames) * target.length);
-    el.textContent = target
+
+  activeTimer = setInterval(() => {
+    const resolved = Math.floor((frame / totalFrames) * original.length);
+    el.textContent = original
       .split('')
       .map((ch, i) =>
         i < resolved ? ch : CHARSET[Math.floor(Math.random() * CHARSET.length)]
       )
       .join('');
     if (++frame > totalFrames) {
-      clearInterval(timer);
-      el.textContent = target;
+      clearInterval(activeTimer!);
+      activeTimer = null;
+      el.textContent = original; // always restore to the true original
     }
   }, 40);
 }
 
 const nameEl = document.querySelector<HTMLElement>('.bio-name');
 if (nameEl) {
-  scramble(nameEl);
-  nameEl.addEventListener('mouseenter', () => scramble(nameEl));
+  // Capture original text once, before any scrambling mutates it
+  const original = nameEl.textContent ?? '';
+  scramble(nameEl, original);
+  nameEl.addEventListener('mouseenter', () => scramble(nameEl, original));
 }
 </script>
