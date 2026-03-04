@@ -1,11 +1,9 @@
 ---
 // src/pages/[slug].astro
-// 博客文章页面 - 保持与 Gatsby 一致的根路径路由：/{slug}/
 import Layout from '../layouts/Layout.astro';
 import Bio from '../components/Bio.astro';
 import { getCollection, render } from 'astro:content';
 
-// 生成静态路径
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
   return posts.map((post) => ({
@@ -17,14 +15,13 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 
-// 获取相邻文章
 const allPosts = await getCollection('blog');
 const sortedPosts = allPosts
   .filter((p) => !p.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const currentIndex = sortedPosts.findIndex((p) => p.id === post.id);
-const prevPost = sortedPosts[currentIndex + 1]; // 更早的文章
-const nextPost = sortedPosts[currentIndex - 1]; // 更新的文章
+const prevPost = sortedPosts[currentIndex + 1];
+const nextPost = sortedPosts[currentIndex - 1];
 ---
 
 <Layout
@@ -33,99 +30,166 @@ const nextPost = sortedPosts[currentIndex - 1]; // 更新的文章
   image={post.data.hero}
   article={true}
 >
-  <article
-    class="blog-post"
-    itemscope
-    itemtype="http://schema.org/BlogPosting"
-  >
-    <header>
+  <article itemscope itemtype="http://schema.org/BlogPosting">
+    <header class="article-header">
       <h1 itemprop="headline">{post.data.title}</h1>
-      <p class="post-date">
-        <time datetime={post.data.date.toISOString()} itemprop="datePublished">
-          {post.data.date.toLocaleDateString('zh-CN')}
+      <div class="article-meta">
+        <time
+          datetime={post.data.date.toISOString()}
+          itemprop="datePublished"
+        >
+          {post.data.date.toLocaleDateString('zh-CN', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
         </time>
-      </p>
-
-      {post.data.tags.length > 0 && (
-        <div class="tags">
-          {post.data.tags.map((tag) => (
-            <span class="tag">{tag}</span>
-          ))}
-        </div>
-      )}
+        {post.data.tags.length > 0 && (
+          <>
+            <span class="meta-sep">·</span>
+            <div class="article-tags" role="list">
+              {post.data.tags.map((tag) => (
+                <span class="article-tag" role="listitem">{tag}</span>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
     </header>
 
-    <section class="article-post-body" itemprop="articleBody">
+    <section class="prose" itemprop="articleBody">
       <Content />
     </section>
 
-    <hr />
-
-    <footer>
-      <Bio />
+    <footer class="article-footer">
+      <Bio compact={true} />
     </footer>
   </article>
 
-  <nav class="blog-post-nav" aria-label="文章导航">
-    <ul>
-      {prevPost && (
-        <li>
-          <a href={`/${prevPost.id}/`} rel="prev">
-            ← {prevPost.data.title}
+  {(prevPost || nextPost) && (
+    <nav class="post-nav" aria-label="Article navigation">
+      <div>
+        {prevPost && (
+          <a href={`/${prevPost.id}/`} rel="prev" class="nav-prev">
+            <span class="nav-label">Earlier</span>
+            <span class="nav-title">{prevPost.data.title}</span>
           </a>
-        </li>
-      )}
-      {nextPost && (
-        <li>
-          <a href={`/${nextPost.id}/`} rel="next">
-            {nextPost.data.title} →
+        )}
+      </div>
+      <div>
+        {nextPost && (
+          <a href={`/${nextPost.id}/`} rel="next" class="nav-next">
+            <span class="nav-label">Later</span>
+            <span class="nav-title">{nextPost.data.title}</span>
           </a>
-        </li>
-      )}
-    </ul>
-  </nav>
+        )}
+      </div>
+    </nav>
+  )}
 </Layout>
 
 <style>
-  .blog-post {
-    padding: var(--spacing-4);
+  .article-header {
+    margin-bottom: 3rem;
   }
 
-  .blog-post h1 {
-    margin: 0 0 var(--spacing-4) 0;
+  .article-header h1 {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin: 0 0 1rem;
   }
 
-  .post-date {
-    font-size: var(--fontSize-2);
-    font-family: var(--font-heading);
-    color: var(--color-text-third);
-    margin-bottom: var(--spacing-4);
-  }
-
-  .tags {
+  .article-meta {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 0.5rem;
-    margin-bottom: var(--spacing-8);
+    color: var(--fg-muted);
+    font-size: var(--text-sm);
   }
 
-  .tag {
-    background: var(--color-accent);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.85rem;
+  .meta-sep {
+    color: var(--fg-subtle);
   }
 
-  .blog-post-nav ul {
+  .article-tags {
     display: flex;
+    gap: 0.375rem;
     flex-wrap: wrap;
-    justify-content: space-between;
-    list-style: none;
-    padding: 0;
-    gap: 1rem;
   }
 
-  .blog-post-nav a {
-    color: var(--color-text-sub);
+  .article-tag {
+    font-size: var(--text-xs);
+    color: var(--fg-subtle);
+    border: 1px solid var(--border);
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+  }
+
+  .article-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .post-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .post-nav > div {
+    flex: 1;
+  }
+
+  .nav-prev,
+  .nav-next {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .nav-next {
+    text-align: right;
+  }
+
+  .nav-label {
+    font-size: var(--text-xs);
+    color: var(--fg-subtle);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-title {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+
+  .nav-prev:hover .nav-title,
+  .nav-next:hover .nav-title {
+    color: var(--accent);
+  }
+
+  @media (max-width: 480px) {
+    .article-header h1 {
+      font-size: var(--text-2xl);
+    }
+
+    .post-nav {
+      flex-direction: column;
+    }
+
+    .nav-next {
+      text-align: left;
+    }
   }
 </style>

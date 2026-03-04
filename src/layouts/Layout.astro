@@ -1,6 +1,7 @@
 ---
 // src/layouts/Layout.astro
 import '../styles/global.css';
+import DarkMode from '../components/DarkMode.astro';
 
 interface Props {
   title: string;
@@ -49,6 +50,14 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:creator" content="@rosu_h" />
 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- KaTeX CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
 
@@ -61,7 +70,7 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
       gtag('config', 'G-1F0F92B00T');
     </script>
 
-    <!-- 深色模式初始化（防止闪烁） -->
+    <!-- Dark mode init (prevent flash) -->
     <script is:inline>
       const theme = (() => {
         const stored = localStorage?.getItem('theme');
@@ -73,49 +82,59 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
   </head>
 
   <body>
-    <div class="global-wrapper">
-      <header class="global-header">
-        <a href="/" class="header-link-home">Blog.kt</a>
+    <div class="site-wrap">
+      <header class="site-header">
+        <a href="/" class="site-logo">Blog.kt</a>
+        <DarkMode />
       </header>
 
       <main>
         <slot />
       </main>
 
-      <footer>
-        <p>
-          © 2016-{new Date().getFullYear()} Powered by
-          <a href="https://astro.build">Astro</a>
-        </p>
+      <footer class="site-footer">
+        <p>© 2016–{new Date().getFullYear()} · <a href="https://astro.build">Astro</a></p>
       </footer>
     </div>
   </body>
 </html>
 
 <style>
-  .global-header {
-    padding: var(--spacing-8) var(--spacing-8);
-    margin-bottom: var(--spacing-12);
+  .site-header {
+    padding: 2rem 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3rem;
   }
 
-  .header-link-home {
-    font-size: 1.5rem;
-    font-weight: 700;
-    background-image: linear-gradient(
-      to bottom,
-      transparent 52%,
-      var(--link-highlight) 52%
-    );
-    background-repeat: no-repeat;
+  .site-logo {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+    transition: color 0.15s;
   }
 
-  footer {
-    padding: var(--spacing-8) 0;
-    text-align: center;
-    color: var(--color-text-third);
+  .site-logo:hover {
+    color: var(--fg-muted);
   }
 
-  footer a {
-    text-decoration: underline dotted var(--link-dotted) 2px;
+  .site-footer {
+    padding: 3rem 0 2rem;
+    color: var(--fg-subtle);
+    font-size: var(--text-sm);
+  }
+
+  .site-footer a {
+    color: var(--fg-subtle);
+    text-decoration: underline;
+    text-decoration-color: var(--border);
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+
+  .site-footer a:hover {
+    color: var(--fg-muted);
   }
 </style>
