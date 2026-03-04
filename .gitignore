@@ -2,6 +2,12 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node,yarn
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,yarn
 
+# Astro build cache
+.astro/
+
+# Claude Code tool files
+.claude/
+
 ### Node ###
 # Logs
 logs
