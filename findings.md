@@ -281,3 +281,37 @@
 ### Verification
 - `dist/index.html` 中头像输出为 `width="100" height="100"` 的 `/_astro` 优化资源。
 - 组件样式中确认 `bio-avatar:hover` 含 blur 规则。
+
+## 2026-03-04 PR Review Fix Research
+
+### Astro.site vs Astro.url
+- `Astro.site` = configured site URL (`https://blog.rosuh.me`), `undefined` in dev without config
+- `Astro.site ?? Astro.url` works for absolute paths (/...) but semantically wrong — Astro.url is a page URL, not site root
+- Correct pattern: `Astro.site ?? new URL('/', Astro.url)` → always gives root as base
+- Source: Astro routing reference docs
+
+### getStaticPaths single-call pattern
+- Pass prevPost/nextPost as props inside getStaticPaths — single getCollection call
+- Pattern: `return sorted.map((post, i) => ({ params, props: { post, prevPost: sorted[i+1] ?? null, nextPost: sorted[i-1] ?? null } }))`
+- Source: route360.dev, Astro official docs, multiple OSS blogs
+
+### color-mix() compatibility
+- MDN Baseline: "Widely available" since May 2023
+- Chrome 111+, Firefox 113+, Safari 16.2+, Edge 111+
+- Global support ~95%+ — acceptable, just needs a code comment
+
+### focus-visible
+- WCAG 2.1 SC 2.4.7 requires visible focus indicator for all keyboard-operable elements
+- Modern CSS: `:focus-visible` (not `:focus`) avoids showing outline on mouse clicks
+- Good pattern: `outline: 2px solid <accent>; outline-offset: 2px; border-radius: 2px;`
+- Must reset browser default `:focus` outline first, then add `:focus-visible`
+
+### Google Fonts non-blocking
+- `display=swap` in URL already prevents FOIT (flash of invisible text)
+- Non-blocking pattern: `<link rel="stylesheet" media="print" onload="this.media='all'">`
+- Add `<noscript>` fallback for JS-disabled browsers
+- Saves ~200-400ms on render-blocking resource
+
+### font-size: 16px override
+- Setting fixed `px` on `html` overrides user browser accessibility preferences
+- Must use `font-size: 100%` to respect user settings (WCAG 1.4.4)

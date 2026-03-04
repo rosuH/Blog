@@ -195,3 +195,30 @@
 - ✅ `npm run build` 通过
 - ✅ 首页产物头像标签为：`width="100" height="100" class="bio-avatar"`
 - ✅ 组件样式中存在 `bio-avatar:hover` blur 规则
+
+## Update: 2026-03-04 (PR #62 Review Fixes)
+
+### All 10 issues resolved
+
+| # | Fix | File |
+|---|-----|------|
+| 1 | `Astro.site ?? new URL('/', Astro.url)` fallback | Layout.astro |
+| 2 | KaTeX CSS conditional on `article` prop | Layout.astro |
+| 3 | `font-size: 100%` (was `16px`) | global.css |
+| 4 | `color-mix()` compat comment added | global.css |
+| 5 | `:focus-visible` global outline styles | global.css |
+| 6 | Single `getCollection` via `getStaticPaths` props | [slug].astro |
+| 7 | `post.data.tags ?? []` null guard | [slug].astro |
+| 8 | `sizes` attr on `<Image>` | Bio.astro |
+| 9 | `<ol>` → `<ul>` for post list | index.astro |
+| 10 | Fonts non-blocking `media=print` + `<noscript>` | Layout.astro |
+
+### Validation
+- ✅ `astro build` 62 pages, 0 errors
+- ✅ KaTeX absent on `/index.html`, present on article pages
+- ✅ `media="print"` font strategy confirmed in dist HTML
+- ✅ `focus-visible` in compiled CSS
+- ✅ Canonical URL resolves to `https://blog.rosuh.me/...`
+- ✅ `getCollection` appears once in [slug].astro (import + 1 call)
+
+### Commit: 7f17d7d — pushed to astro-migration

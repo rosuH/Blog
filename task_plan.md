@@ -140,3 +140,42 @@
 - [x] 头像启用 `quality=95`，降低过度压缩导致的细节丢失
 - [x] 恢复头像自身 hover blur（`filter: blur(3px)`）
 - [x] `npm run build` 验证产物与样式生效
+
+---
+
+# Task Plan: Three Reading UX Features
+
+## Goal
+实现阅读进度条、代码复制按钮、外链标记三个功能，以最小代码量获得最大体验提升。
+
+## Architecture Decisions (from research)
+
+| Feature | Approach | Reason |
+|---------|----------|--------|
+| 阅读进度条 | JS + `transform: scaleX()` | 作用域限制在 article 元素；`animation-timeline` Safari 17 不支持 |
+| 代码复制按钮 | Vanilla JS，wrapper div 包裹 `<pre>` | 解决 `overflow-x: auto` 裁剪按钮问题 |
+| 外链标记 | 纯 CSS `::after` + `↗` | 零 JS，CSS attribute selector 精确匹配 |
+
+## Phases
+
+### Phase 1: 研究架构 ✅
+- [x] reading progress bar 最佳实现方案
+- [x] code copy button Astro 实现范式
+- [x] external link CSS selector 策略
+
+### Phase 2: 实现
+**Status**: `pending`
+- [ ] global.css — 进度条、复制按钮、外链标记样式
+- [ ] [slug].astro — 进度条 div + script，复制按钮 script
+- [ ] 验证 build 无误
+
+### Phase 3: 验证
+**Status**: `pending`
+- [ ] `astro build` 通过
+- [ ] 进度条：滚动文章时填充 accent 色
+- [ ] 复制按钮：hover pre 时出现，点击变 ✓
+- [ ] 外链：`↗` 出现在正文外链后，不出现在图片链接后
+
+## Errors Encountered
+| Error | Attempt | Resolution |
+|-------|---------|------------|
