@@ -15,7 +15,7 @@ const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.val
     「積學以儲寶，酌理以富才」——《神思》
   </p>
 
-  <ol class="post-list" role="list">
+  <ul class="post-list" role="list">
     {sortedPosts.map((post) => (
       <li class="post-row">
         <a href={`/${post.id}/`} class="post-title">
@@ -33,7 +33,7 @@ const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.val
         </time>
       </li>
     ))}
-  </ol>
+  </ul>
 </Layout>
 
 <style>
