@@ -29,6 +29,12 @@ const { Content } = await render(post);
 >
   <!-- Reading progress: fixed bar, scoped to article scroll depth -->
   <div id="reading-progress" aria-hidden="true"></div>
+
+  <!-- Dynamic Island: floating pill in header showing section + progress -->
+  <div id="dynamic-island" aria-hidden="true">
+    <span class="di-dot"></span>
+    <span class="di-text"></span>
+  </div>
   <article itemscope itemtype="http://schema.org/BlogPosting">
     <header class="article-header">
       <h1 itemprop="headline">{post.data.title}</h1>
@@ -155,6 +161,95 @@ const { Content } = await render(post);
     wrapper.appendChild(btn);
   });
 })();
+
+// ── Dynamic Island ────────────────────────────────────────────────────────────
+// Morphing pill in the header center: shows current section + scroll progress.
+// Appears when scrolling, auto-hides 2.5s after the last scroll event.
+(function () {
+  const island = document.getElementById('dynamic-island') as HTMLElement | null;
+  if (!island) return;
+
+  const textEl = island.querySelector<HTMLElement>('.di-text');
+  const article = document.querySelector('article') as HTMLElement | null;
+  if (!textEl || !article) return;
+
+  let hideTimer: ReturnType<typeof setTimeout>;
+  let currentSection = '';
+
+  // Track which H2/H3 is currently in the upper portion of the viewport
+  const headings = document.querySelectorAll<HTMLElement>('.prose h2, .prose h3');
+  if (headings.length > 0) {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const text = entry.target.textContent?.trim() ?? '';
+            currentSection = text.length > 18 ? text.slice(0, 18) + '…' : text;
+          }
+        });
+      },
+      { rootMargin: '-5% 0px -85% 0px' }
+    );
+    headings.forEach((h) => sectionObserver.observe(h));
+  }
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      const { top, height } = article.getBoundingClientRect();
+      const scrollable = height - window.innerHeight;
+      if (scrollable <= 0) return;
+
+      const pct = Math.round(Math.max(0, Math.min(100, (-top / scrollable) * 100)));
+
+      if (pct > 1 && pct < 99) {
+        const prefix = currentSection ? `${currentSection} · ` : '';
+        textEl.textContent = `${prefix}${pct}%`;
+        island.classList.add('is-visible');
+      } else {
+        island.classList.remove('is-visible');
+      }
+
+      // Collapse after 2.5s of inactivity
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => island.classList.remove('is-visible'), 2500);
+    },
+    { passive: true }
+  );
+})();
+
+// ── Paragraph Scroll Reveal ───────────────────────────────────────────────────
+// Elements below the fold fade up as they enter the viewport.
+// Elements already visible on load are left untouched (no FOIC).
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const selector =
+    '.prose p, .prose h2, .prose h3, .prose h4, .prose pre, .prose blockquote, .prose ul, .prose ol';
+  const elements = document.querySelectorAll<HTMLElement>(selector);
+  const viewportH = window.innerHeight;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('reveal-pending');
+          entry.target.classList.add('reveal-done');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.08, rootMargin: '0px 0px -32px 0px' }
+  );
+
+  elements.forEach((el) => {
+    // Only hide elements not yet visible in the initial viewport
+    if (el.getBoundingClientRect().top > viewportH * 0.88) {
+      el.classList.add('reveal-pending');
+      observer.observe(el);
+    }
+  });
+})();
 </script>
 
 <style>
@@ -261,4 +356,70 @@ const { Content } = await render(post);
       text-align: left;
     }
   }
-</style>
+
+  /* ── Dynamic Island ──────────────────────────────────────────────────────── */
+  #dynamic-island {
+    position: fixed;
+    top: 1.75rem;
+    left: 50%;
+    /* Two-state transform: centered + entrance offset when hidden */
+    transform: translateX(-50%) scale(0.88) translateY(-4px);
+
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    white-space: nowrap;
+
+    background: var(--fg);
+    color: var(--bg);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+
+    font-size: 0.6875rem; /* 11px */
+    font-family: var(--font-mono);
+    letter-spacing: 0.01em;
+
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.25s ease,
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: 90;
+  }
+
+  #dynamic-island.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) scale(1) translateY(0);
+  }
+
+  .di-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    animation: di-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes di-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+
+  /* ── Paragraph Scroll Reveal ─────────────────────────────────────────────── */
+  .reveal-pending {
+    opacity: 0;
+    transform: translateY(7px);
+    transition:
+      opacity 0.45s ease,
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-done {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.45s ease,
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }</style>

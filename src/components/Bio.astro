@@ -1,7 +1,7 @@
 ---
 // src/components/Bio.astro
 import { Image } from 'astro:assets';
-import profilePic from '../images/profile-pic.jpeg';
+import profilePic from '../images/profile-pic.png';
 
 interface Props {
   compact?: boolean;
@@ -16,10 +16,10 @@ const { compact = false } = Astro.props;
     alt="rosu"
     width={compact ? 36 : 48}
     height={compact ? 36 : 48}
-    sizes={compact ? '36px' : '48px'}
+    densities={[1, 2, 3]}
     class="bio-avatar"
     loading="eager"
-    quality={90}
+    quality={95}
   />
   <div class="bio-content">
     {!compact && <p class="bio-name">rosu</p>}
@@ -98,3 +98,32 @@ const { compact = false } = Astro.props;
     color: var(--accent);
   }
 </style>
+
+<script>
+const CHARSET = 'abcdefghijklmnopqrstuvwxyz0123456789!@#?';
+
+function scramble(el: HTMLElement, duration = 480): void {
+  const target = el.textContent ?? '';
+  const totalFrames = Math.round(duration / 40);
+  let frame = 0;
+  const timer = setInterval(() => {
+    const resolved = Math.floor((frame / totalFrames) * target.length);
+    el.textContent = target
+      .split('')
+      .map((ch, i) =>
+        i < resolved ? ch : CHARSET[Math.floor(Math.random() * CHARSET.length)]
+      )
+      .join('');
+    if (++frame > totalFrames) {
+      clearInterval(timer);
+      el.textContent = target;
+    }
+  }, 40);
+}
+
+const nameEl = document.querySelector<HTMLElement>('.bio-name');
+if (nameEl) {
+  scramble(nameEl);
+  nameEl.addEventListener('mouseenter', () => scramble(nameEl));
+}
+</script>
