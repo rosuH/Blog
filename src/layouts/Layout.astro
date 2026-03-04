@@ -12,7 +12,8 @@ interface Props {
 }
 
 const { title, description, image, article = false, robots = 'index,follow' } = Astro.props;
-const siteBase = Astro.site ?? Astro.url;
+// Use site root as base; fall back to request origin (not page URL) in dev
+const siteBase = Astro.site ?? new URL('/', Astro.url);
 const canonicalURL = new URL(Astro.url.pathname, siteBase);
 const metaDescription = description || 'An Android Developer and his life_';
 const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
@@ -50,16 +51,26 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:creator" content="@rosu_h" />
 
-    <!-- Fonts -->
+    <!-- Fonts (non-render-blocking via print media swap) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      />
+    </noscript>
 
-    <!-- KaTeX CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+    <!-- KaTeX CSS (article pages only) -->
+    {article && (
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+    )}
 
     <!-- Google Analytics -->
     <script is:inline src="https://www.googletagmanager.com/gtag/js?id=G-1F0F92B00T"></script>

@@ -5,23 +5,20 @@ import Bio from '../components/Bio.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
-  return posts.map((post) => ({
+  const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+  const sorted = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  return sorted.map((post, index) => ({
     params: { slug: post.id },
-    props: { post },
+    props: {
+      post,
+      prevPost: sorted[index + 1] ?? null, // older post
+      nextPost: sorted[index - 1] ?? null, // newer post
+    },
   }));
 }
 
-const { post } = Astro.props;
+const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await render(post);
-
-const allPosts = await getCollection('blog');
-const sortedPosts = allPosts
-  .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const currentIndex = sortedPosts.findIndex((p) => p.id === post.id);
-const prevPost = sortedPosts[currentIndex + 1];
-const nextPost = sortedPosts[currentIndex - 1];
 ---
 
 <Layout
@@ -44,7 +41,7 @@ const nextPost = sortedPosts[currentIndex - 1];
             day: 'numeric',
           })}
         </time>
-        {post.data.tags.length > 0 && (
+        {(post.data.tags ?? []).length > 0 && (
           <>
             <span class="meta-sep">·</span>
             <div class="article-tags" role="list">
