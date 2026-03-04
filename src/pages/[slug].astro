@@ -27,6 +27,8 @@ const { Content } = await render(post);
   image={post.data.hero}
   article={true}
 >
+  <!-- Reading progress: fixed bar, scoped to article scroll depth -->
+  <div id="reading-progress" aria-hidden="true"></div>
   <article itemscope itemtype="http://schema.org/BlogPosting">
     <header class="article-header">
       <h1 itemprop="headline">{post.data.title}</h1>
@@ -84,6 +86,76 @@ const { Content } = await render(post);
     </nav>
   )}
 </Layout>
+
+<script>
+// ── Reading Progress Bar ──────────────────────────────────────────────────────
+// Scoped to <article> element so progress reaches 100% at article end,
+// not at page bottom (which includes footer/nav).
+(function () {
+  const bar = document.getElementById('reading-progress') as HTMLElement | null;
+  const article = document.querySelector('article') as HTMLElement | null;
+  if (!bar || !article) return;
+
+  let ticking = false;
+
+  function update() {
+    const { top, height } = article.getBoundingClientRect();
+    const scrollable = height - window.innerHeight;
+    const progress = scrollable > 0 ? Math.max(0, Math.min(1, -top / scrollable)) : 0;
+    bar.style.transform = `scaleX(${progress})`;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  update(); // set initial state
+})();
+
+// ── Code Block Copy Button ────────────────────────────────────────────────────
+// Wraps each <pre> in a .code-wrapper div (outside overflow context) so the
+// absolutely-positioned button isn't clipped by overflow-x: auto on <pre>.
+(function () {
+  if (!navigator.clipboard) return;
+
+  const ICON_COPY = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+  const ICON_CHECK = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 12 4 9"/></svg>`;
+
+  document.querySelectorAll<HTMLPreElement>('.prose pre').forEach((pre) => {
+    // Wrap pre in a relative-positioned div so button escapes overflow clipping
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-wrapper';
+    pre.parentNode!.insertBefore(wrapper, pre);
+    wrapper.appendChild(pre);
+
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.setAttribute('aria-label', 'Copy code');
+    btn.innerHTML = ICON_COPY;
+
+    btn.addEventListener('click', async () => {
+      const code = pre.querySelector('code');
+      try {
+        await navigator.clipboard.writeText(code?.innerText ?? '');
+        btn.innerHTML = ICON_CHECK;
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = ICON_COPY;
+          btn.classList.remove('copied');
+        }, 1500);
+      } catch {
+        // Clipboard API unavailable or denied — fail silently
+      }
+    });
+
+    wrapper.appendChild(btn);
+  });
+})();
+</script>
 
 <style>
   .article-header {

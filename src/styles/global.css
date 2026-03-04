@@ -7,7 +7,7 @@
   --fg:         #18181b;
   --fg-muted:   #6b7280;
   --fg-subtle:  #9ca3af;
-  --accent:     #4f46e5;
+  --accent:     #c2410c;
   --border:     #e5e7eb;
   --code-bg:    #f3f4f6;
 
@@ -33,7 +33,7 @@ html.dark {
   --fg:        #f4f4f5;
   --fg-muted:  #9ca3af;
   --fg-subtle: #52525b;
-  --accent:    #818cf8;
+  --accent:    #fb923c;
   --border:    #27272a;
   --code-bg:   #1c1c1e;
 }
@@ -245,6 +245,70 @@ img {
 .prose td {
   border-bottom: 1px solid var(--border);
   padding: 0.5rem 0.75rem;
+}
+
+/* ===== Reading Progress Bar ===== */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  z-index: 100;
+  will-change: transform;
+}
+
+/* ===== Code Block Copy Button ===== */
+.code-wrapper {
+  position: relative;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--fg-subtle);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background-color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.code-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  color: var(--fg);
+  background-color: var(--border);
+}
+
+.copy-btn.copied {
+  color: var(--accent);
+  opacity: 1;
+}
+
+/* ===== External Link Indicator ===== */
+/* Marks external links with ↗, excludes image-only links and same-domain links */
+.prose a[href^="http"]:not([href*="blog.rosuh.me"]):not(:has(> img))::after {
+  content: '↗';
+  font-size: 0.65em;
+  margin-left: 0.15em;
+  opacity: 0.55;
+  vertical-align: super;
+  line-height: 1;
+  /* Prevent icon from wrapping to next line alone */
+  white-space: nowrap;
 }
 
 /* ===== KaTeX ===== */
