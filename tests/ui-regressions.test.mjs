@@ -85,6 +85,8 @@ test('bamboo shadow uses JS wind physics instead of global keyframe or SMIL tran
   assert.match(source, /visibilitychange/);
   assert.match(source, /scheduleNextGust/);
   assert.match(source, /gustEnvelope/);
+  assert.match(source, /bamboo-moonlight--halo/);
+  assert.match(source, /bamboo-moonlight--beam/);
   assert.doesNotMatch(source, /@keyframes bamboo-gust/);
   assert.doesNotMatch(source, /animateTransform/);
 });

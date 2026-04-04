@@ -44,6 +44,18 @@
     border-color: color-mix(in srgb, var(--accent) 22%, var(--border));
   }
 
+  :global(.dark) .theme-toggle {
+    background: color-mix(in oklab, var(--bg) 91%, var(--support-soft) 9%);
+    border-color: color-mix(in oklab, var(--support-border) 62%, var(--border));
+    color: color-mix(in oklab, var(--support) 38%, var(--fg-muted));
+  }
+
+  :global(.dark) .theme-toggle:hover {
+    color: var(--fg);
+    border-color: color-mix(in oklab, var(--support) 22%, var(--border));
+    background: color-mix(in oklab, var(--bg) 88%, var(--support-soft) 12%);
+  }
+
   .theme-toggle:focus-visible {
     outline-offset: 3px;
   }
