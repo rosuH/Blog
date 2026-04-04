@@ -2,6 +2,7 @@
 // src/layouts/Layout.astro
 import '../styles/global.css';
 import DarkMode from '../components/DarkMode.astro';
+import BambooShadow from '../components/BambooShadow.astro';
 
 interface Props {
   title: string;
@@ -95,6 +96,7 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
   </head>
 
   <body>
+    <BambooShadow article={article} />
     <div class="site-wrap">
       <header class="site-header">
         <a href="/" class="site-logo">Blog.kt</a>
