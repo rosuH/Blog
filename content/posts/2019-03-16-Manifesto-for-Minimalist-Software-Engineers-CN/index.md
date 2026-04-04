@@ -11,8 +11,6 @@ categories:
 hero: /images/posts/manifesto-for-minimalist-software-engineers-cn-hero.jpg
 ---
 
-# 【翻译】极简主义工程师宣言
-
 🌐 中文翻译
 >  Manifesto for  Minimalist Software Engineers
 

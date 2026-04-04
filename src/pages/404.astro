@@ -1,45 +1,228 @@
 ---
 // src/pages/404.astro
-// 404 页面
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+const recentPosts = posts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
 ---
 
-<Layout title="404 - 页面未找到" robots="noindex,follow">
-  <div class="not-found">
+<Layout
+  title="404 - 页面未找到"
+  description="你访问的页面不存在，看看最近写作。"
+  robots="noindex,follow"
+>
+  <section class="not-found">
+    <p class="not-found-kicker">页面未找到</p>
     <h1>404</h1>
-    <p>页面未找到</p>
-    <a href="/">返回首页</a>
-  </div>
+    <p class="not-found-copy">这篇文章可能已经迁移，或者这个链接已经失效。</p>
+
+    <div class="not-found-actions">
+      <a href="/#recent-writing" class="not-found-primary">查看最新文章</a>
+      <a href="/" class="not-found-secondary">返回首页</a>
+    </div>
+  </section>
+
+  <section class="recovery-list" aria-labelledby="recovery-list-title">
+    <div class="recovery-head">
+      <h2 id="recovery-list-title">最近文章</h2>
+      <p>从这里重新进入内容区。</p>
+    </div>
+
+    <ol class="recovery-posts" role="list">
+      {recentPosts.map((post, index) => (
+        <li class="recovery-post" style={`--recovery-index: ${index}`}>
+          <a href={`/${post.id}/`} class="recovery-link">
+            <span class="recovery-title">{post.data.title}</span>
+            <time datetime={post.data.date.toISOString()} class="recovery-date">
+              {post.data.date.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+              })}
+            </time>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
 </Layout>
 
 <style>
   .not-found {
-    text-align: center;
-    padding: var(--spacing-16) var(--spacing-4);
+    padding: 3.5rem 0 2rem;
+    animation: not-found-settle-in 520ms var(--ease-out-expo) both;
+  }
+
+  .not-found-kicker {
+    margin: 0 0 0.5rem;
+    color: var(--support);
+    font-size: var(--text-sm);
   }
 
   .not-found h1 {
-    font-size: 6rem;
     margin: 0;
-    color: var(--color-text-third);
+    font-size: clamp(4.5rem, 14vw, 8rem);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    color: color-mix(in oklab, var(--accent) 58%, var(--fg));
   }
 
-  .not-found p {
-    font-size: 1.5rem;
-    color: var(--color-text-sub);
-    margin-bottom: var(--spacing-8);
+  .not-found-copy {
+    max-width: 30rem;
+    margin: 0.9rem 0 0;
+    color: var(--fg-muted);
   }
 
-  .not-found a {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    background: var(--color-primary);
-    color: var(--color-text);
-    border-radius: 4px;
+  .not-found-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .not-found-primary,
+  .not-found-secondary {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    border-radius: 999px;
     text-decoration: none;
+    transition:
+      color var(--duration-fast) ease,
+      border-color var(--duration-fast) ease,
+      background-color var(--duration-fast) ease,
+      transform var(--duration-fast) ease;
   }
 
-  .not-found a:hover {
-    opacity: 0.9;
+  .not-found-primary {
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    color: var(--bg);
+  }
+
+  .not-found-primary:hover,
+  .not-found-primary:focus-visible {
+    transform: translateY(-1px);
+  }
+
+  .not-found-secondary {
+    border: 1px solid color-mix(in oklab, var(--support-border) 72%, var(--border));
+    color: color-mix(in oklab, var(--support) 56%, var(--fg-muted));
+    background: color-mix(in oklab, var(--support-soft) 52%, transparent);
+  }
+
+  .not-found-secondary:hover {
+    color: var(--fg);
+    border-color: color-mix(in srgb, var(--accent) 20%, var(--border));
+    transform: translateY(-1px);
+  }
+
+  .recovery-list {
+    padding-top: 0.5rem;
+  }
+
+  .recovery-head {
+    display: grid;
+    gap: 0.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .recovery-head h2 {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--support);
+  }
+
+  .recovery-head p {
+    margin: 0;
+    color: var(--fg-muted);
+    font-size: var(--text-sm);
+  }
+
+  .recovery-posts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .recovery-post {
+    border-top: 1px solid color-mix(in oklab, var(--support-border) 65%, var(--border));
+    opacity: 0;
+    animation: not-found-settle-in 460ms var(--ease-out-expo) both;
+    animation-delay: calc(120ms + (var(--recovery-index, 0) * 60ms));
+  }
+
+  .recovery-post:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .recovery-link {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 0;
+  }
+
+  .recovery-title {
+    color: var(--fg);
+    font-size: var(--text-base);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  .recovery-date {
+    color: var(--fg-muted);
+    flex-shrink: 0;
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+
+  .recovery-link:hover .recovery-title,
+  .recovery-link:focus-visible .recovery-title {
+    color: var(--support);
+  }
+
+  @keyframes not-found-settle-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .not-found {
+      padding: 2.5rem 0 1.5rem;
+    }
+
+    .recovery-link {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .not-found,
+    .recovery-post {
+      animation: none;
+      opacity: 1;
+    }
+
+    .not-found-primary,
+    .not-found-secondary {
+      transition: none;
+    }
   }
 </style>

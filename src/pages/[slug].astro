@@ -11,8 +11,8 @@ export async function getStaticPaths() {
     params: { slug: post.id },
     props: {
       post,
-      prevPost: sorted[index + 1] ?? null, // older post
-      nextPost: sorted[index - 1] ?? null, // newer post
+      prevPost: sorted[index + 1] ?? null,
+      nextPost: sorted[index - 1] ?? null,
     },
   }));
 }
@@ -27,16 +27,10 @@ const { Content } = await render(post);
   image={post.data.hero}
   article={true}
 >
-  <!-- Reading progress: fixed bar, scoped to article scroll depth -->
   <div id="reading-progress" aria-hidden="true"></div>
 
-  <!-- Dynamic Island: floating pill in header showing section + progress -->
-  <div id="dynamic-island" aria-hidden="true">
-    <span class="di-dot"></span>
-    <span class="di-text"></span>
-  </div>
   <article itemscope itemtype="http://schema.org/BlogPosting">
-    <header class="article-header">
+    <header class="article-header" data-reveal="article-header">
       <h1 itemprop="headline">{post.data.title}</h1>
       <div class="article-meta">
         <time
@@ -50,14 +44,11 @@ const { Content } = await render(post);
           })}
         </time>
         {(post.data.tags ?? []).length > 0 && (
-          <>
-            <span class="meta-sep">·</span>
-            <div class="article-tags" role="list">
-              {post.data.tags.map((tag) => (
-                <span class="article-tag" role="listitem">{tag}</span>
-              ))}
-            </div>
-          </>
+          <div class="article-tags" role="list" aria-label="文章标签">
+            {post.data.tags.map((tag) => (
+              <span class="article-tag" role="listitem">{tag}</span>
+            ))}
+          </div>
         )}
       </div>
     </header>
@@ -72,11 +63,11 @@ const { Content } = await render(post);
   </article>
 
   {(prevPost || nextPost) && (
-    <nav class="post-nav" aria-label="Article navigation">
+    <nav class="post-nav" aria-label="文章导航">
       <div>
         {prevPost && (
           <a href={`/${prevPost.id}/`} rel="prev" class="nav-prev">
-            <span class="nav-label">Earlier</span>
+            <span class="nav-label">上一篇</span>
             <span class="nav-title">{prevPost.data.title}</span>
           </a>
         )}
@@ -84,7 +75,7 @@ const { Content } = await render(post);
       <div>
         {nextPost && (
           <a href={`/${nextPost.id}/`} rel="next" class="nav-next">
-            <span class="nav-label">Later</span>
+            <span class="nav-label">下一篇</span>
             <span class="nav-title">{nextPost.data.title}</span>
           </a>
         )}
@@ -94,213 +85,121 @@ const { Content } = await render(post);
 </Layout>
 
 <script>
-// ── Reading Progress Bar ──────────────────────────────────────────────────────
-// Scoped to <article> element so progress reaches 100% at article end,
-// not at page bottom (which includes footer/nav).
-(function () {
-  const bar = document.getElementById('reading-progress') as HTMLElement | null;
-  const article = document.querySelector('article') as HTMLElement | null;
-  if (!bar || !article) return;
+  (function () {
+    const bar = document.getElementById('reading-progress') as HTMLElement | null;
+    const article = document.querySelector('article') as HTMLElement | null;
+    if (!bar || !article) return;
 
-  let ticking = false;
+    let ticking = false;
 
-  function update() {
-    const { top, height } = article.getBoundingClientRect();
-    const scrollable = height - window.innerHeight;
-    const progress = scrollable > 0 ? Math.max(0, Math.min(1, -top / scrollable)) : 0;
-    bar.style.transform = `scaleX(${progress})`;
-    ticking = false;
-  }
-
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(update);
-      ticking = true;
-    }
-  }, { passive: true });
-
-  update(); // set initial state
-})();
-
-// ── Code Block Copy Button ────────────────────────────────────────────────────
-// Wraps each <pre> in a .code-wrapper div (outside overflow context) so the
-// absolutely-positioned button isn't clipped by overflow-x: auto on <pre>.
-(function () {
-  if (!navigator.clipboard) return;
-
-  const ICON_COPY = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
-  const ICON_CHECK = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 12 4 9"/></svg>`;
-
-  document.querySelectorAll<HTMLPreElement>('.prose pre').forEach((pre) => {
-    // Wrap pre in a relative-positioned div so button escapes overflow clipping
-    const wrapper = document.createElement('div');
-    wrapper.className = 'code-wrapper';
-    pre.parentNode!.insertBefore(wrapper, pre);
-    wrapper.appendChild(pre);
-
-    const btn = document.createElement('button');
-    btn.className = 'copy-btn';
-    btn.setAttribute('aria-label', 'Copy code');
-    btn.innerHTML = ICON_COPY;
-
-    btn.addEventListener('click', async () => {
-      const code = pre.querySelector('code');
-      try {
-        await navigator.clipboard.writeText(code?.innerText ?? '');
-        btn.innerHTML = ICON_CHECK;
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.innerHTML = ICON_COPY;
-          btn.classList.remove('copied');
-        }, 1500);
-      } catch {
-        // Clipboard API unavailable or denied — fail silently
-      }
-    });
-
-    wrapper.appendChild(btn);
-  });
-})();
-
-// ── Dynamic Island ────────────────────────────────────────────────────────────
-// Morphing pill in the header center: shows current section + scroll progress.
-// Appears when scrolling, auto-hides 2.5s after the last scroll event.
-(function () {
-  const island = document.getElementById('dynamic-island') as HTMLElement | null;
-  if (!island) return;
-
-  const textEl = island.querySelector<HTMLElement>('.di-text');
-  const article = document.querySelector('article') as HTMLElement | null;
-  if (!textEl || !article) return;
-
-  let hideTimer: ReturnType<typeof setTimeout>;
-  let currentSection = '';
-
-  // Track which H2/H3 is currently in the upper portion of the viewport
-  const headings = document.querySelectorAll<HTMLElement>('.prose h2, .prose h3');
-  if (headings.length > 0) {
-    const sectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const text = entry.target.textContent?.trim() ?? '';
-            currentSection = text.length > 18 ? text.slice(0, 18) + '…' : text;
-          }
-        });
-      },
-      { rootMargin: '-5% 0px -85% 0px' }
-    );
-    headings.forEach((h) => sectionObserver.observe(h));
-  }
-
-  window.addEventListener(
-    'scroll',
-    () => {
+    function update() {
       const { top, height } = article.getBoundingClientRect();
       const scrollable = height - window.innerHeight;
-      if (scrollable <= 0) return;
+      const progress = scrollable > 0 ? Math.max(0, Math.min(1, -top / scrollable)) : 0;
+      bar.style.transform = `scaleX(${progress})`;
+      ticking = false;
+    }
 
-      const pct = Math.round(Math.max(0, Math.min(100, (-top / scrollable) * 100)));
-
-      if (pct > 1 && pct < 99) {
-        const prefix = currentSection ? `${currentSection} · ` : '';
-        textEl.textContent = `${prefix}${pct}%`;
-        island.classList.add('is-visible');
-      } else {
-        island.classList.remove('is-visible');
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
       }
+    }, { passive: true });
 
-      // Collapse after 2.5s of inactivity
-      clearTimeout(hideTimer);
-      hideTimer = setTimeout(() => island.classList.remove('is-visible'), 2500);
-    },
-    { passive: true }
-  );
-})();
+    update();
+  })();
 
-// ── Paragraph Scroll Reveal ───────────────────────────────────────────────────
-// Elements below the fold fade up as they enter the viewport.
-// Elements already visible on load are left untouched (no FOIC).
-(function () {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  (function () {
+    if (!navigator.clipboard) return;
 
-  const selector =
-    '.prose p, .prose h2, .prose h3, .prose h4, .prose pre, .prose blockquote, .prose ul, .prose ol';
-  const elements = document.querySelectorAll<HTMLElement>(selector);
-  const viewportH = window.innerHeight;
+    const copyIcon = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+    const checkIcon = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 12 4 9"/></svg>`;
+    const copiedLabel = '已复制';
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.remove('reveal-pending');
-          entry.target.classList.add('reveal-done');
-          observer.unobserve(entry.target);
+    document.querySelectorAll<HTMLPreElement>('.prose pre').forEach((pre) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-wrapper';
+      pre.parentNode?.insertBefore(wrapper, pre);
+      wrapper.appendChild(pre);
+
+      const button = document.createElement('button');
+      button.className = 'copy-btn';
+      button.setAttribute('aria-label', '复制代码');
+      button.setAttribute('data-copied-label', copiedLabel);
+      button.innerHTML = copyIcon;
+
+      button.addEventListener('click', async () => {
+        const code = pre.querySelector('code');
+        try {
+          await navigator.clipboard.writeText(code?.innerText ?? '');
+          button.innerHTML = checkIcon;
+          button.classList.add('copied');
+          setTimeout(() => {
+            button.innerHTML = copyIcon;
+            button.classList.remove('copied');
+          }, 1500);
+        } catch {
+          // Clipboard API unavailable or denied — fail silently
         }
       });
-    },
-    { threshold: 0.08, rootMargin: '0px 0px -32px 0px' }
-  );
 
-  elements.forEach((el) => {
-    // Only hide elements not yet visible in the initial viewport
-    if (el.getBoundingClientRect().top > viewportH * 0.88) {
-      el.classList.add('reveal-pending');
-      observer.observe(el);
-    }
-  });
-})();
+      wrapper.appendChild(button);
+    });
+  })();
 </script>
 
 <style>
   .article-header {
-    margin-bottom: 3rem;
+    display: grid;
+    gap: 0.9rem;
+    margin-bottom: 2.5rem;
+    animation: article-settle-in 560ms var(--ease-out-expo) both;
   }
 
   .article-header h1 {
-    font-size: var(--text-3xl);
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.15;
-    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+    line-height: 1.1;
   }
 
   .article-meta {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem;
-    color: var(--fg-muted);
+    gap: 0.55rem;
+    color: color-mix(in oklab, var(--support) 38%, var(--fg-muted));
     font-size: var(--text-sm);
-  }
-
-  .meta-sep {
-    color: var(--fg-subtle);
   }
 
   .article-tags {
     display: flex;
-    gap: 0.375rem;
     flex-wrap: wrap;
+    gap: 0.4rem;
   }
 
   .article-tag {
-    font-size: var(--text-xs);
-    color: var(--fg-subtle);
-    border: 1px solid var(--border);
-    padding: 0.125rem 0.5rem;
+    padding: 0.18rem 0.55rem;
+    border: 1px solid color-mix(in oklab, var(--support-border) 76%, var(--border));
     border-radius: 999px;
+    background: color-mix(in oklab, var(--support-soft) 82%, transparent);
+    color: var(--support);
+    font-size: var(--text-xs);
   }
 
   .article-footer {
     margin-top: 3rem;
-    padding-top: 2rem;
+    padding-top: 1.5rem;
     border-top: 1px solid var(--border);
   }
 
   .post-nav {
     display: flex;
     justify-content: space-between;
-    gap: 1.5rem;
+    gap: 1.25rem;
     margin-top: 2rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--border);
@@ -312,11 +211,10 @@ const { Content } = await render(post);
 
   .nav-prev,
   .nav-next {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: 0.25rem;
     text-decoration: none;
-    transition: color 0.15s;
+    position: relative;
   }
 
   .nav-next {
@@ -324,28 +222,69 @@ const { Content } = await render(post);
   }
 
   .nav-label {
+    color: color-mix(in oklab, var(--support) 72%, var(--fg-subtle));
     font-size: var(--text-xs);
-    color: var(--fg-subtle);
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-family: var(--font-sans);
   }
 
   .nav-title {
-    font-size: var(--text-sm);
     color: var(--fg-muted);
+    font-size: var(--text-sm);
     font-weight: 500;
-    transition: color 0.15s;
+    line-height: 1.5;
+    transition: color var(--duration-fast) ease, transform var(--duration-fast) ease;
   }
 
   .nav-prev:hover .nav-title,
-  .nav-next:hover .nav-title {
+  .nav-next:hover .nav-title,
+  .nav-prev:focus-visible .nav-title,
+  .nav-next:focus-visible .nav-title {
     color: var(--accent);
+    transform: translateY(-1px);
   }
 
-  @media (max-width: 480px) {
-    .article-header h1 {
-      font-size: var(--text-2xl);
+  .nav-prev::after,
+  .nav-next::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.1rem;
+    height: 1px;
+    background: color-mix(in srgb, var(--accent) 50%, transparent);
+    transform: scaleX(0);
+    transition: transform var(--duration-medium) var(--ease-out-quart);
+  }
+
+  .nav-prev::after {
+    transform-origin: left;
+  }
+
+  .nav-next::after {
+    transform-origin: right;
+  }
+
+  .nav-prev:hover::after,
+  .nav-next:hover::after,
+  .nav-prev:focus-visible::after,
+  .nav-next:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  @keyframes article-settle-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .article-header {
+      margin-bottom: 2rem;
     }
 
     .post-nav {
@@ -357,69 +296,15 @@ const { Content } = await render(post);
     }
   }
 
-  /* ── Dynamic Island ──────────────────────────────────────────────────────── */
-  #dynamic-island {
-    position: fixed;
-    top: 1.75rem;
-    left: 50%;
-    /* Two-state transform: centered + entrance offset when hidden */
-    transform: translateX(-50%) scale(0.88) translateY(-4px);
+  @media (prefers-reduced-motion: reduce) {
+    .article-header {
+      animation: none;
+    }
 
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    white-space: nowrap;
-
-    background: var(--fg);
-    color: var(--bg);
-    border-radius: 999px;
-    padding: 0.3rem 0.75rem;
-
-    font-size: 0.6875rem; /* 11px */
-    font-family: var(--font-mono);
-    letter-spacing: 0.01em;
-
-    opacity: 0;
-    pointer-events: none;
-    transition:
-      opacity 0.25s ease,
-      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-
-    z-index: 90;
+    .nav-title,
+    .nav-prev::after,
+    .nav-next::after {
+      transition: none;
+    }
   }
-
-  #dynamic-island.is-visible {
-    opacity: 1;
-    transform: translateX(-50%) scale(1) translateY(0);
-  }
-
-  .di-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--accent);
-    flex-shrink: 0;
-    animation: di-pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes di-pulse {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.4; }
-  }
-
-  /* ── Paragraph Scroll Reveal ─────────────────────────────────────────────── */
-  .reveal-pending {
-    opacity: 0;
-    transform: translateY(7px);
-    transition:
-      opacity 0.45s ease,
-      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .reveal-done {
-    opacity: 1;
-    transform: none;
-    transition:
-      opacity 0.45s ease,
-      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  }</style>
+</style>
