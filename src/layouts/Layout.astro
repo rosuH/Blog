@@ -16,7 +16,7 @@ const { title, description, image, article = false, robots = 'index,follow' } = 
 // Use site root as base; fall back to request origin (not page URL) in dev
 const siteBase = Astro.site ?? new URL('/', Astro.url);
 const canonicalURL = new URL(Astro.url.pathname, siteBase);
-const metaDescription = description || 'An Android Developer and his life_';
+const metaDescription = description || '写 Android、技术，也写生活。';
 const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
 ---
 
@@ -61,12 +61,12 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
       rel="stylesheet"
       media="print"
       onload="this.media='all'"
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       />
     </noscript>
 
@@ -108,7 +108,7 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
       </main>
 
       <footer class="site-footer">
-        <p>© 2016–{new Date().getFullYear()} · <a href="https://astro.build">Astro</a></p>
+        <p>© 2016–{new Date().getFullYear()} · 使用 <a href="https://astro.build">Astro</a> 构建</p>
       </footer>
     </div>
 
@@ -117,16 +117,17 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
 
 <style>
   .site-header {
-    padding: 2rem 0 1.5rem;
+    padding: 1.25rem 0 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
   }
 
   .site-logo {
     font-size: 0.9375rem;
     font-weight: 500;
+    font-family: var(--font-display);
     color: var(--fg);
     letter-spacing: -0.01em;
     transition: color 0.15s;
@@ -137,7 +138,7 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
   }
 
   .site-footer {
-    padding: 3rem 0 2rem;
+    padding: 2.5rem 0 2rem;
     color: var(--fg-subtle);
     font-size: var(--text-sm);
   }
