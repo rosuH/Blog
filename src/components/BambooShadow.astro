@@ -8,8 +8,7 @@ const { article = false } = Astro.props;
 ---
 
 <div id="bamboo-shadow" data-page-kind={article ? 'article' : 'home'} aria-hidden="true">
-  <div class="bamboo-moonlight bamboo-moonlight--halo"></div>
-  <div class="bamboo-moonlight bamboo-moonlight--beam"></div>
+  <div class="bamboo-moonlight"></div>
   <svg id="bamboo-svg" xmlns="http://www.w3.org/2000/svg"></svg>
 </div>
 
@@ -21,57 +20,30 @@ const { article = false } = Astro.props;
     width: 65vw;
     height: 100vh;
     pointer-events: none;
-    z-index: 0;
+    z-index: 1;
     overflow: visible;
+    opacity: 0.9;
   }
 
   .bamboo-moonlight {
     position: absolute;
     pointer-events: none;
     opacity: 0;
-  }
-
-  .bamboo-moonlight--halo {
-    top: -22%;
-    right: -18%;
-    width: 82%;
-    height: 56%;
+    top: -5%;
+    right: -5%;
+    width: 70vw;
+    height: 80vh;
     background:
       radial-gradient(
-        ellipse at 100% 0%,
-        rgba(205, 215, 255, 0.4) 0%,
-        rgba(162, 177, 234, 0.24) 18%,
-        rgba(105, 118, 176, 0.12) 36%,
-        rgba(45, 56, 96, 0.04) 52%,
-        transparent 72%
+        ellipse 70% 50% at 100% 0%,
+        rgba(230, 245, 255, 0.8) 0%,
+        rgba(200, 220, 250, 0.4) 30%,
+        rgba(165, 195, 230, 0.15) 60%,
+        transparent 85%
       );
-    filter: blur(18px);
-  }
-
-  .bamboo-moonlight--beam {
-    top: -10%;
-    right: -15%;
-    width: 110%;
-    height: 122%;
-    background:
-      linear-gradient(
-        214deg,
-        rgba(190, 203, 248, 0.18) 0%,
-        rgba(147, 163, 222, 0.11) 16%,
-        rgba(98, 114, 172, 0.06) 31%,
-        rgba(57, 71, 118, 0.025) 46%,
-        transparent 62%
-      );
-    filter: blur(34px);
-    transform: rotate(7deg) translateX(6%);
-    transform-origin: top right;
-    mask-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.92) 0%,
-      rgba(0, 0, 0, 0.76) 28%,
-      rgba(0, 0, 0, 0.36) 64%,
-      transparent 100%
-    );
+    mix-blend-mode: soft-light;
+    filter: blur(60px);
+    transform: translateZ(0);
   }
 
   #bamboo-svg {
@@ -81,67 +53,51 @@ const { article = false } = Astro.props;
     width: 100%;
     height: 100%;
     z-index: 1;
-    opacity: 0.16;
+    opacity: 0.18;
     mix-blend-mode: multiply;
-    filter: blur(1.8px);
+    filter: blur(4px);
   }
 
   #bamboo-shadow[data-page-kind='article'] {
-    width: 48vw;
+    width: 100vw;
   }
 
   #bamboo-shadow[data-page-kind='article'] #bamboo-svg {
-    opacity: 0.09;
-    filter: blur(2.5px);
+    opacity: 0.08;
+    filter: blur(2px);
   }
 
   :global(html.dark) #bamboo-svg {
     opacity: 0.06;
-    mix-blend-mode: screen;
+    mix-blend-mode: soft-light;
   }
 
-  :global(html.dark) .bamboo-moonlight--halo {
-    opacity: 0.52;
-  }
-
-  :global(html.dark) .bamboo-moonlight--beam {
-    opacity: 0.34;
+  :global(html.dark) .bamboo-moonlight {
+    opacity: 0.55;
   }
 
   :global(html.dark) #bamboo-shadow[data-page-kind='article'] #bamboo-svg {
     opacity: 0.038;
   }
 
-  :global(html.dark) #bamboo-shadow[data-page-kind='article'] .bamboo-moonlight--halo {
-    opacity: 0.34;
-  }
-
-  :global(html.dark) #bamboo-shadow[data-page-kind='article'] .bamboo-moonlight--beam {
-    opacity: 0.2;
+  :global(html.dark) #bamboo-shadow[data-page-kind='article'] .bamboo-moonlight {
+    opacity: 0.4;
   }
 
   @media (max-width: 640px) {
-    #bamboo-shadow { width: 78vw; }
-    #bamboo-shadow[data-page-kind='article'] { width: 42vw; }
-    #bamboo-svg { opacity: 0.1; filter: blur(2.2px); }
-    #bamboo-shadow[data-page-kind='article'] #bamboo-svg { opacity: 0.052; }
-    .bamboo-moonlight--halo {
-      right: -26%;
-      width: 98%;
-      height: 48%;
+    #bamboo-shadow { width: 85vw; opacity: 0.85; }
+    #bamboo-shadow[data-page-kind='article'] { width: 55vw; }
+    #bamboo-svg { opacity: 0.12; filter: blur(3px); }
+    #bamboo-shadow[data-page-kind='article'] #bamboo-svg { opacity: 0.065; }
+    .bamboo-moonlight {
+      width: 80vw;
+      height: 70vh;
+      filter: blur(40px);
     }
-    .bamboo-moonlight--beam {
-      right: -24%;
-      width: 132%;
-      opacity: 0;
-      transform: rotate(9deg) translateX(4%);
-    }
-    :global(html.dark) #bamboo-svg { opacity: 0.042; }
-    :global(html.dark) #bamboo-shadow[data-page-kind='article'] #bamboo-svg { opacity: 0.024; }
-    :global(html.dark) .bamboo-moonlight--halo { opacity: 0.34; }
-    :global(html.dark) .bamboo-moonlight--beam { opacity: 0.2; }
-    :global(html.dark) #bamboo-shadow[data-page-kind='article'] .bamboo-moonlight--halo { opacity: 0.22; }
-    :global(html.dark) #bamboo-shadow[data-page-kind='article'] .bamboo-moonlight--beam { opacity: 0.12; }
+    :global(html.dark) #bamboo-svg { opacity: 0.05; }
+    :global(html.dark) #bamboo-shadow[data-page-kind='article'] #bamboo-svg { opacity: 0.03; }
+    :global(html.dark) .bamboo-moonlight { opacity: 0.4; }
+    :global(html.dark) #bamboo-shadow[data-page-kind='article'] .bamboo-moonlight { opacity: 0.28; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -502,19 +458,7 @@ const { article = false } = Astro.props;
     const isDark = document.documentElement.classList.contains('dark');
     const color = isDark ? 'rgb(176, 186, 204)' : 'rgb(58, 54, 46)';
 
-    const defs = ns('defs');
-    defs.appendChild(
-      makeBlurFilter(
-        'bamboo-soft-blur',
-        pageKind === 'article' ? 1.4 : 0.9,
-        isDark ? (pageKind === 'article' ? 0.56 : 0.64) : (pageKind === 'article' ? 0.5 : 0.58),
-        isDark ? [190, 196, 210] : [58, 54, 46]
-      )
-    );
-    fragment.appendChild(defs);
-
     const root = ns('g');
-    root.setAttribute('filter', 'url(#bamboo-soft-blur)');
     fragment.appendChild(root);
 
     const stemsLayer = ns('g');
@@ -848,12 +792,17 @@ const { article = false } = Astro.props;
     }
   }
 
+  let frameCount = 0;
   function tick(ts: number) {
     if (!scene || reducedMotion) return;
     if (!lastTs) lastTs = ts;
     const dt = clamp((ts - lastTs) / 1000, 1 / 240, 1 / 30);
     lastTs = ts;
-    renderFrame(ts, dt);
+    // Render every 2nd frame for 30fps to reduce CPU usage
+    frameCount++;
+    if (frameCount % 2 === 0) {
+      renderFrame(ts, dt);
+    }
     rafId = requestAnimationFrame(tick);
   }
 
@@ -920,7 +869,14 @@ const { article = false } = Astro.props;
 
   document.addEventListener('visibilitychange', handleVisibility);
 
-  new MutationObserver(() => queueRebuild()).observe(document.documentElement, {
+  let lastRebuild = 0;
+  new MutationObserver(() => {
+    const now = performance.now();
+    if (now - lastRebuild > 500) { // Debounce: max 1 rebuild per 500ms
+      lastRebuild = now;
+      queueRebuild();
+    }
+  }).observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['class'],
   });
