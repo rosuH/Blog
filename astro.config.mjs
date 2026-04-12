@@ -10,6 +10,11 @@ import remarkImagePerformance from './src/utils/remark-image-performance.mjs';
 export default defineConfig({
   site: 'https://blog.rosuh.me',
 
+  image: {
+    layout: 'constrained',
+    responsiveStyles: true,
+  },
+
   integrations: [
     mdx(),
   ],

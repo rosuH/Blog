@@ -9,10 +9,18 @@ interface Props {
   description?: string;
   image?: string;
   article?: boolean;
+  math?: boolean;
   robots?: string;
 }
 
-const { title, description, image, article = false, robots = 'index,follow' } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  article = false,
+  math = false,
+  robots = 'index,follow',
+} = Astro.props;
 // Use site root as base; fall back to request origin (not page URL) in dev
 const siteBase = Astro.site ?? new URL('/', Astro.url);
 const canonicalURL = new URL(Astro.url.pathname, siteBase);
@@ -70,19 +78,45 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
       />
     </noscript>
 
-    <!-- KaTeX CSS (article pages only) -->
-    {article && (
+    <!-- KaTeX CSS (math posts only) -->
+    {math && (
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
     )}
 
-    <!-- Google Analytics -->
-    <script is:inline src="https://www.googletagmanager.com/gtag/js?id=G-1F0F92B00T"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-1F0F92B00T');
-    </script>
+    <!-- Deferred analytics bootstrap -->
+    {import.meta.env.PROD && (
+      <script is:inline>
+        const analyticsId = 'G-1F0F92B00T';
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', analyticsId);
+
+        const loadAnalytics = () => {
+          if (document.querySelector(`script[data-analytics-id="${analyticsId}"]`)) return;
+          const script = document.createElement('script');
+          script.async = true;
+          script.src = `https://www.googletagmanager.com/gtag/js?id=${analyticsId}`;
+          script.dataset.analyticsId = analyticsId;
+          document.head.appendChild(script);
+        };
+
+        const scheduleAnalytics = () => {
+          if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(loadAnalytics, { timeout: 2000 });
+          } else {
+            window.setTimeout(loadAnalytics, 1200);
+          }
+        };
+
+        if (document.readyState === 'complete') {
+          scheduleAnalytics();
+        } else {
+          window.addEventListener('load', scheduleAnalytics, { once: true });
+        }
+      </script>
+    )}
 
     <!-- Dark mode init (prevent flash) -->
     <script is:inline>

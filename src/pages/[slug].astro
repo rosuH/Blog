@@ -19,6 +19,7 @@ export async function getStaticPaths() {
 
 const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await render(post);
+const needsMath = /\$\$|\\\(|\\\[/.test(post.body ?? '');
 ---
 
 <Layout
@@ -26,6 +27,7 @@ const { Content } = await render(post);
   description={post.data.description || post.data.excerpt}
   image={post.data.hero}
   article={true}
+  math={needsMath}
 >
   <div id="reading-progress" aria-hidden="true"></div>
 
