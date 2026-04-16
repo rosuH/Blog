@@ -132,6 +132,7 @@
 
   toggle?.addEventListener('click', () => {
     const nextIsDark = document.documentElement.classList.toggle('dark');
+    document.documentElement.style.colorScheme = nextIsDark ? 'dark' : 'light';
     localStorage.setItem('theme', nextIsDark ? 'dark' : 'light');
     applyThemeLabel(nextIsDark);
 

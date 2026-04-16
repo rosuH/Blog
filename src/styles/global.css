@@ -2,6 +2,8 @@
 
 /* ===== Design Tokens ===== */
 :root {
+  color-scheme: light;
+
   /* Colors */
   --bg:             oklch(97.7% 0.006 85);
   --fg:             oklch(24% 0.016 252);
@@ -41,6 +43,7 @@
 }
 
 html.dark {
+  color-scheme: dark;
   --bg:             oklch(18.5% 0.01 252);
   --fg:             oklch(95% 0.007 88);
   --fg-muted:       oklch(77% 0.012 88);

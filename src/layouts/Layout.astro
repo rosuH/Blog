@@ -125,7 +125,9 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
         if (stored === 'dark' || stored === 'light') return stored;
         return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       })();
-      document.documentElement.classList.toggle('dark', theme === 'dark');
+      const isDark = theme === 'dark';
+      document.documentElement.classList.toggle('dark', isDark);
+      document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
     </script>
   </head>
 
