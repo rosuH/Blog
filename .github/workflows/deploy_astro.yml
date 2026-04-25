@@ -39,13 +39,15 @@ jobs:
           ffmpeg -version | head -1
           ffprobe -version | head -1
 
-      - name: Cache media derivatives
+      - name: Cache generated image derivatives
         uses: actions/cache@v4
         with:
-          path: .cache/media
-          key: media-${{ hashFiles('content/posts/**/*.heic', 'content/posts/**/*.mov') }}
+          path: |
+            .cache/astro
+            .cache/media
+          key: image-cache-${{ runner.os }}-${{ hashFiles('package-lock.json', 'astro.config.mjs', 'src/utils/media-cache.mjs', 'src/utils/remark-media.mjs', 'src/utils/rehype-media.mjs', 'content/posts/**/*.png', 'content/posts/**/*.jpg', 'content/posts/**/*.jpeg', 'content/posts/**/*.webp', 'content/posts/**/*.gif', 'content/posts/**/*.heic', 'content/posts/**/*.mov') }}
           restore-keys: |
-            media-
+            image-cache-${{ runner.os }}-
 
       - name: Verify media tooling
         run: |
@@ -56,11 +58,19 @@ jobs:
           # with output.alias containing 'avif' — probe both pieces explicitly.
           node -e "import('sharp').then(s => { const o = s.default.format.heif?.output; const ok = !!o?.file && Array.isArray(o?.alias) && o.alias.includes('avif'); if (!ok) { console.error('sharp AVIF output missing'); process.exit(1); } })"
 
+      - name: Log image cache sizes
+        run: |
+          du -sh .cache/astro .cache/media public/_media 2>/dev/null || true
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v4
 
       - name: Build Astro site
         run: npm run build
+
+      - name: Log generated image output sizes
+        run: |
+          du -sh .cache/astro .cache/media public/_media dist/_astro dist/_media 2>/dev/null || true
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
