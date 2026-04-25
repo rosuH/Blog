@@ -114,3 +114,53 @@ export async function processHeic(srcPath, cacheRoot) {
   await writeFile(metaPath, JSON.stringify(result, null, 2));
   return result;
 }
+
+export async function processMov(srcPath, cacheRoot) {
+  await ensureFfmpeg();
+  const hash = await hashSource(srcPath);
+  const key = cacheKeyFor(hash);
+  const dir = join(cacheRoot, hash);
+  const metaPath = join(dir, 'meta.json');
+
+  if (await exists(metaPath)) {
+    const meta = JSON.parse(await readFile(metaPath, 'utf8'));
+    if (meta.cacheKey === key) return meta;
+  }
+
+  await mkdir(dir, { recursive: true });
+  const hevcOut = join(dir, 'clip.hevc.mp4');
+  const h264Out = join(dir, 'clip.h264.mp4');
+
+  // HEVC: remux only, strip audio, force hvc1 tag for Safari
+  await execFileP('ffmpeg', [
+    '-y', '-i', srcPath,
+    '-an', '-c:v', 'copy', '-tag:v', 'hvc1',
+    '-movflags', '+faststart',
+    hevcOut,
+  ]);
+
+  // H.264: transcode, strip audio, fast-start
+  await execFileP('ffmpeg', [
+    '-y', '-i', srcPath,
+    '-an',
+    '-c:v', 'libx264', '-preset', 'slow', '-crf', '23',
+    '-pix_fmt', 'yuv420p',
+    '-movflags', '+faststart',
+    h264Out,
+  ]);
+
+  const result = {
+    cacheKey: key,
+    hash,
+    kind: 'mov',
+    version: PROCESSOR_VERSION,
+    src_basename: basename(srcPath, extname(srcPath)),
+    products: {
+      video_hevc: 'clip.hevc.mp4',
+      video_h264: 'clip.h264.mp4',
+    },
+  };
+
+  await writeFile(metaPath, JSON.stringify(result, null, 2));
+  return result;
+}
