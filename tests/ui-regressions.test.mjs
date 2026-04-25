@@ -101,6 +101,24 @@ test('color system uses calmer paper, copper, and pine accents', () => {
   assert.match(homeSource, /home-section--recent/);
 });
 
+test('article page exposes editorial layout hooks and overflow-safe media styles', () => {
+  const html = readDist('2026-04-25-year-end-summary', 'index.html');
+  const articleSource = readSource('src', 'pages', '[slug].astro');
+  const css = readSource('src', 'styles', 'global.css');
+
+  assert.match(html, /class="article-shell"/);
+  assert.match(html, /class="article-header"/);
+  assert.match(html, /class="article-title"/);
+  assert.match(html, /class="article-date"/);
+  assert.match(css, /--content-width:\s+700px/);
+  assert.match(css, /--media-width:\s+980px/);
+  assert.match(css, /\.media-figure\s*\{/);
+  assert.match(css, /grid-template-columns:\s+minmax\(0,\s*1fr\)\s+var\(--caption-width\)/);
+  assert.match(css, /overflow-wrap:\s+anywhere/);
+  assert.match(css, /overflow-x:\s+auto/);
+  assert.match(articleSource, /article-shell/);
+});
+
 before(() => {
   buildSite();
 });
