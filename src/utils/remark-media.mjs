@@ -17,7 +17,7 @@ const CACHE_ROOT = fileURLToPath(new URL('../../.cache/media/', import.meta.url)
 const PUBLIC_ROOT = fileURLToPath(new URL('../../public/', import.meta.url));
 
 const referencedKeys = new Set();
-export function getReferencedHashes() { return referencedKeys; }
+export function getReferencedKeys() { return referencedKeys; }
 
 function walk(node, visit) {
   if (!node || typeof node !== 'object') return;
@@ -98,9 +98,10 @@ export default function remarkMedia() {
       };
       node.data.hProperties['data-media'] = JSON.stringify(payload);
       node.data.hProperties['data-media-marker'] = '1';
-      // Clear the .heic URL so if rehype-media's marker handling somehow
-      // misses the node, we don't fall through to a broken <img src=".heic">.
-      node.url = '';
+      // Keep the original .heic URL — rehype-media is the source of truth for
+      // replacement and removes the node on payload-parse failure (see
+      // rehype-media.mjs). Blanking the URL would yield <img src=""> on
+      // failure, which triggers an extra request to the current document URL.
     }
   };
 }
