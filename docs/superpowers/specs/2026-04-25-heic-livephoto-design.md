@@ -68,10 +68,11 @@ MediaCache（read-through）
 2. remark/rehype pipeline 加载 → MediaCache 单例创建
 3. 对每篇 markdown：
    a. 遍历 image 节点
-   b. .heic 命中 → MediaCache.getOrBuild(absPath, 'heic')
-                  → 内部检查同 basename .mov，存在则同时 getOrBuild(..., 'mov')
-                  → 返回 { still: { avif, webp, jpg @ 1x/2x }, video?: { hevc, h264 }, dims }
-   c. 节点 data.hProperties 加 data-media + 临时 marker class
+   b. .heic 命中 → `processHeic(absPath, CACHE_ROOT)` 解码 + 编出三档静帧
+                  → 检查同 basename .mov，存在则 `processMov(absMovPath, CACHE_ROOT)`
+                  → `publishToPublic(hash, ...)` 把缓存里 `products` 列出的文件复制到 public
+                  → 在节点 `data.hProperties['data-media']` 上序列化 { kind, stillHash, videoHash?, products, width, height, alt }
+   c. 节点 data.hProperties 加 data-media + 临时 marker
 4. rehype 阶段把 marker 节点替换为最终 hast tree
 5. Astro build 把 public/_media 整目录拷到 dist/
 6. 构建结束：
@@ -105,16 +106,31 @@ hash = sha256(file_bytes).hex.slice(0,16) + ":" + PROCESSOR_VERSION
 
 ## HEIC 处理
 
-依赖：`sharp@^0.33`（prebuilt 二进制带 HEIF 解码，基于 libde265）。
+依赖：`sharp@^0.34`（用于 AVIF/WebP/JPEG 编码）+ 系统 `ffmpeg`（用于 HEIC HEVC 解码）。
 
-启动时硬探测：
+> **设计修正 (2026-04-25 实施时)**：原计划用 sharp 直接解码 HEIC，但 sharp 的 prebuilt libvips 包含 libheif 却**不带 libde265 HEVC 插件**（LGPL/binary-size 限制），无法解码 iPhone HEVC HEIC。改为用 ffmpeg 做解码前置。CI 探测条件相应改为 `sharp.format.heif.output.alias.includes('avif')`（验证 AVIF 输出能力，因为这是我们真正用到的）。
+
+启动时硬探测两个工具：
 ```js
-if (!sharp.format.heif?.input?.file) {
-  throw new Error('sharp HEIF decoder unavailable. Need sharp@^0.33 with libvips-heif.');
+// ffmpeg with libx264 (used for HEIC decode + MOV transcode)
+await execFile('ffmpeg', ['-hide_banner', '-codecs']); // grep libx264
+
+// sharp AVIF output (served via heif format with 'avif' alias)
+const o = sharp.format.heif?.output;
+if (!o?.file || !o.alias?.includes('avif')) {
+  throw new Error('sharp AVIF encoder missing');
 }
 ```
 
-每张 HEIC：
+每张 HEIC（实际管线）：
+
+```
+ffmpeg -i src.heic -update 1 -frames:v 1 cache_dir/source.png
+sharp(source.png).rotate()   // 从无损 PNG 中间产物开始
+  → 1x/2x avif/webp/jpg
+```
+
+**示意伪代码**：
 ```js
 const img = sharp(srcPath).rotate();             // 自动方向校正
 const meta = await img.metadata();                // 拿到原始宽高

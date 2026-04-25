@@ -30,7 +30,6 @@ function pictureNode({ hash, alt, width, height, products, loading = 'lazy' }) {
 }
 
 function livePhotoNode({ stillHash, videoHash, alt, width, height, products }) {
-  const stillBase = `/_media/${stillHash}`;
   const videoBase = `/_media/${videoHash}`;
   const picture = pictureNode({ hash: stillHash, alt, width, height, products });
   const video = h('video', {

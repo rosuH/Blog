@@ -1743,3 +1743,18 @@ Plan complete and saved to `docs/superpowers/plans/2026-04-25-heic-livephoto.md`
 2. **Inline Execution** — Execute tasks in this session using executing-plans, batch execution with checkpoints.
 
 Which approach?
+
+---
+
+## Implementation Notes (post-execution, 2026-04-25)
+
+Captured here so a future reader knows where the actual code diverges from the plan above. Code is the source of truth; this section just points at the deltas.
+
+- **HEIC decoder**: plan assumed `sharp` would decode HEIC directly. The prebuilt libvips includes libheif but **omits libde265** (LGPL / binary-size constraints), so iPhone HEVC HEIC is undecodable. `processHeic` (in `src/utils/media-cache.mjs`) routes through ffmpeg → lossless PNG → sharp instead. No new system dependency (ffmpeg is already required for MOV).
+- **GC scheduling**: plan used `process.once('beforeExit', ...)` with async `gcCache`. Astro's CLI calls `process.exit()`, which **skips `beforeExit`** entirely. `remark-media.mjs` now uses `process.once('exit', ...)` with a synchronous `gcCacheSync` helper exported from `media-cache.mjs`. Same applies to the test counter sidecar in Task 15.
+- **Sharp version**: bumped from `^0.33` to `^0.34` to align with Astro 5's optional sharp dependency and avoid duplicate native binaries in `node_modules`.
+- **CI sharp probe**: switched from `format.heif?.input?.file` (false positive — only proves libheif loaded, not that HEVC decodes) to verifying `format.heif.output.alias` includes `'avif'` (matches what we actually rely on).
+- **Components dropped**: `src/components/{Picture,LivePhoto}.astro` were specified but turned out to be dead code — `rehype-media.mjs` emits the HTML directly, so the components were never rendered and their scoped CSS/script were never loaded. The styles + behavior script were moved into `Layout.astro` as a global `<style>` and `<script is:inline>`; the .astro files were deleted.
+- **`publishToPublic`**: originally `cp(src, dst, { recursive: true })`, which leaked `meta.json` and the HEIC `source.png` intermediate to the public site. Now reads `meta.json` and copies only the files listed in `products`.
+- **Filename collision fix**: the test post (`content/posts/2026-04-25-year-end-summary/`) was created with `filename: 2021_summary` in frontmatter, colliding with the existing 2021 post. Renamed to `filename: year-end-summary` so both posts get distinct URLs; HEIC e2e test paths point to `dist/year-end-summary/`.
+- **2x derivative threshold**: plan's `metadata.width >= w1 * 2` was strict; for the 3158-wide test fixture this would skip 2x even though 3158 ≈ 2× of 1579 is useful for retina. Relaxed to `>= 1.5×` and clamped output width to `min(w1*2, source)` so file names always reflect actual dimensions.

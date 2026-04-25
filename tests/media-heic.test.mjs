@@ -42,19 +42,30 @@ test('processHeic produces avif/webp/jpg at 1x and 2x sizes with meta.json', asy
   await rm(cacheRoot, { recursive: true, force: true });
 });
 
-test('processHeic is a cache hit on repeated call (no rework)', async () => {
+test('processHeic is a cache hit on repeated call (no file rewrites)', async () => {
   const { processHeic } = await import('../src/utils/media-cache.mjs');
   const cacheRoot = join(tmpdir(), `heic-hit-${Date.now()}`);
   await mkdir(cacheRoot, { recursive: true });
 
   const r1 = await processHeic(FIXTURE, cacheRoot);
-  const t0 = Date.now();
+  const dir = join(cacheRoot, r1.hash);
+  // Snapshot mtimes of every product + meta.json before second call
+  const tracked = ['meta.json', ...Object.values(r1.products).filter(Boolean)];
+  const before = Object.fromEntries(
+    await Promise.all(tracked.map(async (f) => [f, (await stat(join(dir, f))).mtimeMs])),
+  );
+
   const r2 = await processHeic(FIXTURE, cacheRoot);
-  const elapsed = Date.now() - t0;
+
+  const after = Object.fromEntries(
+    await Promise.all(tracked.map(async (f) => [f, (await stat(join(dir, f))).mtimeMs])),
+  );
 
   assert.equal(r1.hash, r2.hash);
   assert.deepEqual(r1.products, r2.products);
-  assert.ok(elapsed < 100, `cache hit should be < 100ms, got ${elapsed}ms`);
+  for (const [filename, mtime] of Object.entries(before)) {
+    assert.equal(after[filename], mtime, `${filename} must not be rewritten on cache hit`);
+  }
 
   await rm(cacheRoot, { recursive: true, force: true });
 });

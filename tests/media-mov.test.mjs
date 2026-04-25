@@ -50,7 +50,7 @@ test('processMov outputs hevc and h264 mp4s, both audio-stripped', async () => {
   await rm(cacheRoot, { recursive: true, force: true });
 });
 
-test('processMov is cache-hit on repeat', async () => {
+test('processMov is cache-hit on repeat (no file rewrites)', async () => {
   const { processMov } = await import('../src/utils/media-cache.mjs');
   const cacheRoot = join(tmpdir(), `mov-hit-${Date.now()}`);
   await mkdir(cacheRoot, { recursive: true });
@@ -58,12 +58,22 @@ test('processMov is cache-hit on repeat', async () => {
   makeFixtureMov(fixture);
 
   const r1 = await processMov(fixture, cacheRoot);
-  const t0 = Date.now();
+  const dir = join(cacheRoot, r1.hash);
+  const tracked = ['meta.json', ...Object.values(r1.products).filter(Boolean)];
+  const before = Object.fromEntries(
+    await Promise.all(tracked.map(async (f) => [f, (await stat(join(dir, f))).mtimeMs])),
+  );
+
   const r2 = await processMov(fixture, cacheRoot);
-  const elapsed = Date.now() - t0;
+
+  const after = Object.fromEntries(
+    await Promise.all(tracked.map(async (f) => [f, (await stat(join(dir, f))).mtimeMs])),
+  );
 
   assert.equal(r1.hash, r2.hash);
-  assert.ok(elapsed < 100, `cache hit should be < 100ms, got ${elapsed}ms`);
+  for (const [filename, mtime] of Object.entries(before)) {
+    assert.equal(after[filename], mtime, `${filename} must not be rewritten on cache hit`);
+  }
 
   await rm(cacheRoot, { recursive: true, force: true });
 });
