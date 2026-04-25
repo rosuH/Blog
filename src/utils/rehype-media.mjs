@@ -7,8 +7,8 @@ function h(tag, props = {}, children = []) {
 }
 function text(value) { return { type: 'text', value }; }
 
-function pictureNode({ hash, alt, width, height, products, loading = 'lazy' }) {
-  const base = `/_media/${hash}`;
+function pictureNode({ key, alt, width, height, products, loading = 'lazy' }) {
+  const base = `/_media/${key}`;
   const has2x = !!products.still_2x_jpg;
   const avifSrcset = has2x
     ? `${base}/${products.still_1x_avif} 1x, ${base}/${products.still_2x_avif} 2x`
@@ -29,9 +29,9 @@ function pictureNode({ hash, alt, width, height, products, loading = 'lazy' }) {
   ]);
 }
 
-function livePhotoNode({ stillHash, videoHash, alt, width, height, products }) {
-  const videoBase = `/_media/${videoHash}`;
-  const picture = pictureNode({ hash: stillHash, alt, width, height, products });
+function livePhotoNode({ stillKey, videoKey, alt, width, height, products }) {
+  const videoBase = `/_media/${videoKey}`;
+  const picture = pictureNode({ key: stillKey, alt, width, height, products });
   const video = h('video', {
     class: 'livephoto-video',
     'data-lp-video': '',
@@ -97,7 +97,7 @@ export default function rehypeMedia() {
       const node2 = payload.kind === 'livephoto'
         ? livePhotoNode(payload)
         : pictureNode({
-            hash: payload.stillHash,
+            key: payload.stillKey,
             alt: payload.alt,
             width: payload.width,
             height: payload.height,

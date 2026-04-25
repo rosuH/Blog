@@ -31,7 +31,7 @@ test('processMov outputs hevc and h264 mp4s, both audio-stripped', async () => {
     assert.ok(result.products.video_hevc.endsWith('.hevc.mp4'));
     assert.ok(result.products.video_h264.endsWith('.h264.mp4'));
 
-    const dir = join(cacheRoot, result.hash);
+    const dir = join(cacheRoot, result.cacheKey);
     const hevcStat = await stat(join(dir, result.products.video_hevc));
     const h264Stat = await stat(join(dir, result.products.video_h264));
     assert.ok(hevcStat.size > 0);
@@ -63,7 +63,7 @@ test('processMov is cache-hit on repeat (no file rewrites)', async () => {
     makeFixtureMov(fixture);
 
     const r1 = await processMov(fixture, cacheRoot);
-    const dir = join(cacheRoot, r1.hash);
+    const dir = join(cacheRoot, r1.cacheKey);
     const tracked = ['meta.json', ...Object.values(r1.products).filter(Boolean)];
     const before = Object.fromEntries(
       await Promise.all(tracked.map(async (f) => [f, (await stat(join(dir, f))).mtimeMs])),

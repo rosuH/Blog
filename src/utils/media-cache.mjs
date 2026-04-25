@@ -93,7 +93,11 @@ export async function processHeic(srcPath, cacheRoot) {
   const sharp = await getSharp();
   const hash = await hashSource(srcPath);
   const key = cacheKeyFor(hash);
-  const dir = join(cacheRoot, hash);
+  // Directory and public URL are keyed by cacheKey (= <hash>-v<version>) so
+  // bumping PROCESSOR_VERSION starts a fresh dir + URL — old artifacts become
+  // orphaned (eventually cleaned by gcCacheSync) and CDN/browser caches see a
+  // new path on the version flip.
+  const dir = join(cacheRoot, key);
   const metaPath = join(dir, 'meta.json');
 
   if (await exists(metaPath)) {
@@ -157,7 +161,7 @@ export async function processMov(srcPath, cacheRoot) {
   await ensureFfmpegX264();
   const hash = await hashSource(srcPath);
   const key = cacheKeyFor(hash);
-  const dir = join(cacheRoot, hash);
+  const dir = join(cacheRoot, key);
   const metaPath = join(dir, 'meta.json');
 
   if (await exists(metaPath)) {
@@ -204,14 +208,15 @@ export async function processMov(srcPath, cacheRoot) {
   return result;
 }
 
-// Copies only the product files listed in meta.json into public/_media/<hash>/.
+// Copies only the product files listed in meta.json into public/_media/<cacheKey>/.
+// `cacheKey` is what processHeic/processMov use as the directory name (= <hash>-v<version>).
 // Internal cache artifacts like source.png (HEIC decode intermediate) and
 // meta.json are intentionally NOT published. Stale files in the destination
-// (from a previous PROCESSOR_VERSION or different output set) are removed
-// before copying so the published dir is always exactly meta.products.
-export async function publishToPublic(hash, cacheRoot, publicRoot) {
-  const src = join(cacheRoot, hash);
-  const dst = join(publicRoot, '_media', hash);
+// (from a different output set) are removed before copying so the published
+// dir is always exactly meta.products.
+export async function publishToPublic(cacheKey, cacheRoot, publicRoot) {
+  const src = join(cacheRoot, cacheKey);
+  const dst = join(publicRoot, '_media', cacheKey);
   const metaPath = join(src, 'meta.json');
   const meta = JSON.parse(await readFile(metaPath, 'utf8'));
   const products = new Set(Object.values(meta.products || {}).filter(Boolean));
