@@ -30,6 +30,7 @@ function pictureNode({ key, alt, width, height, products, loading = 'lazy' }) {
     src: `${base}/${products.still_1x_jpg}`,
     width, height, alt,
     loading, decoding: 'async',
+    style: `aspect-ratio: ${width} / ${height}`,
   });
   if (has2x) img.properties.srcset = `${base}/${products.still_2x_jpg} 2x`;
   return h('picture', {}, [
@@ -39,9 +40,9 @@ function pictureNode({ key, alt, width, height, products, loading = 'lazy' }) {
   ]);
 }
 
-function livePhotoNode({ stillKey, videoKey, alt, width, height, products }) {
+function livePhotoNode({ stillKey, videoKey, alt, width, height, products, loading = 'lazy' }) {
   const videoBase = `/_media/${videoKey}`;
-  const picture = pictureNode({ key: stillKey, alt, width, height, products });
+  const picture = pictureNode({ key: stillKey, alt, width, height, products, loading });
   const video = h('video', {
     class: 'livephoto-video',
     'data-lp-video': '',
@@ -80,13 +81,14 @@ function livePhotoNode({ stillKey, videoKey, alt, width, height, products }) {
   });
 }
 
-function generatedPictureNode(payload) {
+function generatedPictureNode(payload, loading = 'lazy') {
   return pictureNode({
     key: payload.stillKey,
     alt: payload.alt,
     width: payload.width,
     height: payload.height,
     products: payload.products,
+    loading,
   });
 }
 
@@ -119,15 +121,26 @@ function walk(node, visit, parent = null, index = -1, grandparent = null, parent
 
 export default function rehypeMedia() {
   return (tree) => {
+    let imageCount = 0;
     walk(tree, (node, parent, index, grandparent, parentIndex) => {
       if (node.type !== 'element' || node.tagName !== 'img') return;
+      imageCount++;
+      const isFirstImage = imageCount === 1;
+      const loading = isFirstImage ? 'eager' : 'lazy';
       // Defaults from non-HEIC pass-through (already preserved by remark)
       const props = node.properties || {};
       if (!props['dataMediaMarker'] && !props['data-media-marker']) {
         // ensure loading/decoding hints (works for property-cased and dash-cased)
         if (props.alt == null) props.alt = '';
-        if (props.loading == null) props.loading = 'lazy';
+        if (props.loading == null) props.loading = loading;
         if (props.decoding == null) props.decoding = 'async';
+        const w = props.width;
+        const h = props.height;
+        if (w && h) {
+          const existing = props.style || '';
+          const extra = `aspect-ratio: ${w} / ${h}`;
+          props.style = existing ? `${existing}; ${extra}` : extra;
+        }
         if (parent?.tagName === 'a') return;
         const figure = figureNode([node], props.alt);
         replaceStandaloneParagraph(parent, index, grandparent, parentIndex, figure);
@@ -152,9 +165,9 @@ export default function rehypeMedia() {
         };
         return;
       }
-      const picture = generatedPictureNode(payload);
+      const picture = generatedPictureNode(payload, loading);
       const figure = payload.kind === 'livephoto'
-        ? livePhotoNode(payload)
+        ? livePhotoNode({ ...payload, loading })
         : figureNode([picture], payload.alt, 'media-figure media-figure--generated');
       if (replaceStandaloneParagraph(parent, index, grandparent, parentIndex, figure)) return;
       parent.children[index] = picture;
