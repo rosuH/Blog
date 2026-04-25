@@ -1,7 +1,30 @@
 // SHA-256 content-addressed cache for derived media (HEIC stills, MOV clips).
 // Bumping PROCESSOR_VERSION invalidates all existing cache entries.
 import { createHash } from 'node:crypto';
-import { createReadStream } from 'node:fs';
+import { createReadStream, writeFileSync, mkdirSync } from 'node:fs';
+import { resolve as pathResolve, dirname as pathDirname } from 'node:path';
+
+// Test instrumentation: when MEDIA_TEST_COUNTER=1, every actual processor run
+// (cache miss path) increments globalThis.__mediaProcessCount.
+function bumpCounter() {
+  if (process.env.MEDIA_TEST_COUNTER === '1') {
+    globalThis.__mediaProcessCount = (globalThis.__mediaProcessCount || 0) + 1;
+  }
+}
+
+// Astro's CLI calls process.exit() which skips 'beforeExit'; use 'exit' with
+// synchronous I/O instead so the counter file is always written.
+if (process.env.MEDIA_TEST_COUNTER === '1' && !globalThis.__mediaCounterHook) {
+  globalThis.__mediaCounterHook = true;
+  globalThis.__mediaProcessCount = 0;
+  process.once('exit', () => {
+    try {
+      const out = pathResolve('.cache/media-counter.json');
+      mkdirSync(pathDirname(out), { recursive: true });
+      writeFileSync(out, JSON.stringify({ count: globalThis.__mediaProcessCount || 0 }));
+    } catch { /* ignore write failures */ }
+  });
+}
 
 export const PROCESSOR_VERSION = 1;
 
@@ -64,6 +87,7 @@ export async function processHeic(srcPath, cacheRoot) {
     if (meta.cacheKey === key) return meta;
   }
 
+  bumpCounter();
   await mkdir(dir, { recursive: true });
 
   // Decode HEIC HEVC → PNG via ffmpeg (sharp's libheif lacks HEVC decoder)
@@ -127,6 +151,7 @@ export async function processMov(srcPath, cacheRoot) {
     if (meta.cacheKey === key) return meta;
   }
 
+  bumpCounter();
   await mkdir(dir, { recursive: true });
   const hevcOut = join(dir, 'clip.hevc.mp4');
   const h264Out = join(dir, 'clip.h264.mp4');
