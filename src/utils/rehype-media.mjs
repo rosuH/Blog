@@ -77,6 +77,16 @@ function livePhotoNode({ stillKey, videoKey, alt, width, height, products }) {
   });
 }
 
+function generatedPictureNode(payload) {
+  return pictureNode({
+    key: payload.stillKey,
+    alt: payload.alt,
+    width: payload.width,
+    height: payload.height,
+    products: payload.products,
+  });
+}
+
 function isWhitespace(node) {
   return node.type === 'text' && /^\s*$/.test(node.value || '');
 }
@@ -139,17 +149,12 @@ export default function rehypeMedia() {
         };
         return;
       }
-      const node2 = payload.kind === 'livephoto'
+      const picture = generatedPictureNode(payload);
+      const figure = payload.kind === 'livephoto'
         ? livePhotoNode(payload)
-        : figureNode([pictureNode({
-          key: payload.stillKey,
-          alt: payload.alt,
-          width: payload.width,
-          height: payload.height,
-          products: payload.products,
-        })], payload.alt, 'media-figure media-figure--generated');
-      if (replaceStandaloneParagraph(parent, index, grandparent, parentIndex, node2)) return;
-      parent.children[index] = node2;
+        : figureNode([picture], payload.alt, 'media-figure media-figure--generated');
+      if (replaceStandaloneParagraph(parent, index, grandparent, parentIndex, figure)) return;
+      parent.children[index] = picture;
     });
   };
 }
