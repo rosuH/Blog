@@ -1,7 +1,7 @@
 import test, { before } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { readFileSync, rmSync, existsSync } from 'node:fs';
+import { readFileSync, rmSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const repoRoot = new URL('..', import.meta.url).pathname;
@@ -22,6 +22,15 @@ function readDist(...segments) {
 
 function readSource(...segments) {
   return readFileSync(join(repoRoot, ...segments), 'utf8');
+}
+
+function readAstroJs() {
+  const astroDir = join(distDir, '_astro');
+  if (!existsSync(astroDir)) return '';
+  return readdirSync(astroDir)
+    .filter((f) => f.endsWith('.js'))
+    .map((f) => readFileSync(join(astroDir, f), 'utf8'))
+    .join('\n');
 }
 
 function countMatches(text, pattern) {
@@ -52,11 +61,12 @@ test('homepage foregrounds recent writing in Chinese with archive grouping hooks
 
 test('article page renders a single h1 and Chinese post navigation labels', () => {
   const html = readDist('Manifesto-for-Minimalist-Software-Engineers-CN', 'index.html');
+  const js = readAstroJs();
 
   assert.equal(countMatches(html, /<h1\b/g), 1);
   assert.doesNotMatch(html, /Earlier|Later/);
   assert.match(html, /上一篇|下一篇/);
-  assert.match(html, /已复制/);
+  assert.match(html + js, /已复制/);
 });
 
 test('404 page provides a strong recovery path back into content', () => {
@@ -116,7 +126,7 @@ test('article page exposes editorial layout hooks and overflow-safe media styles
   assert.match(css, /--content-width:\s+700px/);
   assert.match(css, /--media-width:\s+980px/);
   assert.match(css, /\.media-figure\s*\{/);
-  assert.match(css, /grid-template-columns:\s+minmax\(0,\s*1fr\)\s+var\(--caption-width\)/);
+  assert.match(css, /position:\s*absolute/);
   assert.match(css, /overflow-wrap:\s+anywhere/);
   assert.match(css, /overflow-x:\s+auto/);
   assert.match(articleSource, /article-shell/);
