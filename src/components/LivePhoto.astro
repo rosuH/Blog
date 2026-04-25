@@ -1,0 +1,177 @@
+---
+interface Props {
+  hash: string;
+  alt: string;
+  width: number;
+  height: number;
+  products: {
+    still_1x_avif: string;
+    still_1x_webp: string;
+    still_1x_jpg: string;
+    still_2x_avif?: string;
+    still_2x_webp?: string;
+    still_2x_jpg?: string;
+    video_hevc: string;
+    video_h264: string;
+  };
+}
+import Picture from './Picture.astro';
+
+const { hash, alt, width, height, products } = Astro.props;
+const base = `/_media/${hash}`;
+---
+<figure class="livephoto" data-livephoto data-state="idle" style={`aspect-ratio: ${width} / ${height};`}>
+  <Picture hash={hash} alt={alt} width={width} height={height} products={products} />
+  <video
+    class="livephoto-video"
+    data-lp-video
+    muted
+    playsinline
+    preload="none"
+    width={width}
+    height={height}
+    aria-hidden="true"
+  >
+    <source src={`${base}/${products.video_hevc}`} type='video/mp4; codecs=hvc1' />
+    <source src={`${base}/${products.video_h264}`} type="video/mp4" />
+  </video>
+  <button type="button" class="livephoto-badge" aria-label="Live Photo — 悬停或长按播放">
+    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+      <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.2" />
+      <circle cx="8" cy="8" r="3.6" fill="none" stroke="currentColor" stroke-width="1.2" />
+      <circle cx="8" cy="8" r="1.4" fill="currentColor" class="livephoto-dot" />
+    </svg>
+    <span>LIVE</span>
+  </button>
+</figure>
+
+<style>
+  .livephoto {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--code-bg);
+  }
+  .livephoto :global(picture),
+  .livephoto :global(picture img),
+  .livephoto-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .livephoto-video {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.18s ease-out;
+    pointer-events: none;
+  }
+  .livephoto[data-state="playing"] :global(picture) {
+    opacity: 0;
+    transition: opacity 0.18s ease-out;
+  }
+  .livephoto[data-state="playing"] .livephoto-video {
+    opacity: 1;
+  }
+  .livephoto-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px 4px 8px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px) saturate(1.4);
+    -webkit-backdrop-filter: blur(8px) saturate(1.4);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    user-select: none;
+  }
+  :global(html.dark) .livephoto-badge {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--bg);
+  }
+  .livephoto-badge:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .livephoto[data-state="playing"] .livephoto-dot {
+    animation: livephoto-pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes livephoto-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .livephoto[data-state="playing"] :global(picture),
+    .livephoto-video {
+      transition: none;
+    }
+    .livephoto[data-state="playing"] .livephoto-dot {
+      animation: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    if (window.__livephotoBound) return;
+    window.__livephotoBound = true;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('[data-livephoto]').forEach((fig) => {
+      const video = fig.querySelector('[data-lp-video]');
+      const badge = fig.querySelector('.livephoto-badge');
+      if (!video || !badge) return;
+      let pressTimer = 0;
+      const start = () => {
+        if (fig.dataset.state === 'playing') return;
+        fig.dataset.state = 'playing';
+        try { video.currentTime = 0; } catch (e) {}
+        const p = video.play();
+        if (p && p.catch) p.catch(() => { fig.dataset.state = 'idle'; });
+      };
+      const stop = () => {
+        video.pause();
+        try { video.currentTime = 0; } catch (e) {}
+        fig.dataset.state = 'idle';
+      };
+      video.addEventListener('ended', stop);
+
+      if (reduce) {
+        badge.addEventListener('click', () => {
+          fig.dataset.state === 'playing' ? stop() : start();
+        });
+      } else {
+        fig.addEventListener('mouseenter', start);
+        fig.addEventListener('mouseleave', stop);
+        fig.addEventListener('pointerdown', (e) => {
+          if (e.pointerType !== 'touch') return;
+          pressTimer = setTimeout(start, 200);
+        });
+        ['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) => {
+          fig.addEventListener(ev, () => { clearTimeout(pressTimer); stop(); });
+        });
+        badge.addEventListener('keydown', (e) => {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            fig.dataset.state === 'playing' ? stop() : start();
+          }
+        });
+      }
+
+      const io = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting && fig.dataset.state === 'playing') stop();
+      }, { rootMargin: '200px' });
+      io.observe(fig);
+    });
+  })();
+</script>
