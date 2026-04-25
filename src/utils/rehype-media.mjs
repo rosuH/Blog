@@ -90,10 +90,25 @@ export default function rehypeMedia() {
         if (props.decoding == null) props.decoding = 'async';
         return;
       }
+      // Marker is set — this img MUST be replaced. If anything goes wrong
+      // (missing payload, parse error), drop the node entirely rather than
+      // leaving a broken <img src=".heic"> in the output.
+      if (!parent) return;
       const raw = props.dataMedia ?? props['data-media'];
-      if (!raw || !parent) return;
-      let payload;
-      try { payload = JSON.parse(raw); } catch { return; }
+      let payload = null;
+      if (raw) {
+        try { payload = JSON.parse(raw); } catch { payload = null; }
+      }
+      if (!payload) {
+        // Replace with a comment instead of splicing so the walker's index
+        // stays correct for any siblings. The comment is a diagnostic
+        // breadcrumb and renders as nothing visible.
+        parent.children[index] = {
+          type: 'comment',
+          value: ' rehype-media: media payload missing or unparseable ',
+        };
+        return;
+      }
       const node2 = payload.kind === 'livephoto'
         ? livePhotoNode(payload)
         : pictureNode({
