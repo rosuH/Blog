@@ -7,6 +7,16 @@ function h(tag, props = {}, children = []) {
 }
 function text(value) { return { type: 'text', value }; }
 
+function captionNode(alt) {
+  if (typeof alt !== 'string' || alt.trim() === '') return null;
+  return h('figcaption', {}, [text(alt.trim())]);
+}
+
+function figureNode(children, alt, className = 'media-figure', props = {}) {
+  const caption = captionNode(alt);
+  return h('figure', { class: className, ...props }, caption ? [...children, caption] : children);
+}
+
 function pictureNode({ key, alt, width, height, products, loading = 'lazy' }) {
   const base = `/_media/${key}`;
   const has2x = !!products.still_2x_jpg;
@@ -60,34 +70,54 @@ function livePhotoNode({ stillKey, videoKey, alt, width, height, products }) {
     },
     h('span', {}, [text('LIVE')]),
   ]);
-  return h('figure', {
-    class: 'livephoto',
+  return figureNode([picture, video, badge], alt, 'livephoto media-figure', {
     'data-livephoto': '',
     'data-state': 'idle',
     style: `aspect-ratio: ${width} / ${height};`,
-  }, [picture, video, badge]);
+  });
 }
 
-function walk(node, visit, parent = null, index = -1) {
+function isWhitespace(node) {
+  return node.type === 'text' && /^\s*$/.test(node.value || '');
+}
+
+function paragraphHasOnlyChild(paragraph, child) {
+  if (!paragraph || paragraph.type !== 'element' || paragraph.tagName !== 'p') return false;
+  return paragraph.children.every((node) => node === child || isWhitespace(node));
+}
+
+function replaceStandaloneParagraph(parent, index, grandparent, parentIndex, replacement) {
+  if (parent && paragraphHasOnlyChild(parent, parent.children[index]) && grandparent && parentIndex >= 0) {
+    grandparent.children[parentIndex] = replacement;
+    return true;
+  }
+  return false;
+}
+
+function walk(node, visit, parent = null, index = -1, grandparent = null, parentIndex = -1) {
   if (!node || typeof node !== 'object') return;
-  visit(node, parent, index);
+  visit(node, parent, index, grandparent, parentIndex);
   if (Array.isArray(node.children)) {
     for (let i = 0; i < node.children.length; i++) {
-      walk(node.children[i], visit, node, i);
+      walk(node.children[i], visit, node, i, parent, index);
     }
   }
 }
 
 export default function rehypeMedia() {
   return (tree) => {
-    walk(tree, (node, parent, index) => {
+    walk(tree, (node, parent, index, grandparent, parentIndex) => {
       if (node.type !== 'element' || node.tagName !== 'img') return;
       // Defaults from non-HEIC pass-through (already preserved by remark)
       const props = node.properties || {};
       if (!props['dataMediaMarker'] && !props['data-media-marker']) {
         // ensure loading/decoding hints (works for property-cased and dash-cased)
+        if (props.alt == null) props.alt = '';
         if (props.loading == null) props.loading = 'lazy';
         if (props.decoding == null) props.decoding = 'async';
+        if (parent?.tagName === 'a') return;
+        const figure = figureNode([node], props.alt);
+        replaceStandaloneParagraph(parent, index, grandparent, parentIndex, figure);
         return;
       }
       // Marker is set — this img MUST be replaced. If anything goes wrong
@@ -111,13 +141,14 @@ export default function rehypeMedia() {
       }
       const node2 = payload.kind === 'livephoto'
         ? livePhotoNode(payload)
-        : pictureNode({
-            key: payload.stillKey,
-            alt: payload.alt,
-            width: payload.width,
-            height: payload.height,
-            products: payload.products,
-          });
+        : figureNode([pictureNode({
+          key: payload.stillKey,
+          alt: payload.alt,
+          width: payload.width,
+          height: payload.height,
+          products: payload.products,
+        })], payload.alt, 'media-figure media-figure--generated');
+      if (replaceStandaloneParagraph(parent, index, grandparent, parentIndex, node2)) return;
       parent.children[index] = node2;
     });
   };

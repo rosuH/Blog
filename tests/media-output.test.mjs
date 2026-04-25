@@ -29,6 +29,12 @@ test('HEIC reference is replaced with <picture> + AVIF/WebP/JPEG sources', async
   assert.match(html, /<img[^>]+src="\/_media\/[a-f0-9]{16}-v\d+\/img-\d+w\.jpg"[^>]+width="\d+"[^>]+height="\d+"/);
 });
 
+test('HEIC reference renders as generated figure with caption from alt text', async () => {
+  const html = await readFile(post.articleHtmlPath, 'utf8');
+  assert.match(html, /<figure[^>]+class="media-figure media-figure--generated"[\s\S]*<picture>[\s\S]*<figcaption>sample-heic<\/figcaption>[\s\S]*<\/figure>/);
+  assert.match(html, /<img[^>]+alt="sample-heic"/);
+});
+
 test('Test post does NOT (yet) render as Live Photo (no .mov pair)', async () => {
   const html = await readFile(post.articleHtmlPath, 'utf8');
   // Match the actual figure markup, not the bare attribute name (which appears
@@ -43,6 +49,26 @@ test('Non-HEIC images still get loading=lazy and decoding=async', async () => {
   // for non-HEIC inputs). Match by alt — Astro's image optimizer rewrites the
   // src to a hashed /_astro/*.webp, so the .png filename isn't in the markup.
   assert.match(html, /<img[^>]+alt="sample-png"[^>]+loading="lazy"[^>]+decoding="async"|<img[^>]+alt="sample-png"[^>]+decoding="async"[^>]+loading="lazy"/);
+});
+
+test('Standalone PNG renders as figure with caption from alt text', async () => {
+  const html = await readFile(post.articleHtmlPath, 'utf8');
+  assert.match(html, /<figure[^>]+class="media-figure"[\s\S]*<img[^>]+alt="sample-png"[\s\S]*<figcaption>sample-png<\/figcaption>[\s\S]*<\/figure>/);
+});
+
+test('Standalone empty-alt PNG renders as figure without caption', async () => {
+  const html = await readFile(post.articleHtmlPath, 'utf8');
+  const emptyAltFigure = [...html.matchAll(/<figure[^>]+class="media-figure"[\s\S]*?<\/figure>/g)]
+    .map((match) => match[0])
+    .find((figure) => !figure.includes('<figcaption>'));
+  assert.ok(emptyAltFigure, 'empty-alt standalone PNG should render as a media figure');
+  assert.doesNotMatch(emptyAltFigure, /<figcaption>/);
+});
+
+test('Linked PNG remains linked and is not promoted to a figure', async () => {
+  const html = await readFile(post.articleHtmlPath, 'utf8');
+  assert.match(html, /<a href="https:\/\/example\.com\/"><img[^>]+alt="linked-png"[\s\S]*?<\/a>/);
+  assert.doesNotMatch(html, /<figure[^>]*>[\s\S]*<a href="https:\/\/example\.com\/"><img[^>]+alt="linked-png"[\s\S]*?<\/a>[\s\S]*<\/figure>/);
 });
 
 test('Generated derivative files exist on disk', async () => {
@@ -67,11 +93,12 @@ test('When a same-basename .mov exists, output renders as Live Photo', async () 
   try {
     execFileSync('npm', ['run', 'build', '--', '--force'], { stdio: 'pipe' });
     const html = await readFile(post.articleHtmlPath, 'utf8');
-    assert.match(html, /<figure[^>]+class="livephoto"/);
+    assert.match(html, /<figure[^>]+class="livephoto media-figure"/);
     assert.match(html, /<figure[^>]+data-livephoto/);
     assert.match(html, /<source[^>]+type="video\/mp4; codecs=&#x22;hvc1&#x22;"|<source[^>]+codecs="hvc1"/);
     assert.match(html, /<source[^>]+\.h264\.mp4[^>]*type="video\/mp4"|<source[^>]+type="video\/mp4"[^>]+\.h264\.mp4/);
     assert.match(html, /<button[^>]+class="livephoto-badge"/);
+    assert.match(html, /<figcaption>sample-heic<\/figcaption>/);
   } finally {
     const { unlink } = await import('node:fs/promises');
     await unlink(`${post.dir}/sample.mov`);
