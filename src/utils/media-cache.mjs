@@ -190,11 +190,19 @@ export async function processMov(srcPath, cacheRoot) {
   return result;
 }
 
+// Copies only the product files listed in meta.json into public/_media/<hash>/.
+// Internal cache artifacts like source.png (HEIC decode intermediate) and
+// meta.json are intentionally NOT published.
 export async function publishToPublic(hash, cacheRoot, publicRoot) {
   const src = join(cacheRoot, hash);
   const dst = join(publicRoot, '_media', hash);
+  const metaPath = join(src, 'meta.json');
+  const meta = JSON.parse(await readFile(metaPath, 'utf8'));
   await mkdir(dst, { recursive: true });
-  await cp(src, dst, { recursive: true, force: true });
+  for (const filename of Object.values(meta.products || {})) {
+    if (!filename) continue;
+    await cp(join(src, filename), join(dst, filename), { force: true });
+  }
 }
 
 export async function gcCache(cacheRoot, keepSet, { maxAgeDays = 60 } = {}) {
