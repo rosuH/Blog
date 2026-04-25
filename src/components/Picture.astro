@@ -1,0 +1,42 @@
+---
+interface Props {
+  hash: string;
+  alt: string;
+  width: number;
+  height: number;
+  products: {
+    still_1x_avif: string;
+    still_1x_webp: string;
+    still_1x_jpg: string;
+    still_2x_avif?: string;
+    still_2x_webp?: string;
+    still_2x_jpg?: string;
+  };
+  loading?: 'lazy' | 'eager';
+}
+
+const { hash, alt, width, height, products, loading = 'lazy' } = Astro.props;
+const base = `/_media/${hash}`;
+const has2x = !!products.still_2x_jpg;
+
+const avifSrcset = has2x
+  ? `${base}/${products.still_1x_avif} 1x, ${base}/${products.still_2x_avif} 2x`
+  : `${base}/${products.still_1x_avif} 1x`;
+const webpSrcset = has2x
+  ? `${base}/${products.still_1x_webp} 1x, ${base}/${products.still_2x_webp} 2x`
+  : `${base}/${products.still_1x_webp} 1x`;
+const jpgSrcset = has2x ? `${base}/${products.still_2x_jpg} 2x` : undefined;
+---
+<picture>
+  <source type="image/avif" srcset={avifSrcset} />
+  <source type="image/webp" srcset={webpSrcset} />
+  <img
+    src={`${base}/${products.still_1x_jpg}`}
+    srcset={jpgSrcset}
+    width={width}
+    height={height}
+    alt={alt}
+    loading={loading}
+    decoding="async"
+  />
+</picture>
