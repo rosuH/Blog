@@ -81,12 +81,15 @@ MediaCache（read-through）
 ### 缓存键
 
 ```
-hash = sha256(file_bytes).hex.slice(0,16) + ":" + PROCESSOR_VERSION
+hash     = sha256(file_bytes).hex.slice(0, 16)        // 16 hex chars, source-bytes only
+cacheKey = `${hash}-v${PROCESSOR_VERSION}`             // e.g. be7f0ffec49236c2-v1
 ```
 
-`PROCESSOR_VERSION = 1`。修改输出策略（质量/尺寸/编解码参数）时 bump version → 旧缓存失效。
+缓存目录和发布 URL 都用 `cacheKey` 作为目录名（`.cache/media/<cacheKey>/`、`/_media/<cacheKey>/`）。bump `PROCESSOR_VERSION` 之后旧目录变孤儿（GC 60 天后清掉），新目录从头构建，CDN/浏览器看到新 URL 自然失效旧缓存。
 
-`.cache/media/<hash>/meta.json`：
+`PROCESSOR_VERSION = 1`。修改输出策略（质量/尺寸/编解码参数）时 bump version。
+
+`.cache/media/<cacheKey>/meta.json`：
 ```json
 {
   "version": 1,
@@ -303,7 +306,7 @@ for (const fig of document.querySelectorAll('[data-livephoto]')) {
 - 徽章是真实 `<button type="button">`，可 tab focus，aria-label 说明用法
 - `<video aria-hidden="true">` — 视觉等价由 `<img alt>` 提供
 - `prefers-reduced-motion: reduce` → 自动 hover 播放禁用，徽章变成可点切换
-- 移动端 long-press 时段拦截 `contextmenu`，避免与系统「保存图片」冲突
+- 当前实现**不**额外拦截移动端 `contextmenu`；系统「保存图片」等原生菜单保持默认行为
 
 ## CI 集成
 

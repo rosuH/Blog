@@ -16,8 +16,8 @@ import {
 const CACHE_ROOT = fileURLToPath(new URL('../../.cache/media/', import.meta.url));
 const PUBLIC_ROOT = fileURLToPath(new URL('../../public/', import.meta.url));
 
-const referencedHashes = new Set();
-export function getReferencedHashes() { return referencedHashes; }
+const referencedKeys = new Set();
+export function getReferencedHashes() { return referencedKeys; }
 
 function walk(node, visit) {
   if (!node || typeof node !== 'object') return;
@@ -40,7 +40,7 @@ function scheduleGc() {
   // with the synchronous GC variant.
   process.once('exit', () => {
     try {
-      gcCacheSync(CACHE_ROOT, referencedHashes, { maxAgeDays: 60 });
+      gcCacheSync(CACHE_ROOT, referencedKeys, { maxAgeDays: 60 });
     } catch (err) {
       console.warn('[media] GC skipped:', err.message);
     }
@@ -72,8 +72,8 @@ export default function remarkMedia() {
 
     for (const { node, heicPath } of tasks) {
       const stillMeta = await processHeic(heicPath, CACHE_ROOT);
-      referencedHashes.add(stillMeta.hash);
-      await publishToPublic(stillMeta.hash, CACHE_ROOT, PUBLIC_ROOT);
+      referencedKeys.add(stillMeta.cacheKey);
+      await publishToPublic(stillMeta.cacheKey, CACHE_ROOT, PUBLIC_ROOT);
 
       const movPath = join(
         dirname(heicPath),
@@ -82,23 +82,25 @@ export default function remarkMedia() {
       let videoMeta = null;
       if (existsSync(movPath)) {
         videoMeta = await processMov(movPath, CACHE_ROOT);
-        referencedHashes.add(videoMeta.hash);
-        await publishToPublic(videoMeta.hash, CACHE_ROOT, PUBLIC_ROOT);
+        referencedKeys.add(videoMeta.cacheKey);
+        await publishToPublic(videoMeta.cacheKey, CACHE_ROOT, PUBLIC_ROOT);
       }
 
       const payload = {
         kind: videoMeta ? 'livephoto' : 'heic',
-        stillHash: stillMeta.hash,
+        stillKey: stillMeta.cacheKey,
         width: stillMeta.dimensions.width,
         height: stillMeta.dimensions.height,
         products: { ...stillMeta.products, ...(videoMeta?.products ?? {}) },
-        // For livephoto, video files live under videoMeta.hash dir
-        videoHash: videoMeta?.hash ?? null,
+        // For livephoto, video files live under videoMeta.cacheKey dir
+        videoKey: videoMeta?.cacheKey ?? null,
         alt: node.alt ?? '',
       };
       node.data.hProperties['data-media'] = JSON.stringify(payload);
-      // Remove the URL so rehype doesn't double-render the original .heic <img>
       node.data.hProperties['data-media-marker'] = '1';
+      // Clear the .heic URL so if rehype-media's marker handling somehow
+      // misses the node, we don't fall through to a broken <img src=".heic">.
+      node.url = '';
     }
   };
 }

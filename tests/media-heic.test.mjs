@@ -28,7 +28,7 @@ test('processHeic produces avif/webp/jpg at 1x and 2x sizes with meta.json', asy
     assert.ok(result.products.still_2x_avif?.endsWith('.avif'));
 
     // All product files exist on disk
-    const dir = join(cacheRoot, result.hash);
+    const dir = join(cacheRoot, result.cacheKey);
     for (const filename of Object.values(result.products)) {
       if (!filename) continue;
       const s = await stat(join(dir, filename));
@@ -51,7 +51,7 @@ test('processHeic is a cache hit on repeated call (no file rewrites)', async () 
 
   try {
     const r1 = await processHeic(FIXTURE, cacheRoot);
-    const dir = join(cacheRoot, r1.hash);
+    const dir = join(cacheRoot, r1.cacheKey);
     // Snapshot mtimes of every product + meta.json before second call
     const tracked = ['meta.json', ...Object.values(r1.products).filter(Boolean)];
     const before = Object.fromEntries(
