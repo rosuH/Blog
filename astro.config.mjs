@@ -3,8 +3,8 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
-import rehypeImagePerformance from './src/utils/rehype-image-performance.mjs';
-import remarkImagePerformance from './src/utils/remark-image-performance.mjs';
+import rehypeMedia from './src/utils/rehype-media.mjs';
+import remarkMedia from './src/utils/remark-media.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -26,8 +26,8 @@ export default defineConfig({
       wrap: true,
     },
     // 数学公式
-    remarkPlugins: [remarkMath, remarkImagePerformance],
-    rehypePlugins: [rehypeImagePerformance, [rehypeKatex, { strict: false }]],
+    remarkPlugins: [remarkMath, remarkMedia],
+    rehypePlugins: [rehypeMedia, [rehypeKatex, { strict: false }]],
   },
 
   // 构建输出
