@@ -5,10 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const FIXTURE = fileURLToPath(new URL(
-  '../content/posts/2026-04-25-year-end-summary/tea-heic-with-live-photo.heic',
-  import.meta.url,
-));
+const FIXTURE = fileURLToPath(new URL('./fixtures/sample.heic', import.meta.url));
 
 test('processHeic produces avif/webp/jpg at 1x and 2x sizes with meta.json', async () => {
   const { processHeic } = await import('../src/utils/media-cache.mjs');
