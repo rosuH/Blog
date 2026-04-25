@@ -39,9 +39,11 @@ jobs:
 
       - name: Verify media tooling
         run: |
+          # ffmpeg: required for HEIC HEVC decoding AND for MOV transcode (libx264).
           ffmpeg -hide_banner -codecs 2>&1 | grep -E 'libx264' >/dev/null \
             || (echo "ffmpeg missing libx264"; exit 1)
-          node -e "import('sharp').then(s => { if (!s.default.format.heif?.input?.file) { console.error('sharp HEIF decoder missing'); process.exit(1); } })"
+          # sharp: required for AVIF/WebP/JPEG output. AVIF is served via the heif format (output.alias contains 'avif').
+          node -e "import('sharp').then(s => { if (!s.default.format.heif?.output?.file) { console.error('sharp HEIF/AVIF output missing'); process.exit(1); } })"
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v4
