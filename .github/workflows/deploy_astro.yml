@@ -29,6 +29,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install ffmpeg
+        # ubuntu-latest no longer pre-installs ffmpeg. The HEIC pipeline
+        # requires it for HEVC decoding (and for MOV H.264 transcode via
+        # libx264, which the apt package includes by default).
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
       - name: Cache media derivatives
         uses: actions/cache@v4
         with:
