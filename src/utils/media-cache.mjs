@@ -1,7 +1,7 @@
 // SHA-256 content-addressed cache for derived media (HEIC stills, MOV clips).
 // Bumping PROCESSOR_VERSION invalidates all existing cache entries.
 import { createHash } from 'node:crypto';
-import { createReadStream, writeFileSync, mkdirSync } from 'node:fs';
+import { createReadStream, writeFileSync, mkdirSync, readdirSync, statSync, rmSync } from 'node:fs';
 import { resolve as pathResolve, dirname as pathDirname } from 'node:path';
 
 // Test instrumentation: when MEDIA_TEST_COUNTER=1, every actual processor run
@@ -213,6 +213,32 @@ export async function gcCache(cacheRoot, keepSet, { maxAgeDays = 60 } = {}) {
       const s = await stat(dirPath);
       if (s.mtimeMs < cutoff) {
         await rm(dirPath, { recursive: true, force: true });
+      }
+    } catch {
+      // ignore individual failures
+    }
+  }
+}
+
+// Synchronous variant for use in process.exit handlers.
+// Astro calls process.exit(), which skips beforeExit and async work in 'exit'
+// is unreliable, so the GC scheduler in remark-media.mjs needs sync I/O.
+export function gcCacheSync(cacheRoot, keepSet, { maxAgeDays = 60 } = {}) {
+  let entries;
+  try {
+    entries = readdirSync(cacheRoot, { withFileTypes: true });
+  } catch {
+    return;
+  }
+  const cutoff = Date.now() - maxAgeDays * 86400 * 1000;
+  for (const ent of entries) {
+    if (!ent.isDirectory()) continue;
+    if (keepSet.has(ent.name)) continue;
+    const dirPath = join(cacheRoot, ent.name);
+    try {
+      const s = statSync(dirPath);
+      if (s.mtimeMs < cutoff) {
+        rmSync(dirPath, { recursive: true, force: true });
       }
     } catch {
       // ignore individual failures

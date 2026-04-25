@@ -10,7 +10,7 @@ import {
   processHeic,
   processMov,
   publishToPublic,
-  gcCache,
+  gcCacheSync,
 } from './media-cache.mjs';
 
 const CACHE_ROOT = fileURLToPath(new URL('../../.cache/media/', import.meta.url));
@@ -36,9 +36,11 @@ let _gcScheduled = false;
 function scheduleGc() {
   if (_gcScheduled) return;
   _gcScheduled = true;
-  process.once('beforeExit', async () => {
+  // Astro CLI calls process.exit() which skips 'beforeExit', so use 'exit'
+  // with the synchronous GC variant.
+  process.once('exit', () => {
     try {
-      await gcCache(CACHE_ROOT, referencedHashes, { maxAgeDays: 60 });
+      gcCacheSync(CACHE_ROOT, referencedHashes, { maxAgeDays: 60 });
     } catch (err) {
       console.warn('[media] GC skipped:', err.message);
     }
