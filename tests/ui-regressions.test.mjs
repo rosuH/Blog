@@ -111,6 +111,8 @@ test('article page exposes editorial layout hooks and overflow-safe media styles
   assert.match(html, /class="article-header"/);
   assert.match(html, /class="article-title"/);
   assert.match(html, /class="article-date"/);
+  assert.doesNotMatch(html, /__ASTRO_IMAGE_/);
+  assert.match(html, /<img[^>]+alt="澳门大三巴牌坊"/);
   assert.match(css, /--content-width:\s+700px/);
   assert.match(css, /--media-width:\s+980px/);
   assert.match(css, /\.media-figure\s*\{/);
