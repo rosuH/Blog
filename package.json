@@ -11,7 +11,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "npm run build && node --test --test-concurrency=1 tests/performance-output.test.mjs tests/media-output.test.mjs",
+    "test": "npm run build && node --test --test-concurrency=1 tests/build-cache-config.test.mjs tests/performance-output.test.mjs tests/media-output.test.mjs && npm run test:ui",
+    "test:ui": "node --test tests/ui-regressions.test.mjs",
     "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "dependencies": {

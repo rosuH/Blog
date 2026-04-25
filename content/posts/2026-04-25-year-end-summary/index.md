@@ -223,7 +223,7 @@ AICommit 到今天依然在更新，不过在 24 年就已经 Fully Vibe Coding 
 
 时间是不会暂停的，我们去了澳门。
 
-![澳门大三巴牌坊](2024-The-Ruins-of-Saint-Paul's.jpeg)
+![澳门大三巴牌坊](2024-The-Ruins-of-Saint-Pauls.jpeg)
 
 
 在那里度过了 23 年的最后一天，迎来了 2024。

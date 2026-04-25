@@ -1,7 +1,7 @@
 import test, { before } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { readFileSync, rmSync, existsSync } from 'node:fs';
+import { readFileSync, rmSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const repoRoot = new URL('..', import.meta.url).pathname;
@@ -22,6 +22,15 @@ function readDist(...segments) {
 
 function readSource(...segments) {
   return readFileSync(join(repoRoot, ...segments), 'utf8');
+}
+
+function readAstroJs() {
+  const astroDir = join(distDir, '_astro');
+  if (!existsSync(astroDir)) return '';
+  return readdirSync(astroDir)
+    .filter((f) => f.endsWith('.js'))
+    .map((f) => readFileSync(join(astroDir, f), 'utf8'))
+    .join('\n');
 }
 
 function countMatches(text, pattern) {
@@ -52,11 +61,12 @@ test('homepage foregrounds recent writing in Chinese with archive grouping hooks
 
 test('article page renders a single h1 and Chinese post navigation labels', () => {
   const html = readDist('Manifesto-for-Minimalist-Software-Engineers-CN', 'index.html');
+  const js = readAstroJs();
 
   assert.equal(countMatches(html, /<h1\b/g), 1);
   assert.doesNotMatch(html, /Earlier|Later/);
   assert.match(html, /上一篇|下一篇/);
-  assert.match(html, /已复制/);
+  assert.match(html + js, /已复制/);
 });
 
 test('404 page provides a strong recovery path back into content', () => {
@@ -85,8 +95,9 @@ test('bamboo shadow uses JS wind physics instead of global keyframe or SMIL tran
   assert.match(source, /visibilitychange/);
   assert.match(source, /scheduleNextGust/);
   assert.match(source, /gustEnvelope/);
-  assert.match(source, /bamboo-moonlight--halo/);
-  assert.match(source, /bamboo-moonlight--beam/);
+  assert.match(source, /class="bamboo-moonlight"/);
+  assert.match(source, /radial-gradient/);
+  assert.match(source, /mix-blend-mode:\s*soft-light/);
   assert.doesNotMatch(source, /@keyframes bamboo-gust/);
   assert.doesNotMatch(source, /animateTransform/);
 });
@@ -99,6 +110,26 @@ test('color system uses calmer paper, copper, and pine accents', () => {
   assert.match(css, /--support:\s+oklch\(47% 0\.11 265\)/);
   assert.match(css, /--bg:\s+oklch\(97\.7% 0\.006 85\)/);
   assert.match(homeSource, /home-section--recent/);
+});
+
+test('article page exposes editorial layout hooks and overflow-safe media styles', () => {
+  const html = readDist('2026-04-25-year-end-summary', 'index.html');
+  const articleSource = readSource('src', 'pages', '[slug].astro');
+  const css = readSource('src', 'styles', 'global.css');
+
+  assert.match(html, /class="article-shell"/);
+  assert.match(html, /class="article-header"/);
+  assert.match(html, /class="article-title"/);
+  assert.match(html, /class="article-date"/);
+  assert.doesNotMatch(html, /__ASTRO_IMAGE_/);
+  assert.match(html, /<img[^>]+alt="澳门大三巴牌坊"/);
+  assert.match(css, /--content-width:\s+700px/);
+  assert.match(css, /--media-width:\s+980px/);
+  assert.match(css, /\.media-figure\s*\{/);
+  assert.match(css, /position:\s*absolute/);
+  assert.match(css, /overflow-wrap:\s+anywhere/);
+  assert.match(css, /overflow-x:\s+auto/);
+  assert.match(articleSource, /article-shell/);
 });
 
 before(() => {
