@@ -70,10 +70,13 @@ function livePhotoNode({ stillKey, videoKey, alt, width, height, products }) {
     },
     h('span', {}, [text('LIVE')]),
   ]);
-  return figureNode([picture, video, badge], alt, 'livephoto media-figure', {
+  const frame = h('div', {
+    class: 'livephoto-frame',
+    style: `aspect-ratio: ${width} / ${height};`,
+  }, [picture, video, badge]);
+  return figureNode([frame], alt, 'livephoto media-figure media-figure--livephoto', {
     'data-livephoto': '',
     'data-state': 'idle',
-    style: `aspect-ratio: ${width} / ${height};`,
   });
 }
 
