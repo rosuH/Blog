@@ -6,7 +6,9 @@
 
 **Architecture:** Build-time pipeline. A SHA-256 content-addressed cache (`.cache/media/`) backs two processors: HEIC→AVIF/WebP/JPEG (sharp) and MOV→HEVC/H.264 MP4 (ffmpeg). New remark+rehype plugin pair detects HEIC images in markdown and rewrites them to `<picture>` (HEIC alone) or `<figure data-livephoto>` (HEIC + MOV) with prebuilt URLs. Cached derivatives are copied into `public/_media/<hash>/` and served by Astro. iOS-style "LIVE" badge with hover/long-press playback; fully muted; respects `prefers-reduced-motion`.
 
-**Tech Stack:** Astro 5, sharp ^0.33 (libvips with HEIF), system ffmpeg (libx264 required), Node.js 20 (`node:test`), GitHub Actions ubuntu-latest.
+**Tech Stack:** Astro 5, sharp ^0.33 (image resizing + AVIF/WebP/JPEG encoding), system ffmpeg (HEIC HEVC decoding + MOV processing — libx264 required), Node.js 20 (`node:test`), GitHub Actions ubuntu-latest.
+
+**HEIC decode note:** sharp's prebuilt libvips includes libheif but ships **without** the HEVC decoder plugin (libde265 is LGPL and excluded for binary-size/licensing reasons). iPhone HEIC files are almost always HEVC-compressed, so sharp cannot decode them directly. We use ffmpeg as the HEIC decoder front-end, producing a lossless PNG intermediate that sharp then re-encodes. This adds zero new system dependencies (ffmpeg is already required for MOV).
 
 **Reference:** [Spec](../specs/2026-04-25-heic-livephoto-design.md)
 
@@ -265,23 +267,38 @@ Expected: FAIL — `processHeic` not exported.
 
 - [ ] **Step 3: Implement `processHeic`**
 
-Append to `src/utils/media-cache.mjs`:
+Append to `src/utils/media-cache.mjs`. The HEIC pipeline is:
+1. ffmpeg decodes HEVC HEIC → lossless PNG in cache dir (`source.png`)
+2. sharp reads the PNG → resize → AVIF/WebP/JPEG outputs at 1×/2×
+3. PNG intermediate is kept (small overhead, regenerated only on cache miss)
 
 ```js
 import { mkdir, writeFile, readFile, access } from 'node:fs/promises';
 import { join, basename, extname } from 'node:path';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+const execFileP = promisify(execFile);
 
 let _sharp;
 async function getSharp() {
   if (_sharp) return _sharp;
   const mod = await import('sharp');
   _sharp = mod.default;
-  if (!_sharp.format.heif?.input?.file) {
-    throw new Error(
-      'sharp HEIF decoder unavailable. Need sharp >= 0.33 with libvips-heif (default prebuilt on macOS/linux x64/arm64).',
-    );
-  }
   return _sharp;
+}
+
+let _ffmpegOk;
+async function ensureFfmpeg() {
+  if (_ffmpegOk) return;
+  try {
+    const { stdout } = await execFileP('ffmpeg', ['-hide_banner', '-codecs']);
+    if (!/libx264/.test(stdout)) {
+      throw new Error('ffmpeg present but missing libx264 encoder.');
+    }
+    _ffmpegOk = true;
+  } catch (err) {
+    throw new Error(`ffmpeg not available or unusable: ${err.message}`);
+  }
 }
 
 async function exists(p) {
@@ -289,6 +306,7 @@ async function exists(p) {
 }
 
 export async function processHeic(srcPath, cacheRoot) {
+  await ensureFfmpeg();
   const sharp = await getSharp();
   const hash = await hashSource(srcPath);
   const key = cacheKeyFor(hash);
@@ -302,7 +320,15 @@ export async function processHeic(srcPath, cacheRoot) {
 
   await mkdir(dir, { recursive: true });
 
-  const img = sharp(srcPath).rotate();
+  // Decode HEIC HEVC → PNG via ffmpeg (sharp's libheif lacks HEVC decoder)
+  const pngPath = join(dir, 'source.png');
+  await execFileP('ffmpeg', [
+    '-y', '-i', srcPath,
+    '-update', '1', '-frames:v', '1',
+    pngPath,
+  ]);
+
+  const img = sharp(pngPath).rotate();
   const metadata = await img.metadata();
   const w1 = Math.min(metadata.width, 1600);
   const w2 = metadata.width >= w1 * 2 ? w1 * 2 : null;
@@ -453,27 +479,9 @@ Expected: FAIL — `processMov` not exported.
 
 - [ ] **Step 3: Implement `processMov`**
 
-Append to `src/utils/media-cache.mjs`:
+Append to `src/utils/media-cache.mjs`. Note: `execFileP` and `ensureFfmpeg()` were already added in Task 3 — do NOT redeclare them. Just use the existing helpers.
 
 ```js
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
-const execFileP = promisify(execFile);
-
-let _ffmpegOk;
-async function ensureFfmpeg() {
-  if (_ffmpegOk) return;
-  try {
-    const { stdout } = await execFileP('ffmpeg', ['-hide_banner', '-codecs']);
-    if (!/libx264/.test(stdout)) {
-      throw new Error('ffmpeg present but missing libx264 encoder.');
-    }
-    _ffmpegOk = true;
-  } catch (err) {
-    throw new Error(`ffmpeg not available or unusable: ${err.message}`);
-  }
-}
-
 export async function processMov(srcPath, cacheRoot) {
   await ensureFfmpeg();
   const hash = await hashSource(srcPath);
