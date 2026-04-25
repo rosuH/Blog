@@ -252,6 +252,10 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
           video.addEventListener('ended', stop);
 
           if (reduce) {
+            // In reduced-motion mode, hover/long-press auto-play is suppressed
+            // and the badge becomes the primary click target. Update the label
+            // to reflect that behavior for screen-reader and keyboard users.
+            badge.setAttribute('aria-label', 'Live Photo — 点击播放');
             badge.addEventListener('click', () => {
               fig.dataset.state === 'playing' ? stop() : start();
             });

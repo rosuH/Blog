@@ -51,15 +51,14 @@ MediaCache（read-through）
   - 未命中 → 跑 HeicProcessor / MovProcessor → 写 .cache/media/<hash>/ → 复制
 ```
 
-### 模块边界
+### 模块边界（实际实现）
 
-- **`src/utils/media-cache.mjs`**：单一职责的缓存层。导出 `getOrBuild(sourcePath, kind)`，返回 `{ hash, products: { ... } }`。内部包含 HEIC processor + MOV processor。所有文件 IO 都在这里。
-- **`src/utils/remark-media.mjs`**：替换现有 `remark-image-performance.mjs`。两件事：(1) 给非 HEIC 的 `<img>` 加 `loading=lazy`/`decoding=async`（保持当前行为不退化）；(2) 检测 HEIC，把媒体元数据塞入节点 `data.hProperties.dataMedia`（JSON.stringified 字符串）。
-- **`src/utils/rehype-media.mjs`**：拿到 `data-media` 属性后展开成最终 `<picture>` 或 `<figure>` HTML 节点。替换现有 `rehype-image-performance.mjs`。
-- **`src/components/LivePhoto.astro`**：纯展示组件（接收 props，不做构建）。提供 HTML 结构 + scoped CSS + `is:inline` 行为脚本。
-- **`src/components/Picture.astro`**：纯 HEIC 静态图情况复用（也可以被未来其他图片管线复用）。
+- **`src/utils/media-cache.mjs`**：缓存层 + 处理函数集合。导出 `processHeic`、`processMov`、`publishToPublic`、`gcCache`/`gcCacheSync`、`hashSource`、`cacheKeyFor`、`PROCESSOR_VERSION`。原计划的 `getOrBuild(sourcePath, kind)` 单一入口未落地（拆成按介质类型分别调用更直接），保留为未来重构方向。所有文件 IO 都在这里。
+- **`src/utils/remark-media.mjs`**：替换现有 `remark-image-performance.mjs`。两件事：(1) 给非 HEIC 的 `<img>` 加 `loading=lazy`/`decoding=async`（保持当前行为不退化）；(2) 检测 HEIC，调用 `processHeic`/`processMov`/`publishToPublic`，把媒体元数据序列化进节点 `data.hProperties['data-media']`（JSON 字符串）+ 加 `data-media-marker` 标记。
+- **`src/utils/rehype-media.mjs`**：读取 `data-media-marker` 节点的 JSON payload，**直接发出**最终的 `<picture>` 或 `<figure data-livephoto>` hast 子树。替换现有 `rehype-image-performance.mjs`。
+- **`src/layouts/Layout.astro`**：承载 Live Photo 的全局 `<style is:global>` + `<script is:inline>`（CSS 选择器 `.livephoto`/`[data-livephoto]` 唯一性足够，无 LivePhoto 元素时脚本是 no-op）。原计划的 `src/components/{LivePhoto,Picture}.astro` 在实施时发现是死代码（rehype 直接发 HTML，组件永远不会被渲染、scoped CSS/script 永远不被打包），已删除。
 - **`.cache/media/`**：gitignored，构建产物缓存，按 hash 分目录。
-- **`public/_media/<hash>/`**：每次构建从缓存复制过来的实际服务文件。
+- **`public/_media/<hash>/`**：每次构建从缓存复制过来的实际服务文件（仅含 `meta.products` 列出的文件，不含 `meta.json` / `source.png` 等内部产物）。
 
 ### 数据流（一次构建）
 
