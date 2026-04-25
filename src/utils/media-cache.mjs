@@ -19,7 +19,7 @@ export function cacheKeyFor(hash) {
   return `${hash}-v${PROCESSOR_VERSION}`;
 }
 
-import { mkdir, writeFile, readFile, access } from 'node:fs/promises';
+import { mkdir, writeFile, readFile, access, stat, rm, readdir, cp } from 'node:fs/promises';
 import { join, basename, extname } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -163,4 +163,34 @@ export async function processMov(srcPath, cacheRoot) {
 
   await writeFile(metaPath, JSON.stringify(result, null, 2));
   return result;
+}
+
+export async function publishToPublic(hash, cacheRoot, publicRoot) {
+  const src = join(cacheRoot, hash);
+  const dst = join(publicRoot, '_media', hash);
+  await mkdir(dst, { recursive: true });
+  await cp(src, dst, { recursive: true, force: true });
+}
+
+export async function gcCache(cacheRoot, keepSet, { maxAgeDays = 60 } = {}) {
+  let entries;
+  try {
+    entries = await readdir(cacheRoot, { withFileTypes: true });
+  } catch {
+    return;
+  }
+  const cutoff = Date.now() - maxAgeDays * 86400 * 1000;
+  for (const ent of entries) {
+    if (!ent.isDirectory()) continue;
+    if (keepSet.has(ent.name)) continue;
+    const dirPath = join(cacheRoot, ent.name);
+    try {
+      const s = await stat(dirPath);
+      if (s.mtimeMs < cutoff) {
+        await rm(dirPath, { recursive: true, force: true });
+      }
+    } catch {
+      // ignore individual failures
+    }
+  }
 }
