@@ -29,6 +29,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Cache media derivatives
+        uses: actions/cache@v4
+        with:
+          path: .cache/media
+          key: media-${{ hashFiles('content/posts/**/*.heic', 'content/posts/**/*.mov') }}
+          restore-keys: |
+            media-
+
+      - name: Verify media tooling
+        run: |
+          # ffmpeg: required for HEIC HEVC decoding AND for MOV transcode (libx264).
+          ffmpeg -hide_banner -codecs 2>&1 | grep -E 'libx264' >/dev/null \
+            || (echo "ffmpeg missing libx264"; exit 1)
+          # sharp: required for AVIF/WebP/JPEG output. Sharp exposes AVIF via the heif format
+          # with output.alias containing 'avif' — probe both pieces explicitly.
+          node -e "import('sharp').then(s => { const o = s.default.format.heif?.output; const ok = !!o?.file && Array.isArray(o?.alias) && o.alias.includes('avif'); if (!ok) { console.error('sharp AVIF output missing'); process.exit(1); } })"
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v4
 
