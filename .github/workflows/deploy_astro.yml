@@ -29,6 +29,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Cache media derivatives
+        uses: actions/cache@v4
+        with:
+          path: .cache/media
+          key: media-${{ hashFiles('content/posts/**/*.heic', 'content/posts/**/*.mov') }}
+          restore-keys: |
+            media-
+
+      - name: Verify media tooling
+        run: |
+          ffmpeg -hide_banner -codecs 2>&1 | grep -E 'libx264' >/dev/null \
+            || (echo "ffmpeg missing libx264"; exit 1)
+          node -e "import('sharp').then(s => { if (!s.default.format.heif?.input?.file) { console.error('sharp HEIF decoder missing'); process.exit(1); } })"
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v4
 
