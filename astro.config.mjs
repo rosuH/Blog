@@ -9,10 +9,12 @@ import remarkMedia from './src/utils/remark-media.mjs';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://blog.rosuh.me',
+  cacheDir: '.cache/astro',
 
   image: {
     layout: 'constrained',
     responsiveStyles: true,
+    breakpoints: [640, 828, 1080, 1440],
   },
 
   integrations: [
