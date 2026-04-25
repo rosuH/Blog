@@ -11,7 +11,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "npm run build && node --test tests/performance-output.test.mjs"
+    "test": "npm run build && node --test tests/performance-output.test.mjs tests/media-output.test.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.0",
