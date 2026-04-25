@@ -10,6 +10,7 @@ import {
   processHeic,
   processMov,
   publishToPublic,
+  gcCache,
 } from './media-cache.mjs';
 
 const CACHE_ROOT = fileURLToPath(new URL('../../.cache/media/', import.meta.url));
@@ -31,7 +32,21 @@ function resolveSrc(url, mdFile) {
   return resolve(dirname(mdFile), url);
 }
 
+let _gcScheduled = false;
+function scheduleGc() {
+  if (_gcScheduled) return;
+  _gcScheduled = true;
+  process.once('beforeExit', async () => {
+    try {
+      await gcCache(CACHE_ROOT, referencedHashes, { maxAgeDays: 60 });
+    } catch (err) {
+      console.warn('[media] GC skipped:', err.message);
+    }
+  });
+}
+
 export default function remarkMedia() {
+  scheduleGc();
   return async (tree, file) => {
     const mdFile = file?.path ?? file?.history?.[file.history.length - 1];
     if (!mdFile) return;
