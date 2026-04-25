@@ -3,7 +3,7 @@ import test from 'node:test';
 import { readFile, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
-const articleHtmlPath = fileURLToPath(new URL('../dist/2021_summary/index.html', import.meta.url));
+const articleHtmlPath = fileURLToPath(new URL('../dist/year-end-summary/index.html', import.meta.url));
 
 test('HEIC reference is replaced with <picture> + AVIF/WebP/JPEG sources', async () => {
   const html = await readFile(articleHtmlPath, 'utf8');
