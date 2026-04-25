@@ -1,6 +1,5 @@
 ---
 title: 年终总结的总结：2022-2025
-filename: year-end-summary
 date: 2026-04-25
 ---
 ## 前言
