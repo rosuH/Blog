@@ -32,7 +32,7 @@ export async function setupHeicPost({ slug, withLivePhoto = false }) {
     ], { stdio: 'pipe' });
   }
   await writeFile(join(dir, 'index.md'),
-    `---\ntitle: media e2e fixture\nfilename: ${slug}\ndate: 2026-04-25\n---\n\n![sample-heic](sample.heic)\n\n![sample-png](sample.png)\n`,
+    `---\ntitle: media e2e fixture\nfilename: ${slug}\ndate: 2026-04-25\n---\n\n![sample-heic](sample.heic)\n\n![sample-png](sample.png)\n\n![](sample.png)\n\n[![linked-png](sample.png)](https://example.com/)\n`,
   );
   return { dir, slug, articleHtmlPath: distPath(slug) };
 }
