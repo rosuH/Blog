@@ -17,7 +17,9 @@ test('HEIC reference is replaced with <picture> + AVIF/WebP/JPEG sources', async
 
 test('Test post does NOT (yet) render as Live Photo (no .mov pair)', async () => {
   const html = await readFile(articleHtmlPath, 'utf8');
-  assert.doesNotMatch(html, /data-livephoto/);
+  // Match the actual figure markup, not the bare attribute name (which appears
+  // in Layout's inline behavior script's '[data-livephoto]' selector text on every page).
+  assert.doesNotMatch(html, /<figure[^>]*data-livephoto/);
 });
 
 test('Existing PNG images keep loading=lazy and decoding=async', async () => {
@@ -36,7 +38,7 @@ test('Generated derivative files exist on disk', async () => {
 });
 
 import { execFileSync } from 'node:child_process';
-import { copyFile, unlink } from 'node:fs/promises';
+import { unlink } from 'node:fs/promises';
 
 test('When a same-basename .mov exists, output renders as Live Photo', async () => {
   const postDir = fileURLToPath(new URL('../content/posts/2026-04-25-year-end-summary/', import.meta.url));
@@ -54,7 +56,7 @@ test('When a same-basename .mov exists, output renders as Live Photo', async () 
     execFileSync('npm', ['run', 'build', '--', '--force'], { stdio: 'pipe' });
     const html = await readFile(articleHtmlPath, 'utf8');
     assert.match(html, /<figure[^>]+class="livephoto"/);
-    assert.match(html, /data-livephoto/);
+    assert.match(html, /<figure[^>]+data-livephoto/);
     assert.match(html, /<source[^>]+type="video\/mp4; codecs=&#x22;hvc1&#x22;"|<source[^>]+codecs="hvc1"/);
     assert.match(html, /<source[^>]+\.h264\.mp4[^>]*type="video\/mp4"|<source[^>]+type="video\/mp4"[^>]+\.h264\.mp4/);
     assert.match(html, /<button[^>]+class="livephoto-badge"/);

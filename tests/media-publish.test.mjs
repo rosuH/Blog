@@ -4,19 +4,31 @@ import { mkdir, rm, writeFile, stat, utimes } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-test('publishToPublic copies a hash directory into public/_media/<hash>/', async () => {
+test('publishToPublic copies only the product files (not meta.json or source.png)', async () => {
   const { publishToPublic } = await import('../src/utils/media-cache.mjs');
   const root = join(tmpdir(), `pub-${Date.now()}`);
   const cache = join(root, 'cache');
   const pub = join(root, 'public');
   await mkdir(join(cache, 'abc123'), { recursive: true });
-  await writeFile(join(cache, 'abc123', 'img-800w.jpg'), Buffer.from('fake'));
-  await writeFile(join(cache, 'abc123', 'meta.json'), '{}');
+  await writeFile(join(cache, 'abc123', 'img-800w.jpg'), Buffer.from('fake-product'));
+  await writeFile(join(cache, 'abc123', 'source.png'), Buffer.from('internal-intermediate'));
+  await writeFile(
+    join(cache, 'abc123', 'meta.json'),
+    JSON.stringify({ products: { still_1x_jpg: 'img-800w.jpg' } }),
+  );
 
   await publishToPublic('abc123', cache, pub);
 
-  const s1 = await stat(join(pub, '_media', 'abc123', 'img-800w.jpg'));
-  assert.ok(s1.size > 0);
+  const product = await stat(join(pub, '_media', 'abc123', 'img-800w.jpg'));
+  assert.ok(product.size > 0);
+  await assert.rejects(
+    () => stat(join(pub, '_media', 'abc123', 'meta.json')),
+    'meta.json must NOT be published',
+  );
+  await assert.rejects(
+    () => stat(join(pub, '_media', 'abc123', 'source.png')),
+    'source.png intermediate must NOT be published',
+  );
   await rm(root, { recursive: true, force: true });
 });
 
