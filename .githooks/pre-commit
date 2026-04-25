@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Strips GPS / location metadata from image and video files staged for commit.
+# Intentional minimum: drop user-locatable EXIF/QuickTime tags but keep ICC
+# color profile (needed for accurate display).
+#
+# Skip with: git commit --no-verify
+set -euo pipefail
+
+PATTERN='\.(heic|jpe?g|png|webp|avif|mov|mp4|m4v)$'
+
+# Collect staged files (added or modified) matching the pattern.
+files=$(git diff --cached --name-only --diff-filter=AM 2>/dev/null | grep -iE "$PATTERN" || true)
+[ -z "$files" ] && exit 0
+
+if ! command -v exiftool >/dev/null 2>&1; then
+  echo "[pre-commit] exiftool not found in PATH." >&2
+  echo "[pre-commit] Install with: brew install exiftool   (or: apt-get install libimage-exiftool-perl)" >&2
+  echo "[pre-commit] To bypass this hook: git commit --no-verify" >&2
+  exit 1
+fi
+
+modified=()
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  before=$(shasum -a 256 "$f" | cut -d' ' -f1)
+  # -overwrite_original: edit in place, no .orig sidecar
+  # -P: preserve file modification timestamp (avoids mtime churn)
+  # -q -q: suppress info + minor warnings (e.g. PNG without EXIF)
+  # Tag groups stripped:
+  #   gps:all            — EXIF GPS group (HEIC / JPEG iPhone Camera)
+  #   xmp:Geotag         — XMP geotag
+  #   Keys:GPSCoordinates / Keys:LocationInformation — Apple QuickTime (MOV/MP4 Live Photos)
+  exiftool -overwrite_original -P -q -q \
+    -gps:all= \
+    -xmp:Geotag= \
+    -Keys:GPSCoordinates= \
+    -Keys:LocationInformation= \
+    "$f" || true
+  after=$(shasum -a 256 "$f" | cut -d' ' -f1)
+  if [ "$before" != "$after" ]; then
+    modified+=("$f")
+    git add "$f"
+  fi
+done <<< "$files"
+
+if [ ${#modified[@]} -gt 0 ]; then
+  echo "[pre-commit] Stripped GPS/location metadata from:"
+  printf '  %s\n' "${modified[@]}"
+fi
+
+exit 0

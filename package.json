@@ -11,7 +11,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "npm run build && node --test --test-concurrency=1 tests/performance-output.test.mjs tests/media-output.test.mjs"
+    "test": "npm run build && node --test --test-concurrency=1 tests/performance-output.test.mjs tests/media-output.test.mjs",
+    "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.0",
