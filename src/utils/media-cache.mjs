@@ -77,7 +77,9 @@ export async function processHeic(srcPath, cacheRoot) {
   const img = sharp(pngPath).rotate();
   const metadata = await img.metadata();
   const w1 = Math.min(metadata.width, 1600);
-  const w2 = metadata.width > w1 ? w1 * 2 : null;
+  // Emit 2x only when source has meaningfully more pixels than 1x (≥1.5×).
+  // Clamp to source width so the filename matches actual output dimensions.
+  const w2 = metadata.width >= w1 * 1.5 ? Math.min(w1 * 2, metadata.width) : null;
   const widths = [w1, w2].filter(Boolean);
 
   const products = {};
