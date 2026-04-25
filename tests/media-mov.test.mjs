@@ -20,60 +20,66 @@ test('processMov outputs hevc and h264 mp4s, both audio-stripped', async () => {
   const { processMov } = await import('../src/utils/media-cache.mjs');
   const cacheRoot = join(tmpdir(), `mov-${Date.now()}`);
   await mkdir(cacheRoot, { recursive: true });
-  const fixture = join(cacheRoot, 'src.mov');
-  makeFixtureMov(fixture);
 
-  const result = await processMov(fixture, cacheRoot);
+  try {
+    const fixture = join(cacheRoot, 'src.mov');
+    makeFixtureMov(fixture);
 
-  assert.equal(result.kind, 'mov');
-  assert.ok(result.products.video_hevc.endsWith('.hevc.mp4'));
-  assert.ok(result.products.video_h264.endsWith('.h264.mp4'));
+    const result = await processMov(fixture, cacheRoot);
 
-  const dir = join(cacheRoot, result.hash);
-  const hevcStat = await stat(join(dir, result.products.video_hevc));
-  const h264Stat = await stat(join(dir, result.products.video_h264));
-  assert.ok(hevcStat.size > 0);
-  assert.ok(h264Stat.size > 0);
+    assert.equal(result.kind, 'mov');
+    assert.ok(result.products.video_hevc.endsWith('.hevc.mp4'));
+    assert.ok(result.products.video_h264.endsWith('.h264.mp4'));
 
-  // Probe both outputs to confirm there is NO audio stream
-  const probeHevc = execFileSync('ffprobe', [
-    '-v', 'error', '-show_streams', '-select_streams', 'a',
-    join(dir, result.products.video_hevc),
-  ]).toString();
-  const probeH264 = execFileSync('ffprobe', [
-    '-v', 'error', '-show_streams', '-select_streams', 'a',
-    join(dir, result.products.video_h264),
-  ]).toString();
-  assert.equal(probeHevc.trim(), '', 'hevc output must have no audio stream');
-  assert.equal(probeH264.trim(), '', 'h264 output must have no audio stream');
+    const dir = join(cacheRoot, result.hash);
+    const hevcStat = await stat(join(dir, result.products.video_hevc));
+    const h264Stat = await stat(join(dir, result.products.video_h264));
+    assert.ok(hevcStat.size > 0);
+    assert.ok(h264Stat.size > 0);
 
-  await rm(cacheRoot, { recursive: true, force: true });
+    // Probe both outputs to confirm there is NO audio stream
+    const probeHevc = execFileSync('ffprobe', [
+      '-v', 'error', '-show_streams', '-select_streams', 'a',
+      join(dir, result.products.video_hevc),
+    ]).toString();
+    const probeH264 = execFileSync('ffprobe', [
+      '-v', 'error', '-show_streams', '-select_streams', 'a',
+      join(dir, result.products.video_h264),
+    ]).toString();
+    assert.equal(probeHevc.trim(), '', 'hevc output must have no audio stream');
+    assert.equal(probeH264.trim(), '', 'h264 output must have no audio stream');
+  } finally {
+    await rm(cacheRoot, { recursive: true, force: true });
+  }
 });
 
 test('processMov is cache-hit on repeat (no file rewrites)', async () => {
   const { processMov } = await import('../src/utils/media-cache.mjs');
   const cacheRoot = join(tmpdir(), `mov-hit-${Date.now()}`);
   await mkdir(cacheRoot, { recursive: true });
-  const fixture = join(cacheRoot, 'src.mov');
-  makeFixtureMov(fixture);
 
-  const r1 = await processMov(fixture, cacheRoot);
-  const dir = join(cacheRoot, r1.hash);
-  const tracked = ['meta.json', ...Object.values(r1.products).filter(Boolean)];
-  const before = Object.fromEntries(
-    await Promise.all(tracked.map(async (f) => [f, (await stat(join(dir, f))).mtimeMs])),
-  );
+  try {
+    const fixture = join(cacheRoot, 'src.mov');
+    makeFixtureMov(fixture);
 
-  const r2 = await processMov(fixture, cacheRoot);
+    const r1 = await processMov(fixture, cacheRoot);
+    const dir = join(cacheRoot, r1.hash);
+    const tracked = ['meta.json', ...Object.values(r1.products).filter(Boolean)];
+    const before = Object.fromEntries(
+      await Promise.all(tracked.map(async (f) => [f, (await stat(join(dir, f))).mtimeMs])),
+    );
 
-  const after = Object.fromEntries(
-    await Promise.all(tracked.map(async (f) => [f, (await stat(join(dir, f))).mtimeMs])),
-  );
+    const r2 = await processMov(fixture, cacheRoot);
 
-  assert.equal(r1.hash, r2.hash);
-  for (const [filename, mtime] of Object.entries(before)) {
-    assert.equal(after[filename], mtime, `${filename} must not be rewritten on cache hit`);
+    const after = Object.fromEntries(
+      await Promise.all(tracked.map(async (f) => [f, (await stat(join(dir, f))).mtimeMs])),
+    );
+
+    assert.equal(r1.hash, r2.hash);
+    for (const [filename, mtime] of Object.entries(before)) {
+      assert.equal(after[filename], mtime, `${filename} must not be rewritten on cache hit`);
+    }
+  } finally {
+    await rm(cacheRoot, { recursive: true, force: true });
   }
-
-  await rm(cacheRoot, { recursive: true, force: true });
 });

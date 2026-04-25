@@ -56,17 +56,31 @@ async function getSharp() {
   return _sharp;
 }
 
-let _ffmpegOk;
+let _ffmpegPresent;
 async function ensureFfmpeg() {
-  if (_ffmpegOk) return;
+  if (_ffmpegPresent) return;
+  try {
+    await execFileP('ffmpeg', ['-hide_banner', '-version']);
+    _ffmpegPresent = true;
+  } catch (err) {
+    throw new Error(`ffmpeg not available: ${err.message}`);
+  }
+}
+
+// Stronger probe used only by processMov — H.264 transcode needs libx264.
+// HEIC decode (called from processHeic) does not, so it uses ensureFfmpeg.
+let _ffmpegX264Ok;
+async function ensureFfmpegX264() {
+  if (_ffmpegX264Ok) return;
+  await ensureFfmpeg();
   try {
     const { stdout } = await execFileP('ffmpeg', ['-hide_banner', '-codecs']);
     if (!/libx264/.test(stdout)) {
       throw new Error('ffmpeg present but missing libx264 encoder.');
     }
-    _ffmpegOk = true;
+    _ffmpegX264Ok = true;
   } catch (err) {
-    throw new Error(`ffmpeg not available or unusable: ${err.message}`);
+    throw new Error(`ffmpeg unusable for MOV transcode: ${err.message}`);
   }
 }
 
@@ -140,7 +154,7 @@ export async function processHeic(srcPath, cacheRoot) {
 }
 
 export async function processMov(srcPath, cacheRoot) {
-  await ensureFfmpeg();
+  await ensureFfmpegX264();
   const hash = await hashSource(srcPath);
   const key = cacheKeyFor(hash);
   const dir = join(cacheRoot, hash);
@@ -192,15 +206,29 @@ export async function processMov(srcPath, cacheRoot) {
 
 // Copies only the product files listed in meta.json into public/_media/<hash>/.
 // Internal cache artifacts like source.png (HEIC decode intermediate) and
-// meta.json are intentionally NOT published.
+// meta.json are intentionally NOT published. Stale files in the destination
+// (from a previous PROCESSOR_VERSION or different output set) are removed
+// before copying so the published dir is always exactly meta.products.
 export async function publishToPublic(hash, cacheRoot, publicRoot) {
   const src = join(cacheRoot, hash);
   const dst = join(publicRoot, '_media', hash);
   const metaPath = join(src, 'meta.json');
   const meta = JSON.parse(await readFile(metaPath, 'utf8'));
+  const products = new Set(Object.values(meta.products || {}).filter(Boolean));
   await mkdir(dst, { recursive: true });
-  for (const filename of Object.values(meta.products || {})) {
-    if (!filename) continue;
+
+  // Prune stale entries that aren't in the current product set.
+  try {
+    const existing = await readdir(dst, { withFileTypes: true });
+    for (const ent of existing) {
+      if (products.has(ent.name)) continue;
+      await rm(join(dst, ent.name), { recursive: true, force: true });
+    }
+  } catch {
+    // ignore destination cleanup failures; copy below may still succeed
+  }
+
+  for (const filename of products) {
     await cp(join(src, filename), join(dst, filename), { force: true });
   }
 }
