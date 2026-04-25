@@ -35,6 +35,15 @@ test('HEIC reference renders as generated figure with caption from alt text', as
   assert.match(html, /<img[^>]+alt="sample-heic"/);
 });
 
+test('Inline HEIC renders as phrasing-safe picture without figure caption', async () => {
+  const html = await readFile(post.articleHtmlPath, 'utf8');
+  const paragraph = html.match(/<p>Inline HEIC before [\s\S]*? after\.<\/p>/)?.[0];
+  assert.ok(paragraph, 'inline HEIC paragraph should preserve surrounding text');
+  assert.match(paragraph, /<picture>[\s\S]*<img[^>]+alt="inline-heic"/);
+  assert.doesNotMatch(paragraph, /<figure/);
+  assert.doesNotMatch(paragraph, /<figcaption>/);
+});
+
 test('Test post does NOT (yet) render as Live Photo (no .mov pair)', async () => {
   const html = await readFile(post.articleHtmlPath, 'utf8');
   // Match the actual figure markup, not the bare attribute name (which appears
@@ -99,6 +108,11 @@ test('When a same-basename .mov exists, output renders as Live Photo', async () 
     assert.match(html, /<source[^>]+\.h264\.mp4[^>]*type="video\/mp4"|<source[^>]+type="video\/mp4"[^>]+\.h264\.mp4/);
     assert.match(html, /<button[^>]+class="livephoto-badge"/);
     assert.match(html, /<figcaption>sample-heic<\/figcaption>/);
+    const paragraph = html.match(/<p>Inline HEIC before [\s\S]*? after\.<\/p>/)?.[0];
+    assert.ok(paragraph, 'inline Live Photo paragraph should preserve surrounding text');
+    assert.match(paragraph, /<picture>[\s\S]*<img[^>]+alt="inline-heic"/);
+    assert.doesNotMatch(paragraph, /<figure/);
+    assert.doesNotMatch(paragraph, /<figcaption>/);
   } finally {
     const { unlink } = await import('node:fs/promises');
     await unlink(`${post.dir}/sample.mov`);
