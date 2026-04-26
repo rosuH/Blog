@@ -210,6 +210,7 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
   </head>
 
   <body>
+    <a href="#main-content" class="skip-link">跳转到内容</a>
     <BambooShadow article={article} />
     <div class="site-wrap">
       <header class="site-header">
@@ -217,7 +218,7 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
         <DarkMode />
       </header>
 
-      <main>
+      <main id="main-content">
         <slot />
       </main>
 
@@ -288,6 +289,29 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
 </html>
 
 <style>
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 50%;
+    transform: translate(-50%, -150%);
+    z-index: 1000;
+    padding: 0.5rem 1rem;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    border-radius: 999px;
+    transition: transform 0.18s ease;
+  }
+
+  .skip-link:focus,
+  .skip-link:focus-visible {
+    transform: translate(-50%, 0);
+    outline: 2px solid var(--fg);
+    outline-offset: 2px;
+  }
+
   .site-header {
     padding: 1.25rem 0 1rem;
     display: flex;
@@ -297,7 +321,7 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
   }
 
   .site-logo {
-    font-size: 0.9375rem;
+    font-size: var(--text-sm);
     font-weight: 500;
     font-family: var(--font-display);
     color: var(--fg);

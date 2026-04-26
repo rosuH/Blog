@@ -71,8 +71,10 @@ const formatArchiveDate = (date: Date) =>
 
     <div class="archive-groups">
       {archiveGroups.map(([year, yearPosts]) => (
-        <section class="archive-group" aria-labelledby={`archive-year-${year}`}>
-          <h3 id={`archive-year-${year}`} class="archive-year">{year}</h3>
+        <section class="archive-group" id={`archive-year-${year}`}>
+          <h3 class="archive-year-heading">
+            <a href={`#archive-year-${year}`} class="archive-year">{year}</a>
+          </h3>
           <ol class="post-list post-list--archive" role="list">
             {yearPosts.map((post) => (
               <li class="post-row">
@@ -119,10 +121,11 @@ const formatArchiveDate = (date: Date) =>
     padding: 0.35rem 0 0.35rem 0.875rem;
     border-left: 1px solid color-mix(in oklab, var(--accent) 22%, var(--border));
     color: var(--fg-muted);
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: var(--text-sm);
     line-height: 1.85;
     text-wrap: pretty;
+    letter-spacing: 0.02em;
   }
 
   .tagline cite {
@@ -264,6 +267,11 @@ const formatArchiveDate = (date: Date) =>
     gap: 0.65rem;
   }
 
+  .archive-year-heading {
+    margin: 0;
+    width: fit-content;
+  }
+
   .archive-year {
     display: inline-flex;
     align-items: center;
@@ -277,6 +285,15 @@ const formatArchiveDate = (date: Date) =>
     font-size: var(--text-xs);
     font-weight: 600;
     letter-spacing: 0.08em;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .archive-year:hover,
+  .archive-year:focus-visible {
+    background: color-mix(in oklab, var(--support-soft) 100%, transparent);
+    border-color: color-mix(in oklab, var(--support-border) 100%, var(--border));
+    color: color-mix(in oklab, var(--support) 80%, var(--fg));
   }
 
   @keyframes settle-in {

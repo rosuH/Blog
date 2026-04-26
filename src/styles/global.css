@@ -111,6 +111,10 @@ body::before {
   opacity: 0.28;
 }
 
+html.dark body::before {
+  opacity: 0.12;
+}
+
 /* ===== Layout ===== */
 .site-wrap {
   width: min(100%, var(--media-width));
@@ -155,13 +159,15 @@ img {
   max-width: var(--content-width);
   margin: 0 auto;
   font-size: var(--text-base);
-  line-height: 1.8;
+  line-height: 1.85;
   overflow-wrap: anywhere;
   hanging-punctuation: allow-end;
+  text-align: justify;
+  text-spacing-trim: trim-start;
 }
 
 .prose p {
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.85rem;
 }
 
 .prose a {
@@ -189,11 +195,10 @@ img {
 .prose blockquote {
   position: relative;
   margin: 2rem 0;
-  padding: 0.875rem 1.5rem 0.875rem 2.25rem;
-  border-left: 2px solid color-mix(in oklab, var(--support) 50%, transparent);
+  padding: 0.875rem 1.5rem;
   color: var(--fg-muted);
   background: color-mix(in oklab, var(--support-soft) 16%, transparent);
-  border-radius: 0 0.5rem 0.5rem 0;
+  border-radius: 0.5rem;
 }
 
 .prose blockquote::before {

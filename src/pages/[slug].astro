@@ -33,7 +33,7 @@ const needsMath = /\$\$|\\\(|\\\[/.test(post.body ?? '');
 
   <article class="article-shell" itemscope itemtype="http://schema.org/BlogPosting">
     <header class="article-header" data-reveal="article-header">
-      <p class="article-kicker">Article</p>
+      <p class="article-kicker">文章</p>
       <h1 class="article-title" itemprop="headline">{post.data.title}</h1>
       <div class="article-meta">
         <time
@@ -88,8 +88,8 @@ const needsMath = /\$\$|\\\(|\\\[/.test(post.body ?? '');
   )}
 
   <div id="img-lightbox" class="img-lightbox" role="dialog" aria-modal="true" aria-label="图片预览" tabindex="-1">
-    <div class="img-lightbox__backdrop" data-lightbox-close></div>
-    <img class="img-lightbox__img" src="" alt="" />
+    <div class="img-lightbox__backdrop" data-lightbox-close role="button" tabindex="0" aria-label="关闭图片预览"></div>
+    <img class="img-lightbox__img" src="" alt="" tabindex="0" />
   </div>
 </Layout>
 
@@ -142,7 +142,7 @@ const needsMath = /\$\$|\\\(|\\\[/.test(post.body ?? '');
         lightbox.classList.add('is-open');
         document.body.style.overflow = 'hidden';
         isOpen = true;
-        lightbox.focus();
+        lbImg.focus();
 
         const lastRect = lbImg.getBoundingClientRect();
         const scale = firstRect.width / lastRect.width;
@@ -236,12 +236,41 @@ const needsMath = /\$\$|\\\(|\\\[/.test(post.body ?? '');
       });
     });
 
-    closeTriggers.forEach((t) => t.addEventListener('click', close));
+    closeTriggers.forEach((t) => {
+      t.addEventListener('click', close);
+      t.addEventListener('keydown', (e) => {
+        const ke = e as KeyboardEvent;
+        if (ke.key === ' ' || ke.key === 'Enter') {
+          ke.preventDefault();
+          close();
+        }
+      });
+    });
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (!isOpen) return;
+      if (e.key === 'Escape') {
         e.preventDefault();
         close();
+        return;
+      }
+      if (e.key === 'Tab') {
+        const focusables: HTMLElement[] = [lbImg];
+        closeTriggers.forEach((t) => focusables.push(t as HTMLElement));
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+        if (e.shiftKey) {
+          if (active === first || !lightbox.contains(active)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (active === last || !lightbox.contains(active)) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       }
     });
   })();
@@ -383,8 +412,30 @@ const needsMath = /\$\$|\\\(|\\\[/.test(post.body ?? '');
     }
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && tocMobile.classList.contains('is-open')) {
+      if (!tocMobile.classList.contains('is-open')) return;
+      if (e.key === 'Escape') {
         closeMobileToc();
+        return;
+      }
+      if (e.key === 'Tab') {
+        const focusables = Array.from(
+          mobilePanel.querySelectorAll<HTMLElement>('button, a[href]')
+        ).filter((el) => !el.hasAttribute('disabled'));
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+        if (e.shiftKey) {
+          if (active === first || !mobilePanel.contains(active)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (active === last || !mobilePanel.contains(active)) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       }
     });
 
