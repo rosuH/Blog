@@ -7,7 +7,7 @@ interface Props {
 const { article = false } = Astro.props;
 ---
 
-<div id="bamboo-shadow" data-page-kind={article ? 'article' : 'home'} aria-hidden="true">
+<div id="bamboo-shadow" data-page-kind={article ? 'article' : 'home'} aria-hidden="true" role="presentation">
   <div class="bamboo-moonlight"></div>
   <svg id="bamboo-svg" xmlns="http://www.w3.org/2000/svg"></svg>
 </div>
@@ -815,8 +815,13 @@ const { article = false } = Astro.props;
   function rebuildScene() {
     cancelQueuedRebuild();
     stopAnimation();
+    if (reducedMotion) {
+      svg.replaceChildren();
+      scene = null;
+      return;
+    }
     scene = createScene();
-    seedScene(scene, reducedMotion ? 0.28 : 0.14);
+    seedScene(scene, 0.14);
     scheduleNextGust(performance.now(), true);
     renderFrame(performance.now(), 1 / 60);
     startAnimation();
