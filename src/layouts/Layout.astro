@@ -11,6 +11,7 @@ interface Props {
   article?: boolean;
   math?: boolean;
   robots?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
@@ -20,12 +21,20 @@ const {
   article = false,
   math = false,
   robots = 'index,follow',
+  structuredData,
 } = Astro.props;
 // Use site root as base; fall back to request origin (not page URL) in dev
 const siteBase = Astro.site ?? new URL('/', Astro.url);
 const canonicalURL = new URL(Astro.url.pathname, siteBase);
 const metaDescription = description || '写 Android、技术，也写生活。';
 const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
+const structuredDataItems = Array.isArray(structuredData)
+  ? structuredData
+  : structuredData
+    ? [structuredData]
+    : [];
+const serializeStructuredData = (item: Record<string, unknown>) =>
+  JSON.stringify(item).replaceAll('<', '\\u003c');
 ---
 
 <!DOCTYPE html>
@@ -61,6 +70,10 @@ const ogImage = new URL(image || '/seo-og-image.jpg', siteBase).toString();
     <meta name="twitter:description" content={metaDescription} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:creator" content="@rosu_h" />
+
+    {structuredDataItems.map((item) => (
+      <script type="application/ld+json" set:html={serializeStructuredData(item)} />
+    ))}
 
     <!-- Fonts (non-render-blocking via print media swap) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

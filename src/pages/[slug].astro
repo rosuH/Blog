@@ -3,6 +3,7 @@
 import Layout from '../layouts/Layout.astro';
 import Bio from '../components/Bio.astro';
 import { getCollection, render } from 'astro:content';
+import { SITE, absoluteUrl } from '../utils/site-info';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog', ({ data }) => !data.draft);
@@ -20,14 +21,50 @@ export async function getStaticPaths() {
 const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await render(post);
 const needsMath = /\$\$|\\\(|\\\[/.test(post.body ?? '');
+const postUrl = absoluteUrl(`/${post.id}/`, Astro.site);
+const postDescription = post.data.description || post.data.excerpt || SITE.description;
+const personId = `${absoluteUrl('/', Astro.site)}#person`;
+const articleStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  '@id': `${postUrl}#article`,
+  headline: post.data.title,
+  description: postDescription,
+  url: postUrl,
+  mainEntityOfPage: postUrl,
+  datePublished: post.data.date.toISOString(),
+  dateModified: post.data.date.toISOString(),
+  inLanguage: SITE.language,
+  author: {
+    '@type': 'Person',
+    '@id': personId,
+    name: SITE.author.name,
+    url: SITE.author.url,
+    sameAs: [SITE.author.github, SITE.author.x],
+  },
+  publisher: {
+    '@type': 'Person',
+    '@id': personId,
+    name: SITE.author.name,
+    url: SITE.author.url,
+  },
+  isPartOf: {
+    '@type': 'Blog',
+    '@id': `${absoluteUrl('/', Astro.site)}#blog`,
+    name: SITE.name,
+    url: absoluteUrl('/', Astro.site),
+  },
+  keywords: [...(post.data.tags ?? []), ...(post.data.categories ?? [])].filter(Boolean),
+};
 ---
 
 <Layout
   title={post.data.title}
-  description={post.data.description || post.data.excerpt}
+  description={postDescription}
   image={post.data.hero}
   article={true}
   math={needsMath}
+  structuredData={articleStructuredData}
 >
   <div id="reading-progress" aria-hidden="true"></div>
 

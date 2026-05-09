@@ -3,6 +3,7 @@
 import Layout from '../layouts/Layout.astro';
 import Bio from '../components/Bio.astro';
 import { getCollection } from 'astro:content';
+import { SITE, absoluteUrl } from '../utils/site-info';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
 const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -30,9 +31,52 @@ const formatArchiveDate = (date: Date) =>
     month: '2-digit',
     day: '2-digit',
   });
+
+const homeUrl = absoluteUrl('/', Astro.site);
+const personId = `${homeUrl}#person`;
+const websiteId = `${homeUrl}#website`;
+const blogId = `${homeUrl}#blog`;
+const homeStructuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': personId,
+    name: SITE.author.name,
+    url: SITE.author.url,
+    sameAs: [SITE.author.github, SITE.author.x],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': websiteId,
+    url: homeUrl,
+    name: SITE.name,
+    alternateName: SITE.alternateName,
+    description: SITE.description,
+    inLanguage: SITE.language,
+    author: { '@id': personId },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    '@id': blogId,
+    url: homeUrl,
+    name: SITE.name,
+    description: SITE.description,
+    inLanguage: SITE.language,
+    author: { '@id': personId },
+    blogPost: latestPosts.map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.data.title,
+      url: absoluteUrl(`/${post.id}/`, Astro.site),
+      datePublished: post.data.date.toISOString(),
+      description: post.data.description || post.data.excerpt || undefined,
+    })),
+  },
+];
 ---
 
-<Layout title="rosu 的博客" description="写 Android、技术，也写生活。">
+<Layout title="rosu 的博客" description={SITE.description} structuredData={homeStructuredData}>
   <section class="home-intro" aria-labelledby="home-intro-title" data-reveal="intro">
     <Bio />
     <h1 id="home-intro-title" class="sr-only">rosu 的博客</h1>
