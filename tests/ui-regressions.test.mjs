@@ -38,6 +38,13 @@ function countMatches(text, pattern) {
   return matches ? matches.length : 0;
 }
 
+function cssBlock(css, selector) {
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = css.match(new RegExp(`${escaped}\\s*\\{([^}]*)\\}`));
+  assert.ok(match, `Missing CSS block for ${selector}`);
+  return match[1];
+}
+
 test('homepage foregrounds recent writing in Chinese with archive grouping hooks', () => {
   const html = readDist('index.html');
   const homeSource = readSource('src', 'pages', 'index.astro');
@@ -194,18 +201,26 @@ test('closed overlays are inert and floating controls meet touch target size', (
   assert.match(articleSource, /tocMobile\.setAttribute\('inert', ''\)/);
   assert.match(articleSource, /tocMobile\.removeAttribute\('inert'\)/);
   assert.match(articleSource, /tocTrigger\.setAttribute\('aria-controls', 'mobile-toc'\)/);
-  assert.match(css, /\.quiet-control/);
-  assert.match(css, /\.toc-trigger\s*\{[\s\S]*min-height:\s*2\.75rem/);
-  assert.match(css, /\.toc-trigger\s*\{[\s\S]*background:\s*var\(--control-paper\)/);
-  assert.match(css, /\.toc-mobile__close\s*\{[\s\S]*width:\s*2\.75rem;[\s\S]*height:\s*2\.75rem/);
-  assert.match(css, /\.back-to-top\s*\{[\s\S]*width:\s*2\.75rem;[\s\S]*height:\s*2\.75rem/);
-  assert.match(css, /\.back-to-top\s*\{[\s\S]*background:\s*var\(--control-paper\)/);
-  assert.match(css, /\.copy-btn\s*\{[\s\S]*background:\s*var\(--control-paper\)/);
-  assert.match(bioSource, /\.bio-link\s*\{[\s\S]*min-height:\s*2\.75rem;[\s\S]*min-width:\s*2\.75rem/);
-  assert.doesNotMatch(css, /\.toc-trigger\s*\{[^}]*backdrop-filter:\s*blur/);
-  assert.doesNotMatch(css, /\.back-to-top\s*\{[^}]*backdrop-filter:\s*blur/);
-  assert.doesNotMatch(css, /\.toc-trigger\s*\{[\s\S]*color:\s*var\(--bg\)/);
-  assert.doesNotMatch(css, /\.back-to-top\s*\{[\s\S]*color:\s*var\(--bg\)/);
+
+  const quietControl = cssBlock(css, '.quiet-control');
+  const tocTrigger = cssBlock(css, '.toc-trigger');
+  const tocMobileClose = cssBlock(css, '.toc-mobile__close');
+  const backToTop = cssBlock(css, '.back-to-top');
+  const copyBtn = cssBlock(css, '.copy-btn');
+  const bioLink = cssBlock(bioSource, '.bio-link');
+
+  assert.match(quietControl, /background:\s*var\(--control-paper\)/);
+  assert.match(tocTrigger, /min-height:\s*2\.75rem/);
+  assert.match(tocTrigger, /background:\s*var\(--control-paper\)/);
+  assert.match(tocMobileClose, /width:\s*2\.75rem;[\s\S]*height:\s*2\.75rem/);
+  assert.match(backToTop, /width:\s*2\.75rem;[\s\S]*height:\s*2\.75rem/);
+  assert.match(backToTop, /background:\s*var\(--control-paper\)/);
+  assert.match(copyBtn, /background:\s*var\(--control-paper\)/);
+  assert.match(bioLink, /min-height:\s*2\.75rem;[\s\S]*min-width:\s*2\.75rem/);
+  assert.doesNotMatch(tocTrigger, /backdrop-filter:\s*blur/);
+  assert.doesNotMatch(backToTop, /backdrop-filter:\s*blur/);
+  assert.doesNotMatch(tocTrigger, /color:\s*var\(--bg\)/);
+  assert.doesNotMatch(backToTop, /color:\s*var\(--bg\)/);
 });
 
 test('motion system stays quiet and ink-like', () => {
