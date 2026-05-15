@@ -42,6 +42,44 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Theme and first-paint background must run before stylesheet discovery. -->
+    <script is:inline data-critical-theme-init>
+      (() => {
+        try {
+          const stored = window.localStorage?.getItem('theme');
+          const theme = stored === 'dark' || stored === 'light'
+            ? stored
+            : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          const isDark = theme === 'dark';
+          document.documentElement.classList.toggle('dark', isDark);
+          document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+        } catch {
+          document.documentElement.style.colorScheme = 'light';
+        }
+      })();
+    </script>
+    <style is:inline data-critical-page-background>
+      :root {
+        background-color: oklch(97% 0.012 78);
+      }
+
+      html.dark {
+        background-color: oklch(18.5% 0.012 252);
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        background-color: oklch(97% 0.012 78);
+      }
+
+      html.dark,
+      html.dark body {
+        background-color: oklch(18.5% 0.012 252);
+      }
+    </style>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico?v=avatar" />
@@ -130,18 +168,6 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
         }
       </script>
     )}
-
-    <!-- Dark mode init (prevent flash) -->
-    <script is:inline>
-      const theme = (() => {
-        const stored = localStorage?.getItem('theme');
-        if (stored === 'dark' || stored === 'light') return stored;
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      })();
-      const isDark = theme === 'dark';
-      document.documentElement.classList.toggle('dark', isDark);
-      document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
-    </script>
 
     <!-- Live Photo styles (no-op when no .livephoto exists on the page) -->
     <style is:global>

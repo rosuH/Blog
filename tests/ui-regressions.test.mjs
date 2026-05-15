@@ -127,6 +127,22 @@ test('theme toggle exposes localized motion-friendly labels', () => {
   assert.match(html, /data-label-dark="切换到深色模式"/);
 });
 
+test('theme and page background are initialized before stylesheet discovery', () => {
+  const html = readDist('index.html');
+  const firstStylesheet = html.indexOf('rel="stylesheet"');
+  const themeInit = html.indexOf('data-critical-theme-init');
+  const backgroundInit = html.indexOf('data-critical-page-background');
+
+  assert.notEqual(firstStylesheet, -1);
+  assert.notEqual(themeInit, -1);
+  assert.notEqual(backgroundInit, -1);
+  assert.ok(themeInit < firstStylesheet, 'theme init must run before stylesheet discovery');
+  assert.ok(backgroundInit < firstStylesheet, 'critical background must be inline before stylesheet discovery');
+  assert.match(html.slice(0, firstStylesheet), /html\.dark/);
+  assert.match(html.slice(0, firstStylesheet), /background-color:\s*oklch\(97% 0\.012 78\)/);
+  assert.match(html.slice(0, firstStylesheet), /background-color:\s*oklch\(18\.5% 0\.012 252\)/);
+});
+
 test('bamboo shadow uses JS wind physics instead of global keyframe or SMIL transforms', () => {
   const source = readSource('src', 'components', 'BambooShadow.astro');
 
