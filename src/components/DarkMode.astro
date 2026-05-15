@@ -33,7 +33,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+    transition:
+      color var(--duration-fast) ease,
+      border-color var(--duration-fast) ease,
+      background-color var(--duration-fast) ease;
     border-radius: 999px;
     overflow: hidden;
     position: relative;
@@ -67,13 +70,15 @@
     border-radius: inherit;
     background: color-mix(in srgb, var(--accent) 16%, transparent);
     opacity: 0;
-    transform: scale(0.72);
-    transition: opacity var(--duration-fast) ease, transform var(--duration-medium) var(--ease-out-quart);
+    transform: scale(0.9);
+    transition:
+      opacity var(--duration-fast) ease,
+      transform var(--duration-quiet) var(--ease-quiet);
   }
 
   .theme-toggle.is-toggling::after {
-    opacity: 1;
-    transform: scale(1.2);
+    opacity: 0.72;
+    transform: scale(1.06);
   }
 
   .sun-icon,
@@ -82,12 +87,12 @@
     z-index: 1;
     transition:
       opacity var(--duration-fast) ease,
-      transform var(--duration-medium) var(--ease-out-quart);
+      transform var(--duration-quiet) var(--ease-quiet);
   }
 
   .sun-icon  {
     opacity: 0;
-    transform: rotate(-24deg) scale(0.72);
+    transform: rotate(-12deg) scale(0.86);
   }
 
   .moon-icon {
@@ -102,7 +107,7 @@
 
   :global(.dark) .moon-icon {
     opacity: 0;
-    transform: rotate(24deg) scale(0.72);
+    transform: rotate(12deg) scale(0.86);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -139,6 +144,6 @@
     toggle.classList.remove('is-toggling');
     void toggle.offsetWidth;
     toggle.classList.add('is-toggling');
-    setTimeout(() => toggle.classList.remove('is-toggling'), 420);
+    setTimeout(() => toggle.classList.remove('is-toggling'), 320);
   });
 </script>
