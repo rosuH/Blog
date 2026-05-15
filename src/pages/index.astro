@@ -2,35 +2,15 @@
 // src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
 import Bio from '../components/Bio.astro';
+import PostList from '../components/PostList.astro';
+import ArchiveYearPill from '../components/ArchiveYearPill.astro';
 import { getCollection } from 'astro:content';
 import { SITE, absoluteUrl } from '../utils/site-info';
+import { getLatestPosts, getArchiveSummary } from '../utils/posts';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
-const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const latestPosts = sortedPosts.slice(0, 5);
-const archivedPosts = sortedPosts.slice(5);
-const archiveGroups = Array.from(
-  archivedPosts.reduce((groups, post) => {
-    const year = String(post.data.date.getFullYear());
-    const bucket = groups.get(year) ?? [];
-    bucket.push(post);
-    groups.set(year, bucket);
-    return groups;
-  }, new Map<string, typeof archivedPosts>()).entries()
-);
-
-const formatLatestDate = (date: Date) =>
-  date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  });
-
-const formatArchiveDate = (date: Date) =>
-  date.toLocaleDateString('zh-CN', {
-    month: '2-digit',
-    day: '2-digit',
-  });
+const latestPosts = getLatestPosts(posts, 5);
+const archiveSummary = getArchiveSummary(posts);
 
 const homeUrl = absoluteUrl('/', Astro.site);
 const personId = `${homeUrl}#person`;
@@ -91,52 +71,25 @@ const homeStructuredData = [
       <h2 id="recent-writing-title">最近写作</h2>
     </div>
 
-    <ol class="post-list post-list--featured" role="list" data-stagger="featured-posts">
-      {latestPosts.map((post, index) => (
-        <li class="post-row post-row--featured" style={`--item-index: ${index}`}>
-          <a href={`/${post.id}/`} class="post-link">
-            <span class="post-title">{post.data.title}</span>
-            <time
-              class="post-date"
-              datetime={post.data.date.toISOString()}
-            >
-              {formatLatestDate(post.data.date)}
-            </time>
-          </a>
-        </li>
-      ))}
-    </ol>
+    <PostList posts={latestPosts} variant="featured" />
   </section>
 
   <section class="home-section home-section--archive" aria-labelledby="archive-title">
     <div class="section-head" data-reveal="section-head">
-      <h2 id="archive-title">全部归档</h2>
+      <h2 id="archive-title">归档</h2>
     </div>
 
-    <div class="archive-groups">
-      {archiveGroups.map(([year, yearPosts]) => (
-        <section class="archive-group" id={`archive-year-${year}`}>
-          <h3 class="archive-year-heading">
-            <a href={`#archive-year-${year}`} class="archive-year">{year}</a>
-          </h3>
-          <ol class="post-list post-list--archive" role="list">
-            {yearPosts.map((post) => (
-              <li class="post-row">
-                <a href={`/${post.id}/`} class="post-link">
-                  <span class="post-title">{post.data.title}</span>
-                  <time
-                    class="post-date"
-                    datetime={post.data.date.toISOString()}
-                  >
-                    {formatArchiveDate(post.data.date)}
-                  </time>
-                </a>
-              </li>
-            ))}
-          </ol>
-        </section>
-      ))}
-    </div>
+    <a href="/archive/" class="archive-entry">
+      <span class="archive-entry__copy">
+        <span class="archive-entry__title">查看全部归档</span>
+        <span class="archive-entry__meta">
+          {archiveSummary.totalPosts} 篇文章，跨 {archiveSummary.totalYears} 年
+        </span>
+      </span>
+      <span class="archive-entry__years" aria-label={`最近年份：${archiveSummary.recentYears.join('、')}`}>
+        {archiveSummary.recentYears.map((year) => <ArchiveYearPill year={year} />)}
+      </span>
+    </a>
   </section>
 </Layout>
 
@@ -386,19 +339,66 @@ const homeStructuredData = [
     font-size: var(--text-sm);
   }
 
-  .archive-groups {
-    display: grid;
-    gap: 1.75rem;
+  .archive-entry {
+    min-height: 4.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.95rem 0;
+    border-top: 1px solid color-mix(in oklab, var(--border) 78%, transparent);
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 78%, transparent);
+    color: inherit;
+    text-decoration: none;
+    position: relative;
   }
 
-  .archive-group {
-    display: grid;
-    gap: 0.65rem;
+  .archive-entry::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0.42rem;
+    width: min(11rem, 52%);
+    height: 6px;
+    background: color-mix(in oklab, var(--avatar-blue) 58%, transparent);
+    opacity: 0.68;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path var(--duration-medium) var(--ease-quiet);
+    -webkit-mask-image: var(--scribble-underline-mask);
+    mask-image: var(--scribble-underline-mask);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
   }
 
-  .archive-year-heading {
-    margin: 0;
-    width: fit-content;
+  .archive-entry:hover::after,
+  .archive-entry:focus-visible::after {
+    clip-path: inset(0 0 0 0);
+  }
+
+  .archive-entry__copy {
+    display: grid;
+    gap: 0.18rem;
+  }
+
+  .archive-entry__title {
+    color: var(--fg);
+    font-weight: 560;
+    line-height: 1.4;
+  }
+
+  .archive-entry__meta {
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+
+  .archive-entry__years {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.45rem;
   }
 
   .archive-year {
@@ -529,6 +529,15 @@ const homeStructuredData = [
     .post-row--featured .post-title {
       font-size: var(--text-base);
     }
+
+    .archive-entry {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .archive-entry__years {
+      justify-content: flex-start;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -546,6 +555,7 @@ const homeStructuredData = [
 
     .post-date,
     .archive-year,
+    .archive-entry::after,
     .post-link::after,
     .home-intro::after {
       transition: none;

@@ -1,0 +1,86 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ArchiveYearPill from '../components/ArchiveYearPill.astro';
+import PostList from '../components/PostList.astro';
+import { getCollection } from 'astro:content';
+import { SITE, absoluteUrl } from '../utils/site-info';
+import { getArchiveGroups } from '../utils/posts';
+
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+const archiveGroups = getArchiveGroups(posts);
+const archiveUrl = absoluteUrl('/archive/', Astro.site);
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  url: archiveUrl,
+  name: '完整归档',
+  description: '按年份整理的 rosu 博客文章索引。',
+  inLanguage: SITE.language,
+  isPartOf: {
+    '@type': 'Blog',
+    name: SITE.name,
+    url: absoluteUrl('/', Astro.site),
+  },
+};
+---
+
+<Layout title="完整归档" description="按年份整理的 rosu 博客文章索引。" structuredData={structuredData}>
+  <section class="archive-page" aria-labelledby="archive-title">
+    <header class="archive-page__header">
+      <p class="archive-page__eyebrow">Archive</p>
+      <h1 id="archive-title">完整归档</h1>
+      <p>按年份整理的技术、写作和生活笔记。</p>
+    </header>
+
+    {archiveGroups.length > 0 ? (
+      <div class="archive-groups archive-groups--full">
+        {archiveGroups.map(([year, yearPosts]) => (
+          <section class="archive-group" id={`archive-year-${year}`} aria-labelledby={`archive-heading-${year}`}>
+            <h2 class="archive-year-heading" id={`archive-heading-${year}`}>
+              <ArchiveYearPill year={year} href={`#archive-year-${year}`} />
+            </h2>
+            <PostList posts={yearPosts} variant="archive" />
+          </section>
+        ))}
+      </div>
+    ) : (
+      <p class="archive-empty">暂无归档。</p>
+    )}
+  </section>
+</Layout>
+
+<style>
+  .archive-page {
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+
+  .archive-page__header {
+    margin: 1.5rem 0 2.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 74%, transparent);
+  }
+
+  .archive-page__eyebrow {
+    margin: 0 0 0.4rem;
+    color: color-mix(in oklab, var(--support) 70%, var(--fg-muted));
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+
+  .archive-page__header h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+  }
+
+  .archive-page__header p:last-child {
+    margin: 0.75rem 0 0;
+    color: var(--fg-muted);
+    font-size: var(--text-sm);
+  }
+
+  .archive-empty {
+    color: var(--fg-muted);
+  }
+</style>
