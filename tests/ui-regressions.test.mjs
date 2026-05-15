@@ -61,6 +61,36 @@ test('homepage foregrounds recent writing in Chinese with archive grouping hooks
   assert.match(bioSource, /\.bio-link svg\s*\{[\s\S]*display:\s*block;/);
 });
 
+test('homepage links to archive without rendering the full historical index', () => {
+  const html = readDist('index.html');
+  const homeSource = readSource('src', 'pages', 'index.astro');
+
+  assert.match(html, /href="\/archive\/"/);
+  assert.match(html, /查看全部归档/);
+  assert.doesNotMatch(html, /id="archive-year-2018"/);
+  assert.doesNotMatch(html, /id="archive-year-2016"/);
+  assert.doesNotMatch(homeSource, /archiveGroups\.map/);
+  assert.match(homeSource, /getArchiveSummary/);
+});
+
+test('archive page renders the complete historical index by year', () => {
+  const html = readDist('archive', 'index.html');
+  const archiveSource = readSource('src', 'pages', 'archive.astro');
+  const postsHelper = readSource('src', 'utils', 'posts.ts');
+
+  assert.match(html, /完整归档/);
+  assert.match(html, /id="archive-year-2021"/);
+  assert.match(html, /id="archive-year-2016"/);
+  assert.match(html, /SparseArray 简介/);
+  assert.match(html, /启用 HTTPS 札记/);
+  assert.match(html, /<time[^>]+datetime="2021-07-23T/);
+  assert.match(archiveSource, /getArchiveGroups/);
+  assert.match(postsHelper, /export function getSortedPosts/);
+  assert.match(postsHelper, /export function getLatestPosts/);
+  assert.match(postsHelper, /export function getArchiveGroups/);
+  assert.match(postsHelper, /export function getArchiveSummary/);
+});
+
 test('article page renders a single h1 and Chinese post navigation labels', () => {
   const html = readDist('Manifesto-for-Minimalist-Software-Engineers-CN', 'index.html');
   const js = readAstroJs();
