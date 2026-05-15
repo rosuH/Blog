@@ -137,7 +137,6 @@ test('bamboo shadow uses JS wind physics instead of global keyframe or SMIL tran
 test('color system uses avatar blue with warm paper accents', () => {
   const css = readSource('src', 'styles', 'global.css');
   const homeSource = readSource('src', 'pages', 'index.astro');
-  const pillSource = readSource('src', 'components', 'ArchiveYearPill.astro');
 
   assert.match(css, /--avatar-blue:\s+oklch\(49% 0\.19 255\)/);
   assert.match(css, /--avatar-peach:\s+oklch\(86% 0\.055 50\)/);
@@ -157,12 +156,31 @@ test('color system uses avatar blue with warm paper accents', () => {
   assert.match(homeSource, /mask-image:\s+var\(--scribble-quote-mask\)/);
   assert.match(homeSource, /transition:\s+clip-path var\(--duration-medium\) var\(--ease-quiet\)/);
   assert.doesNotMatch(homeSource, /scaleX\(0\)/);
-  assert.match(pillSource, /\.archive-year::before/);
-  assert.match(pillSource, /\.archive-year::after/);
-  assert.match(pillSource, /mask-image:\s+var\(--scribble-pill-fill-mask\)/);
-  assert.match(pillSource, /mask-image:\s+var\(--scribble-pill-outline-mask\)/);
-  assert.match(pillSource, /\.archive-year\s*\{[\s\S]*background:\s+transparent/);
+  assert.match(css, /\.archive-year::before/);
+  assert.match(css, /\.archive-year::after/);
+  assert.match(css, /mask-image:\s+var\(--scribble-pill-fill-mask\)/);
+  assert.match(css, /mask-image:\s+var\(--scribble-pill-outline-mask\)/);
+  assert.match(css, /\.archive-year\s*\{[\s\S]*background:\s+transparent/);
   assert.match(homeSource, /home-section--recent/);
+});
+
+test('quiet archive visual system uses shared list and year hooks', () => {
+  const css = readSource('src', 'styles', 'global.css');
+  const homeSource = readSource('src', 'pages', 'index.astro');
+  const archiveSource = readSource('src', 'pages', 'archive.astro');
+  const postListSource = readSource('src', 'components', 'PostList.astro');
+  const yearPillSource = readSource('src', 'components', 'ArchiveYearPill.astro');
+
+  assert.match(css, /--divider-soft:/);
+  assert.match(css, /--control-paper:/);
+  assert.match(css, /\.post-row\s*\{[\s\S]*border-top:\s*1px solid var\(--divider-soft\)/);
+  assert.match(css, /\.archive-year::before/);
+  assert.match(css, /\.archive-year::after/);
+  assert.match(postListSource, /post-list--featured/);
+  assert.match(postListSource, /post-list--archive/);
+  assert.match(yearPillSource, /class="archive-year"/);
+  assert.match(homeSource, /archive-entry/);
+  assert.match(archiveSource, /archive-groups--full/);
 });
 
 test('closed overlays are inert and floating controls meet touch target size', () => {
