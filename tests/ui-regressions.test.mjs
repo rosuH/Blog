@@ -194,12 +194,18 @@ test('closed overlays are inert and floating controls meet touch target size', (
   assert.match(articleSource, /tocMobile\.setAttribute\('inert', ''\)/);
   assert.match(articleSource, /tocMobile\.removeAttribute\('inert'\)/);
   assert.match(articleSource, /tocTrigger\.setAttribute\('aria-controls', 'mobile-toc'\)/);
+  assert.match(css, /\.quiet-control/);
   assert.match(css, /\.toc-trigger\s*\{[\s\S]*min-height:\s*2\.75rem/);
+  assert.match(css, /\.toc-trigger\s*\{[\s\S]*background:\s*var\(--control-paper\)/);
   assert.match(css, /\.toc-mobile__close\s*\{[\s\S]*width:\s*2\.75rem;[\s\S]*height:\s*2\.75rem/);
   assert.match(css, /\.back-to-top\s*\{[\s\S]*width:\s*2\.75rem;[\s\S]*height:\s*2\.75rem/);
+  assert.match(css, /\.back-to-top\s*\{[\s\S]*background:\s*var\(--control-paper\)/);
+  assert.match(css, /\.copy-btn\s*\{[\s\S]*background:\s*var\(--control-paper\)/);
   assert.match(bioSource, /\.bio-link\s*\{[\s\S]*min-height:\s*2\.75rem;[\s\S]*min-width:\s*2\.75rem/);
   assert.doesNotMatch(css, /\.toc-trigger\s*\{[^}]*backdrop-filter:\s*blur/);
   assert.doesNotMatch(css, /\.back-to-top\s*\{[^}]*backdrop-filter:\s*blur/);
+  assert.doesNotMatch(css, /\.toc-trigger\s*\{[\s\S]*color:\s*var\(--bg\)/);
+  assert.doesNotMatch(css, /\.back-to-top\s*\{[\s\S]*color:\s*var\(--bg\)/);
 });
 
 test('motion system stays quiet and ink-like', () => {

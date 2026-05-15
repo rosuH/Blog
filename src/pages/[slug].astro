@@ -427,7 +427,7 @@ const articleStructuredData = {
     // 移动端触发按钮
     const tocTrigger = document.createElement('button');
     tocTrigger.type = 'button';
-    tocTrigger.className = 'toc-trigger';
+    tocTrigger.className = 'toc-trigger quiet-control';
     tocTrigger.setAttribute('aria-label', '打开目录');
     tocTrigger.setAttribute('aria-controls', 'mobile-toc');
     tocTrigger.setAttribute('aria-expanded', 'false');
@@ -576,7 +576,7 @@ const articleStructuredData = {
   (function () {
     const backToTop = document.createElement('button');
     backToTop.type = 'button';
-    backToTop.className = 'back-to-top';
+    backToTop.className = 'back-to-top quiet-control';
     backToTop.setAttribute('aria-label', '返回顶部');
     backToTop.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
 

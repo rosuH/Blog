@@ -760,11 +760,13 @@ img {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   padding: 0.25rem;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--fg-subtle);
+  color: var(--control-ink);
+  background: var(--control-paper);
+  border: 1px solid var(--divider-warm);
+  border-radius: 999px;
   cursor: pointer;
   opacity: 0;
   display: flex;
@@ -785,8 +787,9 @@ img {
 }
 
 .copy-btn:hover {
-  color: var(--fg);
-  background-color: color-mix(in oklab, var(--support-soft) 76%, var(--bg));
+  color: color-mix(in oklab, var(--avatar-blue) 78%, var(--fg));
+  border-color: color-mix(in oklab, var(--avatar-blue) 34%, var(--divider-warm));
+  background: color-mix(in oklab, var(--control-paper) 88%, var(--accent-soft));
 }
 
 .copy-btn::after {
@@ -808,6 +811,7 @@ img {
 
 .copy-btn.copied {
   color: var(--accent);
+  border-color: color-mix(in oklab, var(--avatar-blue) 34%, var(--divider-warm));
   opacity: 1;
   transform: translateY(0);
   animation: copy-ack var(--duration-quiet) var(--ease-quiet) both;
@@ -907,6 +911,38 @@ img {
   font-weight: 500;
 }
 
+/* ===== Quiet Controls ===== */
+.quiet-control {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--control-ink);
+  background: var(--control-paper);
+  border: 1px solid var(--divider-warm);
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: none;
+  transition:
+    color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    background-color var(--duration-fast) ease,
+    transform var(--duration-fast) var(--ease-quiet);
+}
+
+.quiet-control:hover,
+.quiet-control:focus-visible {
+  color: color-mix(in oklab, var(--avatar-blue) 78%, var(--fg));
+  border-color: color-mix(in oklab, var(--avatar-blue) 34%, var(--divider-warm));
+  background: color-mix(in oklab, var(--control-paper) 88%, var(--accent-soft));
+  transform: translateY(-1px);
+}
+
+.quiet-control:active {
+  transform: translateY(0);
+}
+
 /* ===== Mobile TOC ===== */
 .toc-trigger {
   position: fixed;
@@ -914,27 +950,31 @@ img {
   bottom: 1rem;
   z-index: 120;
   display: none;
-    align-items: center;
-    gap: 0.4rem;
-    min-height: 2.75rem;
-    padding: 0.55rem 0.95rem;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.95rem;
   font-family: var(--font-sans);
   font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--bg);
-    background: color-mix(in oklab, var(--fg) 84%, var(--bg));
-    border: none;
-  border-radius: 9999px;
+  font-weight: 500;
+  color: var(--control-ink);
+  background: var(--control-paper);
+  border: 1px solid var(--divider-warm);
+  border-radius: 999px;
   cursor: pointer;
-  box-shadow: 0 4px 20px -4px color-mix(in oklab, var(--fg) 30%, transparent);
+  box-shadow: none;
   transition:
-    transform var(--duration-fast) var(--ease-quiet),
-    background-color var(--duration-fast) ease;
+    color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    background-color var(--duration-fast) ease,
+    transform var(--duration-fast) var(--ease-quiet);
 }
 
 .toc-trigger:hover {
-    transform: translateY(-1px);
-    background: color-mix(in oklab, var(--fg) 92%, var(--bg));
+  color: color-mix(in oklab, var(--avatar-blue) 78%, var(--fg));
+  border-color: color-mix(in oklab, var(--avatar-blue) 34%, var(--divider-warm));
+  background: color-mix(in oklab, var(--control-paper) 88%, var(--accent-soft));
+  transform: translateY(-1px);
 }
 
 .toc-trigger:active {
@@ -988,24 +1028,26 @@ img {
   position: absolute;
   top: 0.85rem;
   right: 0.85rem;
-    width: 2.75rem;
-    height: 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--fg-muted);
-  background: none;
-  border: none;
-  border-radius: 8px;
+  color: var(--control-ink);
+  background: var(--control-paper);
+  border: 1px solid var(--divider-warm);
+  border-radius: 999px;
   cursor: pointer;
   transition:
     color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
     background-color var(--duration-fast) ease;
 }
 
 .toc-mobile__close:hover {
-  color: var(--fg);
-  background: var(--code-bg);
+  color: color-mix(in oklab, var(--avatar-blue) 78%, var(--fg));
+  border-color: color-mix(in oklab, var(--avatar-blue) 34%, var(--divider-warm));
+  background: color-mix(in oklab, var(--control-paper) 88%, var(--accent-soft));
 }
 
 @media (max-width: 1179px) {
@@ -1033,7 +1075,7 @@ img {
     align-items: center;
     justify-content: center;
     font-size: 0.9rem;
-    color: var(--bg);
+    color: var(--paper);
     background: color-mix(in oklab, var(--fg) 55%, transparent);
     border-radius: 6px;
     opacity: 0;
@@ -1058,7 +1100,7 @@ img {
     align-items: center;
     justify-content: center;
     font-size: 0.9rem;
-    color: var(--bg);
+    color: var(--paper);
     background: color-mix(in oklab, var(--fg) 40%, transparent);
     border-radius: 6px;
     opacity: 0.55;
@@ -1080,25 +1122,27 @@ html.dark .media-figure figcaption {
   right: 1rem;
   bottom: 1rem;
   z-index: 120;
-    width: 2.75rem;
-    height: 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-    padding: 0;
-    color: var(--bg);
-    background: color-mix(in oklab, var(--fg) 84%, var(--bg));
-  border: none;
-  border-radius: 50%;
+  padding: 0;
+  color: var(--control-ink);
+  background: var(--control-paper);
+  border: 1px solid var(--divider-warm);
+  border-radius: 999px;
   cursor: pointer;
   opacity: 0;
   transform: translateY(0.5rem);
   pointer-events: none;
-  box-shadow: 0 4px 20px -4px color-mix(in oklab, var(--fg) 30%, transparent);
+  box-shadow: none;
   transition:
     opacity 220ms ease,
-    transform 220ms var(--ease-quiet),
-    background-color var(--duration-fast) ease;
+    color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    background-color var(--duration-fast) ease,
+    transform 220ms var(--ease-quiet);
 }
 
 .back-to-top.is-visible {
@@ -1108,7 +1152,9 @@ html.dark .media-figure figcaption {
 }
 
 .back-to-top:hover {
-    background: color-mix(in oklab, var(--fg) 92%, var(--bg));
+  color: color-mix(in oklab, var(--avatar-blue) 78%, var(--fg));
+  border-color: color-mix(in oklab, var(--avatar-blue) 34%, var(--divider-warm));
+  background: color-mix(in oklab, var(--control-paper) 88%, var(--accent-soft));
 }
 
 .back-to-top:active {
@@ -1160,6 +1206,7 @@ html.dark .media-figure figcaption {
 
   .copy-btn,
   .copy-btn::after,
+  .quiet-control,
   .toc-link,
   .toc-trigger,
   .toc-mobile,
@@ -1177,6 +1224,8 @@ html.dark .media-figure figcaption {
     animation: none;
   }
 
+  .quiet-control:hover,
+  .quiet-control:active,
   .toc-trigger:hover,
   .toc-trigger:active,
   .back-to-top:active {
