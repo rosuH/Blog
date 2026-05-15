@@ -26,7 +26,7 @@ if (process.env.MEDIA_TEST_COUNTER === '1' && !globalThis.__mediaCounterHook) {
   });
 }
 
-export const PROCESSOR_VERSION = 1;
+export const PROCESSOR_VERSION = 2;
 
 export async function hashSource(absPath) {
   return new Promise((resolve, reject) => {
@@ -84,8 +84,44 @@ async function ensureFfmpegX264() {
   }
 }
 
+async function probePrimaryVideoCodec(srcPath) {
+  await ensureFfmpeg();
+  try {
+    const { stdout } = await execFileP('ffprobe', [
+      '-v', 'error',
+      '-select_streams', 'v:0',
+      '-show_entries', 'stream=codec_name',
+      '-of', 'default=noprint_wrappers=1:nokey=1',
+      srcPath,
+    ]);
+    const codec = stdout.trim().split(/\s+/)[0];
+    if (!codec) throw new Error('no primary video stream found');
+    return codec;
+  } catch (err) {
+    throw new Error(`ffprobe unusable for MOV codec detection: ${err.message}`);
+  }
+}
+
 async function exists(p) {
   try { await access(p); return true; } catch { return false; }
+}
+
+const publishLocks = new Map();
+
+async function withPublishLock(cacheKey, task) {
+  const previous = publishLocks.get(cacheKey) ?? Promise.resolve();
+  let release;
+  const gate = new Promise((resolve) => { release = resolve; });
+  const next = previous.catch(() => {}).then(() => gate);
+  publishLocks.set(cacheKey, next);
+  await previous.catch(() => {});
+
+  try {
+    return await task();
+  } finally {
+    release();
+    if (publishLocks.get(cacheKey) === next) publishLocks.delete(cacheKey);
+  }
 }
 
 export async function processHeic(srcPath, cacheRoot) {
@@ -158,7 +194,7 @@ export async function processHeic(srcPath, cacheRoot) {
 }
 
 export async function processMov(srcPath, cacheRoot) {
-  await ensureFfmpegX264();
+  await ensureFfmpeg();
   const hash = await hashSource(srcPath);
   const key = cacheKeyFor(hash);
   const dir = join(cacheRoot, key);
@@ -171,37 +207,75 @@ export async function processMov(srcPath, cacheRoot) {
 
   bumpCounter();
   await mkdir(dir, { recursive: true });
+  const codec = await probePrimaryVideoCodec(srcPath);
   const hevcOut = join(dir, 'clip.hevc.mp4');
   const h264Out = join(dir, 'clip.h264.mp4');
+  const products = {};
 
-  // HEVC: remux only, strip audio, force hvc1 tag for Safari
-  await execFileP('ffmpeg', [
-    '-y', '-i', srcPath,
-    '-an', '-c:v', 'copy', '-tag:v', 'hvc1',
-    '-movflags', '+faststart',
-    hevcOut,
-  ]);
+  if (codec === 'hevc') {
+    await ensureFfmpegX264();
+    // HEVC: remux only, strip audio, force hvc1 tag for Safari.
+    await execFileP('ffmpeg', [
+      '-y', '-i', srcPath,
+      '-map', '0:v:0',
+      '-map_metadata', '-1',
+      '-map_chapters', '-1',
+      '-an', '-c:v', 'copy', '-tag:v', 'hvc1',
+      '-movflags', '+faststart',
+      hevcOut,
+    ]);
+    products.video_hevc = 'clip.hevc.mp4';
 
-  // H.264: transcode, strip audio, fast-start
-  await execFileP('ffmpeg', [
-    '-y', '-i', srcPath,
-    '-an',
-    '-c:v', 'libx264', '-preset', 'slow', '-crf', '23',
-    '-pix_fmt', 'yuv420p',
-    '-movflags', '+faststart',
-    h264Out,
-  ]);
+    // H.264: transcode, strip audio, fast-start.
+    await execFileP('ffmpeg', [
+      '-y', '-i', srcPath,
+      '-map', '0:v:0',
+      '-map_metadata', '-1',
+      '-map_chapters', '-1',
+      '-an',
+      '-c:v', 'libx264', '-preset', 'slow', '-crf', '23',
+      '-pix_fmt', 'yuv420p',
+      '-movflags', '+faststart',
+      h264Out,
+    ]);
+    products.video_h264 = 'clip.h264.mp4';
+  } else if (codec === 'h264') {
+    // Some Live Photo exporters emit H.264 already; keep it lossless instead of
+    // forcing an incompatible hvc1 remux.
+    await execFileP('ffmpeg', [
+      '-y', '-i', srcPath,
+      '-map', '0:v:0',
+      '-map_metadata', '-1',
+      '-map_chapters', '-1',
+      '-an', '-c:v', 'copy',
+      '-movflags', '+faststart',
+      h264Out,
+    ]);
+    products.video_h264 = 'clip.h264.mp4';
+  } else {
+    await ensureFfmpegX264();
+    await execFileP('ffmpeg', [
+      '-y', '-i', srcPath,
+      '-map', '0:v:0',
+      '-map_metadata', '-1',
+      '-map_chapters', '-1',
+      '-an',
+      '-c:v', 'libx264', '-preset', 'slow', '-crf', '23',
+      '-pix_fmt', 'yuv420p',
+      '-movflags', '+faststart',
+      h264Out,
+    ]);
+    products.video_h264 = 'clip.h264.mp4';
+  }
 
   const result = {
     cacheKey: key,
     hash,
     kind: 'mov',
     version: PROCESSOR_VERSION,
+    video_codec: codec,
     src_basename: basename(srcPath, extname(srcPath)),
-    products: {
-      video_hevc: 'clip.hevc.mp4',
-      video_h264: 'clip.h264.mp4',
-    },
+    products,
   };
 
   await writeFile(metaPath, JSON.stringify(result, null, 2));
@@ -215,27 +289,29 @@ export async function processMov(srcPath, cacheRoot) {
 // (from a different output set) are removed before copying so the published
 // dir is always exactly meta.products.
 export async function publishToPublic(cacheKey, cacheRoot, publicRoot) {
-  const src = join(cacheRoot, cacheKey);
-  const dst = join(publicRoot, '_media', cacheKey);
-  const metaPath = join(src, 'meta.json');
-  const meta = JSON.parse(await readFile(metaPath, 'utf8'));
-  const products = new Set(Object.values(meta.products || {}).filter(Boolean));
-  await mkdir(dst, { recursive: true });
+  return withPublishLock(cacheKey, async () => {
+    const src = join(cacheRoot, cacheKey);
+    const dst = join(publicRoot, '_media', cacheKey);
+    const metaPath = join(src, 'meta.json');
+    const meta = JSON.parse(await readFile(metaPath, 'utf8'));
+    const products = new Set(Object.values(meta.products || {}).filter(Boolean));
+    await mkdir(dst, { recursive: true });
 
-  // Prune stale entries that aren't in the current product set.
-  try {
-    const existing = await readdir(dst, { withFileTypes: true });
-    for (const ent of existing) {
-      if (products.has(ent.name)) continue;
-      await rm(join(dst, ent.name), { recursive: true, force: true });
+    // Prune stale entries that aren't in the current product set.
+    try {
+      const existing = await readdir(dst, { withFileTypes: true });
+      for (const ent of existing) {
+        if (products.has(ent.name)) continue;
+        await rm(join(dst, ent.name), { recursive: true, force: true });
+      }
+    } catch {
+      // ignore destination cleanup failures; copy below may still succeed
     }
-  } catch {
-    // ignore destination cleanup failures; copy below may still succeed
-  }
 
-  for (const filename of products) {
-    await cp(join(src, filename), join(dst, filename), { force: true });
-  }
+    for (const filename of products) {
+      await cp(join(src, filename), join(dst, filename), { force: true });
+    }
+  });
 }
 
 export async function gcCache(cacheRoot, keepSet, { maxAgeDays = 60 } = {}) {

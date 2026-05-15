@@ -220,6 +220,7 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
         letter-spacing: 0.06em;
         cursor: pointer;
         user-select: none;
+        z-index: 3;
       }
       html.dark .livephoto-badge {
         background: color-mix(in oklab, var(--fg) 78%, transparent);
@@ -302,12 +303,20 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
           } else {
             fig.addEventListener('mouseenter', start);
             fig.addEventListener('mouseleave', stop);
+            badge.addEventListener('click', (e) => {
+              e.preventDefault();
+              start();
+            });
             fig.addEventListener('pointerdown', (e) => {
               if (e.pointerType !== 'touch') return;
               pressTimer = setTimeout(start, 200);
             });
             ['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) => {
-              fig.addEventListener(ev, () => { clearTimeout(pressTimer); stop(); });
+              fig.addEventListener(ev, (e) => {
+                if (e.pointerType !== 'touch') return;
+                clearTimeout(pressTimer);
+                stop();
+              });
             });
             badge.addEventListener('keydown', (e) => {
               if (e.key === ' ' || e.key === 'Enter') {
