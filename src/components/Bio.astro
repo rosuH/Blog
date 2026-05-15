@@ -14,8 +14,8 @@ const { compact = false } = Astro.props;
   <Image
     src={profilePic}
     alt="rosu"
-    width={compact ? 40 : 48}
-    height={compact ? 40 : 48}
+    width={compact ? 42 : 56}
+    height={compact ? 42 : 56}
     layout="fixed"
     densities={[1, 2, 3]}
     class="bio-avatar"
@@ -53,7 +53,7 @@ const { compact = false } = Astro.props;
   .bio {
     display: flex;
     align-items: center;
-    gap: 0.875rem;
+    gap: 1rem;
     margin-bottom: 0.875rem;
   }
 
@@ -66,11 +66,25 @@ const { compact = false } = Astro.props;
     border-radius: 50%;
     flex-shrink: 0;
     object-fit: cover;
+    background: var(--paper);
+    box-shadow:
+      0 0 0 2px color-mix(in oklab, var(--support-soft) 92%, var(--bg)),
+      0 0 0 3px color-mix(in oklab, var(--avatar-blue) 22%, var(--border));
+    transition:
+      box-shadow var(--duration-fast) ease,
+      transform var(--duration-fast) var(--ease-quiet);
+  }
+
+  .bio-avatar:hover {
+    box-shadow:
+      0 0 0 2px color-mix(in oklab, var(--support-soft) 98%, var(--bg)),
+      0 0 0 3px color-mix(in oklab, var(--avatar-blue) 46%, var(--border));
+    transform: translateY(-1px) rotate(-0.6deg);
   }
 
   .bio-copy {
     min-width: 0;
-    flex: 1;
+    flex: 0 1 auto;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -88,11 +102,11 @@ const { compact = false } = Astro.props;
   .bio-name {
     font-size: var(--text-sm);
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
   }
 
-.bio-links {
-    margin-left: auto;
+  .bio-links {
+    margin-left: 0.2rem;
     display: inline-flex;
     flex-wrap: wrap;
     gap: 0.125rem;
@@ -100,8 +114,8 @@ const { compact = false } = Astro.props;
   }
 
   .bio-link {
-    min-height: 2.5rem;
-    min-width: 2.5rem;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
     display: inline-grid;
     place-items: center;
     align-items: center;
@@ -109,11 +123,11 @@ const { compact = false } = Astro.props;
     text-decoration: none;
     transition:
       color var(--duration-fast) ease,
-      transform var(--duration-fast) ease;
+      transform var(--duration-fast) var(--ease-quiet);
   }
 
   .bio-link:hover {
-    color: var(--accent);
+    color: var(--avatar-blue);
     transform: translateY(-1px);
   }
 
@@ -128,13 +142,14 @@ const { compact = false } = Astro.props;
   }
 
   .bio--compact .bio-link {
-    min-height: 2.25rem;
-    min-width: 2.25rem;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
   }
 
   @media (max-width: 560px) {
     .bio {
       align-items: flex-start;
+      gap: 0.875rem;
     }
 
     .bio-copy {
@@ -144,6 +159,18 @@ const { compact = false } = Astro.props;
 
     .bio-links {
       margin-left: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bio-avatar,
+    .bio-link {
+      transition: none;
+    }
+
+    .bio-avatar:hover,
+    .bio-link:hover {
+      transform: none;
     }
   }
 </style>

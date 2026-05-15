@@ -64,9 +64,9 @@ const recentPosts = posts
 
   .not-found h1 {
     margin: 0;
-    font-size: clamp(4.5rem, 14vw, 8rem);
+    font-size: 8rem;
     line-height: 0.95;
-    letter-spacing: -0.05em;
+    letter-spacing: 0;
     color: color-mix(in oklab, var(--accent) 58%, var(--fg));
   }
 
@@ -204,6 +204,10 @@ const recentPosts = posts
   @media (max-width: 640px) {
     .not-found {
       padding: 2.5rem 0 1.5rem;
+    }
+
+    .not-found h1 {
+      font-size: 4.5rem;
     }
 
     .recovery-link {

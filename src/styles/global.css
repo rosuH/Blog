@@ -5,17 +5,27 @@
   color-scheme: light;
 
   /* Colors */
-  --bg:             oklch(97.7% 0.006 85);
-  --fg:             oklch(24% 0.016 252);
+  --avatar-blue:        oklch(49% 0.19 255);
+  --avatar-blue-bright: oklch(62% 0.16 235);
+  --avatar-peach:       oklch(86% 0.055 50);
+  --paper:              oklch(97% 0.012 78);
+  --ink:                oklch(20% 0.015 250);
+
+  --bg:             var(--paper);
+  --fg:             var(--ink);
   --fg-muted:       oklch(49% 0.016 250);
-  --fg-subtle:      oklch(72% 0.01 250);
-  --accent:         oklch(52% 0.22 265);
-  --accent-soft:    oklch(95% 0.04 265);
-  --support:        oklch(47% 0.11 265);
-  --support-soft:   oklch(95% 0.025 265);
-  --support-border: oklch(86% 0.05 265);
-  --border:         oklch(89% 0.008 85);
-  --code-bg:        oklch(95% 0.01 82);
+  --fg-subtle:      oklch(52% 0.012 250);
+  --accent:         var(--avatar-blue);
+  --accent-soft:    oklch(94.5% 0.045 235);
+  --support:        oklch(50% 0.095 52);
+  --support-soft:   oklch(96% 0.027 55);
+  --support-border: oklch(85% 0.05 55);
+  --border:         oklch(88% 0.012 78);
+  --code-bg:        oklch(94.8% 0.014 78);
+  --scribble-underline-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 18' preserveAspectRatio='none'%3E%3Cpath d='M2 10 L10 8 L18 11 L27 7 L37 9 L48 6 L58 10 L69 8 L80 11 L91 7 L103 9 L113 6 L126 10 L137 8 L149 11 L158 9' stroke='black' stroke-width='5.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M4 13 L17 12 L29 14 L44 11 L58 13 L72 12 L88 14 L101 11 L116 13 L130 12 L144 14 L157 12' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' fill='none' opacity='.58'/%3E%3C/svg%3E");
+  --scribble-quote-mask:     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 160' preserveAspectRatio='none'%3E%3Cpath d='M9 2 L7 14 L10 27 L6 40 L9 53 L7 67 L11 82 L8 96 L10 110 L7 124 L11 139 L8 158' stroke='black' stroke-width='5.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M12 5 L11 20 L13 34 L10 49 L12 63 L9 78 L13 93 L10 108 L12 124 L9 141 L11 155' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' fill='none' opacity='.55'/%3E%3C/svg%3E");
+  --scribble-pill-fill-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 42' preserveAspectRatio='none'%3E%3Cpath d='M8 22 C10 10 29 5 55 5 C87 4 112 9 116 21 C119 32 97 39 57 38 C25 39 4 33 8 22 Z' fill='black'/%3E%3C/svg%3E");
+  --scribble-pill-outline-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 42' preserveAspectRatio='none'%3E%3Cpath d='M8 22 C10 9 30 4 55 5 C88 3 113 9 116 21 C119 32 96 39 58 38 C25 40 4 33 8 22 Z' stroke='black' stroke-width='4.2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M12 25 C18 13 35 9 60 9 C91 8 108 13 111 22 C113 29 93 35 59 34 C32 35 13 31 12 25 Z' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round' fill='none' opacity='.52'/%3E%3C/svg%3E");
 
   /* Typography */
   --font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
@@ -42,23 +52,31 @@
   /* Motion */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-quiet: cubic-bezier(0.34, 0, 0.18, 1);
   --duration-fast: 160ms;
+  --duration-quiet: 280ms;
   --duration-medium: 360ms;
 }
 
 html.dark {
   color-scheme: dark;
-  --bg:             oklch(18.5% 0.01 252);
-  --fg:             oklch(95% 0.007 88);
+  --avatar-blue:        oklch(68% 0.16 235);
+  --avatar-blue-bright: oklch(75% 0.13 225);
+  --avatar-peach:       oklch(72% 0.07 50);
+  --paper:              oklch(18.5% 0.012 252);
+  --ink:                oklch(95% 0.007 88);
+
+  --bg:             var(--paper);
+  --fg:             var(--ink);
   --fg-muted:       oklch(77% 0.012 88);
-  --fg-subtle:      oklch(56% 0.01 88);
-  --accent:         oklch(68% 0.16 222);
-  --accent-soft:    oklch(27% 0.07 258);
-  --support:        oklch(63% 0.09 240);
-  --support-soft:   oklch(25% 0.04 255);
-  --support-border: oklch(37% 0.06 252);
-  --border:         oklch(29% 0.01 250);
-  --code-bg:        oklch(25% 0.01 250);
+  --fg-subtle:      oklch(64% 0.01 88);
+  --accent:         var(--avatar-blue);
+  --accent-soft:    oklch(27% 0.065 245);
+  --support:        oklch(72% 0.08 54);
+  --support-soft:   oklch(27% 0.035 48);
+  --support-border: oklch(39% 0.05 48);
+  --border:         oklch(29% 0.012 250);
+  --code-bg:        oklch(24.5% 0.012 250);
 }
 
 /* ===== Reset ===== */
@@ -95,7 +113,9 @@ body {
   background-color: var(--bg);
   color: var(--fg);
   margin: 0;
-  transition: background-color 0.15s, color 0.15s;
+  transition:
+    background-color var(--duration-fast) ease,
+    color var(--duration-fast) ease;
 }
 
 /* ===== Grain texture ===== */
@@ -173,15 +193,33 @@ img {
 .prose a {
   color: var(--accent);
   text-decoration: none;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-position: 50% 100%;
-  background-repeat: no-repeat;
-  background-size: 0% 1.5px;
-  transition: background-size 0.3s var(--ease-out-quart);
+  position: relative;
 }
 
-.prose a:hover {
-  background-size: 100% 1.5px;
+.prose a:not(:has(> img))::before {
+  content: '';
+  position: absolute;
+  inset-inline: -0.05em;
+  bottom: -0.08em;
+  height: 0.32em;
+  background: currentColor;
+  opacity: 0.42;
+  pointer-events: none;
+  transform: rotate(-0.7deg) translateY(0.02em);
+  transform-origin: left center;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--duration-quiet) var(--ease-quiet);
+  -webkit-mask-image: var(--scribble-underline-mask);
+  mask-image: var(--scribble-underline-mask);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+.prose a:hover::before,
+.prose a:focus-visible::before {
+  clip-path: inset(0 0 0 0);
 }
 
 .prose strong {
@@ -195,21 +233,50 @@ img {
 .prose blockquote {
   position: relative;
   margin: 2rem 0;
-  padding: 0.875rem 1.5rem;
-  color: var(--fg-muted);
-  background: color-mix(in oklab, var(--support-soft) 16%, transparent);
-  border-radius: 0.5rem;
+  padding: 1rem 1.45rem 1rem 1.8rem;
+  color: color-mix(in oklab, var(--fg-muted) 86%, var(--support));
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--avatar-peach) 34%, transparent),
+      color-mix(in oklab, var(--support-soft) 34%, transparent)
+    );
+  border: 1px solid color-mix(in oklab, var(--support-border) 44%, transparent);
+  border-radius: 6px;
 }
 
 .prose blockquote::before {
+  content: '';
+  position: absolute;
+  top: 0.75rem;
+  bottom: 0.75rem;
+  left: 0.6rem;
+  width: 5px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--avatar-blue) 54%, transparent),
+    color-mix(in oklab, var(--support) 44%, transparent)
+  );
+  opacity: 0.78;
+  transform: rotate(-1.2deg);
+  -webkit-mask-image: var(--scribble-quote-mask);
+  mask-image: var(--scribble-quote-mask);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  pointer-events: none;
+}
+
+.prose blockquote::after {
   content: '\201C';
   position: absolute;
   top: 0.2rem;
-  left: 0.6rem;
+  left: 0.95rem;
   font-family: var(--font-serif);
   font-size: 1.75rem;
   line-height: 1;
-  color: color-mix(in oklab, var(--support) 45%, transparent);
+  color: color-mix(in oklab, var(--support) 50%, transparent);
   pointer-events: none;
 }
 
@@ -294,7 +361,7 @@ img {
   display: block;
   background: var(--code-bg);
   opacity: 1;
-  transition: opacity 0.6s var(--ease-out-quart);
+  transition: opacity var(--duration-medium) var(--ease-out-quart);
 }
 
 .media-figure img[data-astro-image] {
@@ -440,7 +507,7 @@ img {
   left: 0;
   width: 100%;
   height: 2px;
-  background: var(--accent);
+  background: linear-gradient(90deg, var(--avatar-blue), var(--avatar-blue-bright));
   transform: scaleX(0);
   transform-origin: left;
   z-index: 100;
@@ -463,7 +530,6 @@ img {
   color: var(--fg-subtle);
   cursor: pointer;
   opacity: 0;
-  transition: opacity 0.15s, color 0.15s, background-color 0.15s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -473,7 +539,7 @@ img {
     opacity var(--duration-fast) ease,
     color var(--duration-fast) ease,
     background-color var(--duration-fast) ease,
-    transform var(--duration-fast) ease;
+    transform var(--duration-fast) var(--ease-quiet);
 }
 
 .code-wrapper:hover .copy-btn {
@@ -483,7 +549,7 @@ img {
 
 .copy-btn:hover {
   color: var(--fg);
-  background-color: color-mix(in oklab, var(--support-soft) 72%, var(--border));
+  background-color: color-mix(in oklab, var(--support-soft) 76%, var(--bg));
 }
 
 .copy-btn::after {
@@ -507,6 +573,7 @@ img {
   color: var(--accent);
   opacity: 1;
   transform: translateY(0);
+  animation: copy-ack var(--duration-quiet) var(--ease-quiet) both;
 }
 
 .copy-btn.copied::after {
@@ -560,7 +627,7 @@ img {
 .toc-title {
   font-weight: 600;
   font-size: var(--text-xs);
-  color: var(--fg-muted);
+  color: color-mix(in oklab, var(--support) 56%, var(--fg-muted));
   margin-bottom: 0.5rem;
   padding: 0 0.5rem;
   text-transform: uppercase;
@@ -587,17 +654,19 @@ img {
   color: var(--fg-muted);
   text-decoration: none;
   border-radius: 4px;
-  transition: color 0.15s, background-color 0.15s;
+  transition:
+    color var(--duration-fast) ease,
+    background-color var(--duration-fast) ease;
 }
 
 .toc-link:hover {
   color: var(--fg);
-  background: color-mix(in oklab, var(--bg) 50%, transparent);
+  background: color-mix(in oklab, var(--support-soft) 42%, transparent);
 }
 
 .toc-link.is-active {
-  color: var(--accent);
-  background: color-mix(in oklab, var(--accent-soft) 40%, transparent);
+  color: var(--avatar-blue);
+  background: color-mix(in oklab, var(--accent-soft) 46%, transparent);
   font-weight: 500;
 }
 
@@ -608,30 +677,31 @@ img {
   bottom: 1rem;
   z-index: 120;
   display: none;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 0.95rem;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    padding: 0.55rem 0.95rem;
   font-family: var(--font-sans);
   font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--bg);
-  background: color-mix(in oklab, var(--fg) 80%, transparent);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  border: none;
+    font-weight: 500;
+    color: var(--bg);
+    background: color-mix(in oklab, var(--fg) 84%, var(--bg));
+    border: none;
   border-radius: 9999px;
   cursor: pointer;
   box-shadow: 0 4px 20px -4px color-mix(in oklab, var(--fg) 30%, transparent);
-  transition: transform 0.2s var(--ease-out-quart), background-color 0.2s ease;
+  transition:
+    transform var(--duration-fast) var(--ease-quiet),
+    background-color var(--duration-fast) ease;
 }
 
 .toc-trigger:hover {
-  transform: scale(1.05);
-  background: color-mix(in oklab, var(--fg) 92%, transparent);
+    transform: translateY(-1px);
+    background: color-mix(in oklab, var(--fg) 92%, var(--bg));
 }
 
 .toc-trigger:active {
-  transform: scale(0.96);
+  transform: translateY(0);
 }
 
 .toc-mobile {
@@ -642,7 +712,7 @@ img {
   justify-content: flex-end;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 220ms ease;
 }
 
 .toc-mobile.is-open {
@@ -668,7 +738,7 @@ img {
   border-left: 1px solid var(--border);
   padding: 1.25rem 1.25rem 1.5rem;
   transform: translateX(100%);
-  transition: transform 0.35s var(--ease-out-expo);
+  transition: transform 320ms var(--ease-quiet);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -681,8 +751,8 @@ img {
   position: absolute;
   top: 0.85rem;
   right: 0.85rem;
-  width: 2rem;
-  height: 2rem;
+    width: 2.75rem;
+    height: 2.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -691,7 +761,9 @@ img {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: color 0.15s ease, background-color 0.15s ease;
+  transition:
+    color var(--duration-fast) ease,
+    background-color var(--duration-fast) ease;
 }
 
 .toc-mobile__close:hover {
@@ -713,7 +785,7 @@ img {
 
 /* 图片放大提示 */
 @media (hover: hover) {
-  .media-figure:not(.livephoto)::after {
+.media-figure:not(.livephoto)::after {
     content: '\2922';
     position: absolute;
     bottom: 0.75rem;
@@ -728,7 +800,7 @@ img {
     background: color-mix(in oklab, var(--fg) 55%, transparent);
     border-radius: 6px;
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--duration-fast) ease;
     pointer-events: none;
     z-index: 2;
   }
@@ -771,16 +843,14 @@ html.dark .media-figure figcaption {
   right: 1rem;
   bottom: 1rem;
   z-index: 120;
-  width: 2.5rem;
-  height: 2.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  color: var(--bg);
-  background: color-mix(in oklab, var(--fg) 80%, transparent);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
+    padding: 0;
+    color: var(--bg);
+    background: color-mix(in oklab, var(--fg) 84%, var(--bg));
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -788,7 +858,10 @@ html.dark .media-figure figcaption {
   transform: translateY(0.5rem);
   pointer-events: none;
   box-shadow: 0 4px 20px -4px color-mix(in oklab, var(--fg) 30%, transparent);
-  transition: opacity 0.25s ease, transform 0.25s var(--ease-out-quart), background-color 0.2s ease;
+  transition:
+    opacity 220ms ease,
+    transform 220ms var(--ease-quiet),
+    background-color var(--duration-fast) ease;
 }
 
 .back-to-top.is-visible {
@@ -798,24 +871,26 @@ html.dark .media-figure figcaption {
 }
 
 .back-to-top:hover {
-  background: color-mix(in oklab, var(--fg) 92%, transparent);
+    background: color-mix(in oklab, var(--fg) 92%, var(--bg));
 }
 
 .back-to-top:active {
-  transform: scale(0.92);
+  transform: translateY(1px);
+}
+
+@keyframes copy-ack {
+  0% {
+    transform: translateY(0) scale(0.98);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* ===== Mobile ===== */
 @media (max-width: 640px) {
   .prose h2 { font-size: var(--text-lg); }
   .prose h3 { font-size: var(--text-base); }
-
-  /* 移动端移除性能开销大的 backdrop-filter */
-  .toc-trigger,
-  .back-to-top {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
 
   .media-figure:not(.livephoto) {
     width: auto;
@@ -840,8 +915,34 @@ html.dark .media-figure figcaption {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+
   .copy-btn,
-  .copy-btn::after {
+  .copy-btn::after,
+  .toc-link,
+  .toc-trigger,
+  .toc-mobile,
+  .toc-mobile__panel,
+  .toc-mobile__close,
+  .media-figure img,
+  .media-figure figcaption,
+  .media-figure:not(.livephoto)::after,
+  .back-to-top,
+  .prose a::before {
     transition: none;
+  }
+
+  .copy-btn.copied {
+    animation: none;
+  }
+
+  .toc-trigger:hover,
+  .toc-trigger:active,
+  .back-to-top:active {
+    transform: none;
   }
 }

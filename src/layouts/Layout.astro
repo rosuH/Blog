@@ -44,9 +44,9 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=avatar" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=avatar" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=avatar" />
 
     <!-- Primary Meta Tags -->
     <title>{title} | Blog.kt</title>
@@ -184,10 +184,10 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
         padding: 4px 10px 4px 8px;
         border: 0;
         border-radius: 999px;
-        background: rgba(0, 0, 0, 0.45);
-        backdrop-filter: blur(8px) saturate(1.4);
-        -webkit-backdrop-filter: blur(8px) saturate(1.4);
-        color: #fff;
+        background: color-mix(in oklab, var(--fg) 72%, transparent);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        color: var(--bg);
         font-family: var(--font-mono);
         font-size: 11px;
         font-weight: 600;
@@ -196,7 +196,7 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
         user-select: none;
       }
       html.dark .livephoto-badge {
-        background: rgba(255, 255, 255, 0.12);
+        background: color-mix(in oklab, var(--fg) 78%, transparent);
         color: var(--bg);
       }
       .livephoto-badge:focus-visible {
@@ -310,7 +310,7 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
     z-index: 1000;
     padding: 0.5rem 1rem;
     background: var(--accent);
-    color: #fff;
+    color: var(--bg);
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     text-decoration: none;
@@ -338,7 +338,7 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
     font-weight: 500;
     font-family: var(--font-display);
     color: var(--fg);
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
     transition: color 0.15s;
   }
 
@@ -348,12 +348,12 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
 
   .site-footer {
     padding: 2.5rem 0 2rem;
-    color: var(--fg-subtle);
+    color: var(--fg-muted);
     font-size: var(--text-sm);
   }
 
   .site-footer a {
-    color: var(--fg-subtle);
+    color: var(--fg-muted);
     text-decoration: underline;
     text-decoration-color: var(--border);
     text-underline-offset: 3px;

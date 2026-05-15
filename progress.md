@@ -222,3 +222,139 @@
 - ✅ `getCollection` appears once in [slug].astro (import + 1 call)
 
 ### Commit: 7f17d7d — pushed to astro-migration
+
+## Update: 2026-05-13 (Avatar Replacement + Style Planning)
+
+### Implemented
+
+- 新建分支：`codex/avatar-style-plan`
+- 替换头像源图：
+  - `src/images/profile-pic.png`
+  - `src/images/profile-pic.jpeg`
+  - `public/profile-pic.jpeg`
+- 新增头像驱动的风格设计规格：
+  - `docs/superpowers/specs/2026-05-13-avatar-style-adjustment-design.md`
+- 新增后续实施计划：
+  - `docs/superpowers/plans/2026-05-13-avatar-style-adjustment.md`
+
+### Avatar Style Notes
+
+- 风格关键词：手绘、纸感、清晰、轻松、克制。
+- 主色应靠近头像 marker blue，而不是继续偏冷紫蓝。
+- 后续调整重点：tokens、Bio、首页 underline/quote、文章页 blockquote/TOC/tag。
+
+### Validation
+
+- ✅ `npm run build` 通过
+- ✅ `npm test` 通过（16 个媒体/性能测试 + 8 个 UI 回归测试）
+- ✅ `git diff --check` 通过
+- ✅ `dist/index.html` 中首页头像已指向新的 `/_astro/profile-pic.B9g4oTuh_*.webp` 构建产物
+
+## Update: 2026-05-13 (Avatar-Led Style Implementation)
+
+### Implemented
+
+- 全局色彩 token 改为头像驱动：
+  - avatar blue / bright blue
+  - avatar peach
+  - warm paper
+  - ink
+- `Bio.astro`：
+  - 首页头像显示从 48px 提升到 56px
+  - 增加 warm paper ring 与浅 avatar-blue 外描边
+  - hover 从 blur 改为轻微位移/旋转和描边反馈
+  - 桌面 Bio 链接收回到名字旁边，避免与头像签名区脱节
+- `index.astro`：
+  - quote 左边框改为头像蓝
+  - intro 增加短 marker underline
+  - 最近写作区域加入极浅 paper tint
+  - 文章 hover underline 改成更像手划线的 2px 渐变 stroke
+- `src/pages/[slug].astro` 和 `global.css`：
+  - 阅读进度条、正文链接、TOC active、tag hover 统一使用头像蓝
+  - blockquote 背景引入 peach/cream 暖色
+  - nav underline 加粗为低饱和头像蓝 stroke
+- `tests/ui-regressions.test.mjs` 更新旧 token 断言为头像蓝/暖纸色断言。
+
+### Validation
+
+- ✅ `npm test` 通过（16 个媒体/性能测试 + 8 个 UI 回归测试）
+- ✅ `git diff --check` 通过
+- ✅ 本地 Playwright 截图检查：
+  - 首页 desktop/mobile 无横向溢出
+  - 文章页 desktop/mobile 无横向溢出
+  - 桌面文章页 TOC 可见，移动文章页目录按钮可见
+
+## Update: 2026-05-14 (Avatar Favicon)
+
+### Implemented
+
+- 使用新头像生成浏览器图标资源：
+  - `public/favicon.ico`
+  - `public/favicon-32x32.png`
+  - `public/apple-touch-icon.png`
+- `src/layouts/Layout.astro` 的 favicon/apple-touch-icon 链接增加 `?v=avatar`，避免浏览器继续使用旧缓存。
+
+### Validation
+
+- ✅ `public/favicon.ico` 包含 16px、32px、48px 图标
+- ✅ `public/favicon-32x32.png` 为 32x32
+- ✅ `public/apple-touch-icon.png` 为 180x180
+
+## Update: 2026-05-14 (Scribble Highlight Lines)
+
+### Implemented
+
+- 新增 `--scribble-underline-mask`，用轻微波动的双笔触 SVG mask 表达手划线。
+- 正文链接 hover underline 改为 `::before` 涂鸦线，保留外链 `↗` 指示。
+- 首页 intro、文章列表 hover、文章页上下篇导航 hover 线条统一使用涂鸦 mask。
+- 阅读进度条保持直线，继续作为清晰的功能反馈。
+
+### Adjustment
+
+- hover underline 动画从 `scaleX()` 拉伸整条线，改为 `clip-path` 按长度揭开完整线条，避免涂鸦 mask 在动画过程中被压缩变形。
+- 引用左侧高亮从直 `border-left` 改为竖向双笔触 rough mask，应用到首页 quote 和正文 blockquote。
+
+## Update: 2026-05-14 (Quiet Motion Tuning)
+
+### Implemented
+
+- 新增 `--ease-quiet` 与 `--duration-quiet`，作为博客的主要微动效节奏。
+- 首页首屏动效改为轻微 settle-in：位移从 12px 降到 7px，缩短 stagger 间隔。
+- 首页 intro underline 与 quote 左侧笔触使用 `clip-path` 描线揭开，和涂鸦 mask 的长度变化一致。
+- 文章页 header、上下篇导航、图片 lightbox、移动 TOC、返回顶部按钮改用更短、更克制的 motion。
+- 移除 TOC 跳转时整篇正文 opacity fade，避免阅读中出现突兀闪动。
+- 非交互的文章 tag 移除 hover 位移动效，减少误导。
+- 明暗主题切换的 pulse 和图标旋转幅度降低。
+
+### Validation
+
+- ✅ `npm test` 通过（16 个媒体/性能测试 + 9 个 UI 回归测试）
+- ✅ `git diff --check` 通过
+- ✅ Playwright 验证：
+  - 首页 intro/quote 描线动画存在，最终 clip-path 完整展开
+  - hover underline 从 `inset(0 100% 0 0)` 变为 `inset(0)`
+  - `prefers-reduced-motion: reduce` 下首页首屏动画关闭
+  - 首页与文章页无横向溢出
+
+## Update: 2026-05-14 (Audit Fixes)
+
+### Implemented
+
+- Lightbox 与移动端目录关闭态增加 `inert`，不再进入键盘 Tab 顺序。
+- 移动端目录增加 `aria-controls`，并避免桌面 TOC 点击时误把焦点带到移动按钮。
+- 提高 `--fg-subtle` 与 `--support` 的可读性，修复 cite、footer、年份标签、文章导航小字对比度偏低。
+- Bio 链接、移动目录按钮、关闭按钮、返回顶部按钮统一到 44px 触控目标。
+- 浮动目录/返回顶部与 Live Photo badge 去掉 glassmorphism 倾向，改为 token 化实色/半透明墨色。
+- 头像派生图从 1254px 压到 512px：`public/profile-pic.jpeg` 从 548K 降到 64K。
+- 移除残留负 letter-spacing 和 viewport-width 字号缩放。
+
+### Validation
+
+- ✅ `npm test` 通过（16 个媒体/性能测试 + 10 个 UI 回归测试）
+- ✅ `git diff --check` 通过
+- ✅ Playwright 验证：
+  - lightbox 与移动 TOC 关闭态均为 `inert`
+  - Tab 顺序不会进入关闭态 overlay
+  - 移动 TOC 与 lightbox 打开后焦点进入正确控件，关闭后恢复 `inert`
+  - 浅/深色关键小字对比度均 >= 4.5:1
+  - 生成桌面首页、桌面文章、移动文章截图
