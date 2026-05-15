@@ -137,6 +137,7 @@ test('bamboo shadow uses JS wind physics instead of global keyframe or SMIL tran
 test('color system uses avatar blue with warm paper accents', () => {
   const css = readSource('src', 'styles', 'global.css');
   const homeSource = readSource('src', 'pages', 'index.astro');
+  const pillSource = readSource('src', 'components', 'ArchiveYearPill.astro');
 
   assert.match(css, /--avatar-blue:\s+oklch\(49% 0\.19 255\)/);
   assert.match(css, /--avatar-peach:\s+oklch\(86% 0\.055 50\)/);
@@ -156,11 +157,11 @@ test('color system uses avatar blue with warm paper accents', () => {
   assert.match(homeSource, /mask-image:\s+var\(--scribble-quote-mask\)/);
   assert.match(homeSource, /transition:\s+clip-path var\(--duration-medium\) var\(--ease-quiet\)/);
   assert.doesNotMatch(homeSource, /scaleX\(0\)/);
-  assert.match(homeSource, /\.archive-year::before/);
-  assert.match(homeSource, /\.archive-year::after/);
-  assert.match(homeSource, /mask-image:\s+var\(--scribble-pill-fill-mask\)/);
-  assert.match(homeSource, /mask-image:\s+var\(--scribble-pill-outline-mask\)/);
-  assert.match(homeSource, /\.archive-year\s*\{[\s\S]*background:\s+transparent/);
+  assert.match(pillSource, /\.archive-year::before/);
+  assert.match(pillSource, /\.archive-year::after/);
+  assert.match(pillSource, /mask-image:\s+var\(--scribble-pill-fill-mask\)/);
+  assert.match(pillSource, /mask-image:\s+var\(--scribble-pill-outline-mask\)/);
+  assert.match(pillSource, /\.archive-year\s*\{[\s\S]*background:\s+transparent/);
   assert.match(homeSource, /home-section--recent/);
 });
 
