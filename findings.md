@@ -219,6 +219,35 @@
 - 文章页图片保留阅读宽度限制，并增加点击放大 modal，兼容键盘 `Esc` 关闭。
 - 上/下篇文案语义固定：左侧 `上一篇`（更旧），右侧 `下一篇`（更新）。
 
+## 2026-05-13 Avatar-Led Style Extraction
+
+### Avatar Findings
+
+- 新头像是手绘肖像：粗黑线、蓝色涂抹背景、桃色平涂面部、低阴影、轻表情。
+- 视觉记忆点来自“黑色 marker 线 + 高饱和蓝色蜡笔背景”，不是照片质感。
+- 头像风格适合给博客增加手写人格和纸感细节，但不适合把全站改成强插画风。
+- 轻量采样结果：
+  - 平均色：`#6486B0`
+  - 主蓝：`#1860C0`
+  - 亮蓝：`#3090D8`
+  - 辅助蓝：`#3078C0`
+  - 肤色/暖色：`#FFC0A8`, `#F0D8C0`
+  - 墨色：`#000000`
+
+### Blog Mapping
+
+- 当前站点主色偏冷紫蓝，和新头像的 marker blue 接近但不完全一致。
+- 站点已有竹影背景和中文 quote，适合与“手写/纸感”方向结合。
+- 风格调整应优先落在 token、Bio、链接 underline、blockquote、tag 和 TOC active 等细节。
+- 正文阅读结构、路由、SEO/discovery 文件不应被这次风格方向影响。
+
+### Implementation Notes
+
+- 实际落地时，`--accent` 已改为 `var(--avatar-blue)`，暖色辅助色由 `--support` 承担，避免全站单一蓝色。
+- Bio 桌面布局中，旧的 `margin-left: auto` 会把社交链接推离头像和名字；改为靠近名字后更符合“avatar as signature”。
+- 首页 latest 区域使用极浅 section tint，而不是卡片化包裹，保留当前列表阅读效率。
+- Codex 浏览器插件不可用时，本地 Playwright + 系统 Chrome 可作为视觉验证兜底。
+
 ### 2026-03-03 Round 2: TOC Implementation Notes
 - `render(post)` 可直接返回 `headings`，适合无侵入构建 Markdown 目录。
 - 宽屏下采用 sticky 侧栏 TOC，窄屏下退化为 `details/summary` 折叠目录，交互成本低且易维护。

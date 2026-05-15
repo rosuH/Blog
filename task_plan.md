@@ -64,6 +64,86 @@
 
 ---
 
+# Task Plan: Avatar-Led Blog Style Adjustment
+
+## Goal
+
+完成新头像替换，并基于头像风格提取博客后续视觉调整方案。
+
+## Phases
+
+### Phase 1: 分支与头像替换
+**Status**: `completed`
+**Tasks**:
+- [x] 从 `astro-migration` 新建分支 `codex/avatar-style-plan`
+- [x] 确认首页 Bio 实际使用 `src/images/profile-pic.png`
+- [x] 替换 `src/images/profile-pic.png`
+- [x] 同步替换 `src/images/profile-pic.jpeg` 与 `public/profile-pic.jpeg`
+
+### Phase 2: 头像风格提取
+**Status**: `completed`
+**Tasks**:
+- [x] 视觉分析头像风格：粗黑线、手绘蓝底、桃色平涂、低阴影、友好表情
+- [x] 采样主色：marker blue、bright blue、peach、warm cream、ink black
+- [x] 映射到当前 Blog.kt 视觉系统
+
+### Phase 3: 方案沉淀
+**Status**: `completed`
+**Tasks**:
+- [x] 新增设计规格 `docs/superpowers/specs/2026-05-13-avatar-style-adjustment-design.md`
+- [x] 新增实施计划 `docs/superpowers/plans/2026-05-13-avatar-style-adjustment.md`
+- [x] 更新 `findings.md` 与 `progress.md`
+
+### Phase 4: 验证
+**Status**: `completed`
+**Tasks**:
+- [x] 执行 `npm run build`
+- [x] 确认构建产物中头像来自新 PNG
+- [x] 执行 `npm test`
+- [x] 执行 `git diff --check`
+
+## Errors Encountered
+| Error | Attempt | Resolution |
+|-------|---------|------------|
+| `zsh:1: unmatched \"` (检查 `dist/index.html` 的临时 `rg` 命令) | 1 | 改用单引号包裹正则后重新执行成功 |
+| `zsh:1: no matches found: src/pages/[slug].astro` | 1 | 改用引号包裹动态路由文件路径后读取成功 |
+| `No daemon.json found. Is the daemon running?` (Codex browser plugin) | 1 | 改用本地 Playwright + Chrome 对首页/文章页做桌面与移动端截图检查 |
+
+### Phase 5: 头像风格实际落地
+**Status**: `completed`
+**Tasks**:
+- [x] `src/styles/global.css` 增加 avatar blue / peach / paper / ink tokens
+- [x] `Bio.astro` 将头像提升到 56px，增加纸感描边与轻微 hover 动效
+- [x] 首页 quote、最新文章区域、文章 hover underline 统一到手写纸感方向
+- [x] 文章页 reading progress、TOC active、tag hover、blockquote 使用头像蓝和暖色呼应
+- [x] 更新 UI 回归测试中的色彩断言，避免锁死旧紫蓝 token
+- [x] 本地 Playwright 截图检查首页和文章页桌面/移动端，无横向溢出
+
+### Phase 6: 动效调性优化
+**Status**: `completed`
+**Tasks**:
+- [x] 用 `--ease-quiet` / `--duration-quiet` 收敛全站微动效节奏
+- [x] 首页 intro underline 与 quote 左侧笔触改为按长度描线揭开
+- [x] 首页入场、文章页 header、lightbox、移动 TOC、返回顶部按钮改为更短、更克制的动效
+- [x] 去掉 TOC 跳转时正文整体淡出
+- [x] 明暗主题切换动效降幅
+- [x] 补充 UI 回归测试并通过 Playwright 实测
+
+### Phase 7: Audit 修复收口
+**Status**: `completed`
+**Tasks**:
+- [x] 修复 lightbox 与移动 TOC 关闭态仍可被键盘聚焦
+- [x] 修复 subtle/support 小字对比度偏低
+- [x] 统一 Bio 链接、移动 TOC、返回顶部按钮的 44px+ 触控尺寸
+- [x] 去掉浮动控件和 Live Photo badge 的玻璃化漂移
+- [x] 压缩头像派生图
+- [x] 增加 UI 回归测试覆盖本轮 audit 问题
+- [x] 运行 `npm test`
+- [x] 运行 `git diff --check`
+- [x] Playwright 复核键盘顺序、对比度与视觉一致性
+
+---
+
 # Task Plan: UI Benchmark Refactor (Boris + Zed)
 
 ## Goal
