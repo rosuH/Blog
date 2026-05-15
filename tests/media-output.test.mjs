@@ -102,12 +102,15 @@ test('When a same-basename .mov exists, output renders as Live Photo', async () 
   try {
     execFileSync('npm', ['run', 'build', '--', '--force'], { stdio: 'pipe' });
     const html = await readFile(post.articleHtmlPath, 'utf8');
-    assert.match(html, /<figure[^>]+class="livephoto media-figure media-figure--livephoto"/);
+    assert.match(html, /<figure[^>]+class="livephoto media-figure media-figure--livephoto media-figure--portrait"/);
     assert.match(html, /<figure[^>]+data-livephoto/);
     assert.match(html, /<source[^>]+type="video\/mp4; codecs=&#x22;hvc1&#x22;"|<source[^>]+codecs="hvc1"/);
     assert.match(html, /<source[^>]+\.h264\.mp4[^>]*type="video\/mp4"|<source[^>]+type="video\/mp4"[^>]+\.h264\.mp4/);
     assert.match(html, /<button[^>]+class="livephoto-badge"/);
     assert.match(html, /<figcaption>sample-heic<\/figcaption>/);
+    const figure = html.match(/<figure[^>]+class="livephoto media-figure media-figure--livephoto media-figure--portrait"[\s\S]*?<\/figure>/)?.[0];
+    assert.ok(figure, 'Live Photo figure should expose the livephoto media-figure modifier classes');
+    assert.match(figure, /<div[^>]+class="livephoto-frame"[^>]*>[\s\S]*<picture>[\s\S]*<video[^>]+class="livephoto-video"[\s\S]*<button[^>]+class="livephoto-badge"[\s\S]*<\/div>\s*<figcaption>sample-heic<\/figcaption>/);
     const paragraph = html.match(/<p>Inline HEIC before [\s\S]*? after\.<\/p>/)?.[0];
     assert.ok(paragraph, 'inline Live Photo paragraph should preserve surrounding text');
     assert.match(paragraph, /<picture>[\s\S]*<img[^>]+alt="inline-heic"/);
@@ -117,28 +120,6 @@ test('When a same-basename .mov exists, output renders as Live Photo', async () 
     const { unlink } = await import('node:fs/promises');
     await unlink(`${post.dir}/sample.mov`);
     // Restore: rebuild without .mov so the next test sees still-only state
-    execFileSync('npm', ['run', 'build', '--', '--force'], { stdio: 'pipe' });
-  }
-});
-
-test('Live Photo keeps video and badge overlay inside media frame before caption', async () => {
-  execFileSync('ffmpeg', [
-    '-y', '-f', 'lavfi', '-i', 'color=c=black:s=64x64:d=1',
-    '-c:v', 'libx265', '-tag:v', 'hvc1', '-pix_fmt', 'yuv420p',
-    '-an', '-movflags', '+faststart',
-    `${post.dir}/sample.mov`,
-  ], { stdio: 'pipe' });
-
-  try {
-    execFileSync('npm', ['run', 'build', '--', '--force'], { stdio: 'pipe' });
-    const html = await readFile(post.articleHtmlPath, 'utf8');
-    const figure = html.match(/<figure[^>]+class="livephoto media-figure media-figure--livephoto"[\s\S]*?<\/figure>/)?.[0];
-
-    assert.ok(figure, 'Live Photo figure should expose the livephoto media-figure modifier classes');
-    assert.match(figure, /<div[^>]+class="livephoto-frame"[^>]*>[\s\S]*<picture>[\s\S]*<video[^>]+class="livephoto-video"[\s\S]*<button[^>]+class="livephoto-badge"[\s\S]*<\/div>\s*<figcaption>sample-heic<\/figcaption>/);
-  } finally {
-    const { unlink } = await import('node:fs/promises');
-    await unlink(`${post.dir}/sample.mov`);
     execFileSync('npm', ['run', 'build', '--', '--force'], { stdio: 'pipe' });
   }
 });

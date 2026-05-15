@@ -575,7 +575,8 @@ img {
 }
 
 .media-figure.livephoto {
-  width: 100%;
+  width: min(100%, var(--content-width));
+  margin: 2.5rem auto 2.75rem;
 }
 
 .media-figure img,
@@ -637,14 +638,26 @@ img {
   background: color-mix(in oklab, var(--fg) 85%, transparent);
 }
 
+.media-figure.livephoto figcaption {
+  top: auto;
+  bottom: var(--caption-pad);
+  z-index: 2;
+  pointer-events: none;
+}
+
 .media-figure.livephoto {
   overflow: visible;
   background: transparent;
 }
 
+.media-figure.livephoto.media-figure--portrait {
+  width: min(24.5rem, calc(100vw - 2.5rem));
+}
+
 .livephoto-frame {
   position: relative;
   min-width: 0;
+  width: 100%;
   overflow: hidden;
   border-radius: 4px;
   background: var(--code-bg);
@@ -656,7 +669,14 @@ img {
   display: block;
   width: 100%;
   height: 100%;
+  max-height: none;
   object-fit: cover;
+}
+
+.livephoto-frame picture img {
+  min-width: 0;
+  margin: 0;
+  background: transparent;
 }
 
 .media-figure.livephoto .livephoto-video {
@@ -1182,7 +1202,6 @@ html.dark .media-figure figcaption {
   }
 
   .media-figure.livephoto {
-    width: 100%;
     max-width: calc(100vw - 2.5rem);
     margin: 2rem auto 2.25rem;
   }

@@ -52,9 +52,13 @@ function livePhotoNode({ stillKey, videoKey, alt, width, height, products, loadi
     width, height,
     'aria-hidden': 'true',
   }, [
-    h('source', { src: `${videoBase}/${products.video_hevc}`, type: 'video/mp4; codecs="hvc1"' }),
-    h('source', { src: `${videoBase}/${products.video_h264}`, type: 'video/mp4' }),
-  ]);
+    products.video_hevc
+      ? h('source', { src: `${videoBase}/${products.video_hevc}`, type: 'video/mp4; codecs="hvc1"' })
+      : null,
+    products.video_h264
+      ? h('source', { src: `${videoBase}/${products.video_h264}`, type: 'video/mp4' })
+      : null,
+  ].filter(Boolean));
   const badge = h('button', {
     type: 'button',
     class: 'livephoto-badge',
@@ -75,7 +79,8 @@ function livePhotoNode({ stillKey, videoKey, alt, width, height, products, loadi
     class: 'livephoto-frame',
     style: `aspect-ratio: ${width} / ${height};`,
   }, [picture, video, badge]);
-  return figureNode([frame], alt, 'livephoto media-figure media-figure--livephoto', {
+  const orientationClass = height > width ? ' media-figure--portrait' : ' media-figure--landscape';
+  return figureNode([frame], alt, `livephoto media-figure media-figure--livephoto${orientationClass}`, {
     'data-livephoto': '',
     'data-state': 'idle',
   });
