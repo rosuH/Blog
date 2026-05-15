@@ -1,0 +1,26 @@
+---
+import type { BlogPost } from '../utils/posts';
+import { formatFullDate, formatMonthDay } from '../utils/posts';
+
+interface Props {
+  posts: BlogPost[];
+  variant: 'featured' | 'archive';
+}
+
+const { posts, variant } = Astro.props;
+const isFeatured = variant === 'featured';
+const formatDate = isFeatured ? formatFullDate : formatMonthDay;
+---
+
+<ol class:list={['post-list', `post-list--${variant}`]} role="list" data-stagger={isFeatured ? 'featured-posts' : undefined}>
+  {posts.map((post, index) => (
+    <li class:list={['post-row', { 'post-row--featured': isFeatured }]} style={isFeatured ? `--item-index: ${index}` : undefined}>
+      <a href={`/${post.id}/`} class="post-link">
+        <span class="post-title">{post.data.title}</span>
+        <time class="post-date" datetime={post.data.date.toISOString()}>
+          {formatDate(post.data.date)}
+        </time>
+      </a>
+    </li>
+  ))}
+</ol>

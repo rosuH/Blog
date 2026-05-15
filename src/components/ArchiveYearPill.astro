@@ -1,0 +1,14 @@
+---
+interface Props {
+  year: string;
+  href?: string;
+}
+
+const { year, href } = Astro.props;
+---
+
+{href ? (
+  <a href={href} class="archive-year">{year}</a>
+) : (
+  <span class="archive-year">{year}</span>
+)}
