@@ -10,9 +10,13 @@ interface Props {
 const { posts, variant } = Astro.props;
 const isFeatured = variant === 'featured';
 const formatDate = isFeatured ? formatFullDate : formatMonthDay;
+const variantClass = {
+  featured: 'post-list--featured',
+  archive: 'post-list--archive',
+}[variant];
 ---
 
-<ol class:list={['post-list', `post-list--${variant}`]} role="list" data-stagger={isFeatured ? 'featured-posts' : undefined}>
+<ol class:list={['post-list', variantClass]} role="list" data-stagger={isFeatured ? 'featured-posts' : undefined}>
   {posts.map((post, index) => (
     <li class:list={['post-row', { 'post-row--featured': isFeatured }]} style={isFeatured ? `--item-index: ${index}` : undefined}>
       <a href={`/${post.id}/`} class="post-link">
@@ -24,149 +28,3 @@ const formatDate = isFeatured ? formatFullDate : formatMonthDay;
     </li>
   ))}
 </ol>
-
-<style>
-  .post-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .post-row {
-    border-top: 1px solid var(--border);
-  }
-
-  .post-row:last-child {
-    border-bottom: 1px solid var(--border);
-  }
-
-  .post-link {
-    min-height: 2.75rem;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.8rem 0;
-    text-decoration: none;
-    position: relative;
-  }
-
-  .post-link::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0.35rem;
-    width: min(18rem, 72%);
-    height: 6px;
-    background: linear-gradient(
-      90deg,
-      color-mix(in oklab, var(--avatar-blue) 76%, transparent),
-      color-mix(in oklab, var(--avatar-blue-bright) 58%, transparent),
-      color-mix(in oklab, var(--avatar-blue) 26%, transparent)
-    );
-    opacity: 0.78;
-    transform: rotate(-0.8deg) translateY(1px);
-    transform-origin: left;
-    clip-path: inset(0 100% 0 0);
-    transition: clip-path var(--duration-medium) var(--ease-quiet);
-    pointer-events: none;
-    -webkit-mask-image: var(--scribble-underline-mask);
-    mask-image: var(--scribble-underline-mask);
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-size: 100% 100%;
-    mask-size: 100% 100%;
-  }
-
-  .post-title {
-    min-width: 0;
-    color: var(--fg);
-    font-size: var(--text-base);
-    font-weight: 500;
-    letter-spacing: 0;
-    line-height: 1.5;
-    text-wrap: pretty;
-    transition: color var(--duration-fast) ease;
-  }
-
-  .post-date {
-    color: var(--fg-muted);
-    flex-shrink: 0;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    transition: color var(--duration-fast) ease, transform var(--duration-fast) ease;
-  }
-
-  .post-link:hover .post-title,
-  .post-link:focus-visible .post-title {
-    color: var(--accent);
-  }
-
-  .post-link:hover .post-date,
-  .post-link:focus-visible .post-date {
-    color: color-mix(in srgb, var(--accent) 72%, var(--fg-muted));
-    transform: translateX(-1px);
-  }
-
-  .post-link:hover::after,
-  .post-link:focus-visible::after {
-    clip-path: inset(0 0 0 0);
-  }
-
-  .post-row--featured .post-title {
-    font-size: var(--text-lg);
-    font-weight: 520;
-  }
-
-  .post-row--featured .post-link {
-    padding: 0.9rem 0;
-  }
-
-  .post-row--featured {
-    opacity: 0;
-    animation: post-list-settle 400ms var(--ease-quiet) both;
-    animation-delay: calc(70ms + (var(--item-index) * 36ms));
-  }
-
-  .post-list--archive .post-title {
-    font-size: var(--text-sm);
-  }
-
-  @keyframes post-list-settle {
-    from {
-      opacity: 0;
-      transform: translateY(7px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (max-width: 640px) {
-    .post-link {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.18rem;
-      padding: 0.75rem 0;
-    }
-
-    .post-row--featured .post-title {
-      font-size: var(--text-base);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .post-row--featured {
-      animation: none;
-      opacity: 1;
-    }
-
-    .post-date,
-    .post-link::after {
-      transition: none;
-    }
-  }
-</style>
