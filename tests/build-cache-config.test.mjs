@@ -19,9 +19,16 @@ test('GitHub Actions caches Astro and custom media derivatives', async () => {
   assert.match(workflow, /\.cache\/astro\/assets/);
   assert.match(workflow, /\.cache\/media/);
   assert.doesNotMatch(workflow, /\.cache\/astro\n/);
+  assert.match(workflow, /runs-on:\s*ubuntu-24\.04/);
+  assert.match(workflow, /node-version:\s*['"]24['"]/);
+  assert.match(workflow, /persist-credentials:\s*false/);
+  assert.match(workflow, /actions\/checkout@[a-f0-9]{40} # v\d/);
+  assert.match(workflow, /actions\/setup-node@[a-f0-9]{40} # v\d/);
+  assert.match(workflow, /actions\/cache@[a-f0-9]{40} # v\d/);
   assert.match(workflow, /src\/utils\/media-cache\.mjs/);
   assert.match(workflow, /content\/posts\/\*\*\/\*\.heic/);
   assert.match(workflow, /Log image cache sizes/);
   assert.match(workflow, /node scripts\/verify-pages-media\.mjs/);
   assert.doesNotMatch(workflow, /npm run build -- --force/);
+  assert.doesNotMatch(workflow, /BtbN|releases\/download\/latest|curl .*sudo/);
 });
