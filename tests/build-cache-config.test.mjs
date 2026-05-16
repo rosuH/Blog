@@ -16,9 +16,12 @@ test('GitHub Actions caches Astro and custom media derivatives', async () => {
   const workflow = await readFile(workflowPath, 'utf8');
 
   assert.match(workflow, /Cache generated image derivatives/);
-  assert.match(workflow, /\.cache\/astro/);
+  assert.match(workflow, /\.cache\/astro\/assets/);
   assert.match(workflow, /\.cache\/media/);
+  assert.doesNotMatch(workflow, /\.cache\/astro\n/);
   assert.match(workflow, /src\/utils\/media-cache\.mjs/);
   assert.match(workflow, /content\/posts\/\*\*\/\*\.heic/);
   assert.match(workflow, /Log image cache sizes/);
+  assert.match(workflow, /node scripts\/verify-pages-media\.mjs/);
+  assert.doesNotMatch(workflow, /npm run build -- --force/);
 });

@@ -66,56 +66,14 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Build Astro site
-        run: npm run build -- --force
+        run: npm run build
 
       - name: Log generated image output sizes
         run: |
           du -sh .cache/astro/assets .cache/media public/_media dist/_astro dist/_media 2>/dev/null || true
 
-      - name: Verify generated media references
-        run: |
-          node --input-type=module <<'NODE'
-          import { access, readdir, readFile } from 'node:fs/promises';
-          import { join } from 'node:path';
-
-          async function walk(dir) {
-            const entries = await readdir(dir, { withFileTypes: true });
-            const files = [];
-            for (const entry of entries) {
-              const path = join(dir, entry.name);
-              if (entry.isDirectory()) files.push(...await walk(path));
-              else files.push(path);
-            }
-            return files;
-          }
-
-          const htmlFiles = (await walk('dist')).filter((path) => path.endsWith('.html'));
-          const missing = new Set();
-          for (const file of htmlFiles) {
-            const html = await readFile(file, 'utf8');
-            for (const match of html.matchAll(/\/_media\/[^"'()\s,<>]+/g)) {
-              const localPath = join('dist', match[0].slice(1));
-              try {
-                await access(localPath);
-              } catch {
-                missing.add(`${file}: ${match[0]}`);
-              }
-            }
-          }
-
-          if (missing.size > 0) {
-            console.error('Missing generated media files referenced from HTML:');
-            for (const item of [...missing].sort()) console.error(`- ${item}`);
-            process.exit(1);
-          }
-
-          const target = 'dist/2026-04-25-year-end-summary/index.html';
-          const targetHtml = await readFile(target, 'utf8');
-          if (!targetHtml.includes('data-livephoto') || !targetHtml.includes('clip.h264.mp4')) {
-            console.error(`${target} did not render the expected Live Photo markup.`);
-            process.exit(1);
-          }
-          NODE
+      - name: Verify generated media references and privacy stripping
+        run: node scripts/verify-pages-media.mjs
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
