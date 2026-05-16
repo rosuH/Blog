@@ -214,6 +214,9 @@ test('closed overlays are inert and floating controls meet touch target size', (
   assert.match(articleSource, /id="img-lightbox"[^>]+aria-hidden="true"[^>]+inert/);
   assert.match(articleSource, /lightbox\.removeAttribute\('inert'\)/);
   assert.match(articleSource, /lightbox\.setAttribute\('inert', ''\)/);
+  assert.match(articleSource, /is-pointer-open/);
+  assert.match(articleSource, /event\.detail > 0/);
+  assert.match(articleSource, /\.img-lightbox\.is-pointer-open \.img-lightbox__img:focus-visible/);
   assert.match(articleSource, /tocMobile\.setAttribute\('inert', ''\)/);
   assert.match(articleSource, /tocMobile\.removeAttribute\('inert'\)/);
   assert.match(articleSource, /tocTrigger\.setAttribute\('aria-controls', 'mobile-toc'\)/);
