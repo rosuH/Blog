@@ -67,6 +67,19 @@ async function ensureFfmpeg() {
   }
 }
 
+// HEIC decode uses heif-convert (libheif + libde265 plugin). ffmpeg can't demux
+// .heic and sharp's bundled libheif lacks the HEVC decoder plugin.
+let _heifConvertPresent;
+async function ensureHeifConvert() {
+  if (_heifConvertPresent) return;
+  try {
+    await execFileP('heif-convert', ['--version']);
+    _heifConvertPresent = true;
+  } catch (err) {
+    throw new Error(`heif-convert not available (install libheif-examples + libde265): ${err.message}`);
+  }
+}
+
 // Stronger probe used only by processMov — H.264 transcode needs libx264.
 // HEIC decode (called from processHeic) does not, so it uses ensureFfmpeg.
 let _ffmpegX264Ok;
@@ -125,7 +138,7 @@ async function withPublishLock(cacheKey, task) {
 }
 
 export async function processHeic(srcPath, cacheRoot) {
-  await ensureFfmpeg();
+  await ensureHeifConvert();
   const sharp = await getSharp();
   const hash = await hashSource(srcPath);
   const key = cacheKeyFor(hash);
@@ -144,13 +157,10 @@ export async function processHeic(srcPath, cacheRoot) {
   bumpCounter();
   await mkdir(dir, { recursive: true });
 
-  // Decode HEIC HEVC → PNG via ffmpeg (sharp's libheif lacks HEVC decoder)
+  // Decode HEIC (HEVC) → PNG via heif-convert. ffmpeg can't open .heic and
+  // sharp's bundled libheif can read the container but not decode the payload.
   const pngPath = join(dir, 'source.png');
-  await execFileP('ffmpeg', [
-    '-y', '-i', srcPath,
-    '-update', '1', '-frames:v', '1',
-    pngPath,
-  ]);
+  await execFileP('heif-convert', [srcPath, pngPath]);
 
   const img = sharp(pngPath).rotate();
   const metadata = await img.metadata();

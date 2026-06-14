@@ -33,12 +33,21 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --fund=false
 
-      - name: Install ffmpeg
+      - name: Install media tools (ffmpeg + libheif)
         run: |
           sudo apt-get update
+          # ffmpeg: MOV transcode (libx264).
           sudo apt-get install -y --no-install-recommends ffmpeg
+          # libheif (heif-convert) + HEVC decoder plugin (libde265) to decode the
+          # Live Photo .heic still. Plugin package name varies across releases, so
+          # try the modern plugin, then the legacy runtime; the verify step below
+          # smoke-tests real decode capability and fails fast if it's still missing.
+          sudo apt-get install -y libheif-examples libheif-plugin-libde265 \
+            || sudo apt-get install -y libheif-examples libde265-0 \
+            || sudo apt-get install -y libheif-examples \
+            || true
           ffmpeg -version | head -1
-          ffprobe -version | head -1
+          heif-convert --version 2>&1 | head -1 || true
 
       - name: Cache generated image derivatives
         uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
@@ -52,9 +61,16 @@ jobs:
 
       - name: Verify media tooling
         run: |
-          # ffmpeg: required for HEIC HEVC decoding AND for MOV transcode (libx264).
+          # ffmpeg: required for MOV transcode (libx264).
           ffmpeg -hide_banner -codecs 2>&1 | grep -E 'libx264' >/dev/null \
             || (echo "ffmpeg missing libx264"; exit 1)
+          # heif-convert: decodes the Live Photo HEIC still (HEVC). Smoke-test a real
+          # decode so a missing decoder plugin fails here, fast, with a clear message.
+          HEIC=$(find content/posts -iname '*.heic' | head -1)
+          if [ -n "$HEIC" ]; then
+            heif-convert "$HEIC" /tmp/heic-probe.png >/dev/null 2>&1 && test -s /tmp/heic-probe.png \
+              || (echo "heif-convert cannot decode HEVC HEIC (need libheif + libde265 plugin)"; exit 1)
+          fi
           # sharp: required for AVIF/WebP/JPEG output. Sharp exposes AVIF via the heif format
           # with output.alias containing 'avif' — probe both pieces explicitly.
           node -e "import('sharp').then(s => { const o = s.default.format.heif?.output; const ok = !!o?.file && Array.isArray(o?.alias) && o.alias.includes('avif'); if (!ok) { console.error('sharp AVIF output missing'); process.exit(1); } })"
