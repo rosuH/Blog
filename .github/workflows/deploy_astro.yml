@@ -16,7 +16,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    # Cold cache (after a media-code change or cache eviction) re-encodes every
+    # content image to AVIF+WebP; allow headroom. Warm builds are ~1-2 min.
+    timeout-minutes: 30
     permissions:
       contents: read
     steps:

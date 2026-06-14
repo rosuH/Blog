@@ -230,17 +230,22 @@ export async function processRaster(srcPath, cacheRoot) {
     .sort((a, b) => a - b);
 
   // Flat filename map so publishToPublic (which copies Object.values) works.
+  // Encode every width × format concurrently — sharp/libvips saturates the
+  // available cores so the cold (cache-miss) build stays within CI time limits.
   const products = {};
+  const encodes = [];
   for (const w of widths) {
     const base = img.clone().resize({ width: w, withoutEnlargement: true });
     const avifName = `img-${w}w.avif`;
     const webpName = `img-${w}w.webp`;
-    // AVIF q44 ≈ WebP q76 visually but ~25-35% smaller; effort 4 keeps builds sane.
-    await base.clone().avif({ quality: 44, effort: 4 }).toFile(join(dir, avifName));
-    await base.clone().webp({ quality: 76 }).toFile(join(dir, webpName));
     products[`avif_${w}`] = avifName;
     products[`webp_${w}`] = webpName;
+    // AVIF q44 ≈ WebP q76 visually; effort 2 keeps cold builds fast (same quality
+    // as effort 4, ~5-10% larger files — still well under the WebP fallback).
+    encodes.push(base.clone().avif({ quality: 44, effort: 2 }).toFile(join(dir, avifName)));
+    encodes.push(base.clone().webp({ quality: 76 }).toFile(join(dir, webpName)));
   }
+  await Promise.all(encodes);
 
   const result = {
     cacheKey: key,
