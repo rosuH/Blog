@@ -7,9 +7,14 @@ const workflowPath = new URL('../.github/workflows/deploy_astro.yml', import.met
 
 test('Astro stores generated image assets in the project cache directory', async () => {
   const config = await readFile(astroConfigPath, 'utf8');
-
   assert.match(config, /cacheDir:\s*['"]\.cache\/astro['"]/);
-  assert.match(config, /breakpoints:\s*\[\s*640,\s*828,\s*1080,\s*1440\s*\]/);
+});
+
+test('responsive image widths are defined in the media pipeline', async () => {
+  // Astro 6 removed image.breakpoints config; our content images use the custom
+  // raster pipeline whose widths live in media-cache.mjs.
+  const mediaCache = await readFile(new URL('../src/utils/media-cache.mjs', import.meta.url), 'utf8');
+  assert.match(mediaCache, /RASTER_WIDTHS\s*=\s*\[\s*640,\s*828,\s*1080,\s*1440\s*\]/);
 });
 
 test('GitHub Actions caches Astro and custom media derivatives', async () => {

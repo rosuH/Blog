@@ -2,7 +2,8 @@
 // Astro Content Collections Schema 定义
 // 支持多种 frontmatter 格式，与 Gatsby 保持兼容
 
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 // 博客文章集合

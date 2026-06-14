@@ -1,0 +1,77 @@
+<h2>首页归档结构：选一个主方向</h2>
+<p class="subtitle">这一步只决定信息架构。后面的手绘线条、日期样式、文章页控件会跟着这个方向统一。</p>
+
+<div class="cards">
+  <div class="card" data-choice="quiet-front-door" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="padding:18px;background:#faf4ec;border:1px solid #e7d9c9;border-radius:6px;font-family:ui-sans-serif,system-ui;color:#202126">
+        <div style="font-size:12px;margin-bottom:14px">rosu · quote stroke</div>
+        <div style="color:#1860c0;font-weight:700;margin-bottom:8px">最近写作</div>
+        <div style="display:grid;gap:8px">
+          <div style="border-top:1px solid #ded3c7;padding-top:8px;font-weight:700">年终总结的总结：2022-2025 <span style="float:right;font-weight:400;color:#65707a">2026/04/25</span></div>
+          <div style="border-top:1px solid #ded3c7;padding-top:8px">认知与接纳：2021年终总结</div>
+          <div style="border-top:1px solid #ded3c7;padding-top:8px">自定义布局其二...</div>
+          <div style="border-top:1px solid #ded3c7;padding-top:8px">Gradle daemon 与 OOM</div>
+        </div>
+        <div style="margin-top:22px;color:#8a5937;font-weight:700">归档入口</div>
+        <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+          <span style="background:#f4dfd0;border:1px solid #dfbda9;border-radius:999px;padding:2px 9px;font-size:12px">2021</span>
+          <span style="background:#f4dfd0;border:1px solid #dfbda9;border-radius:999px;padding:2px 9px;font-size:12px">2020</span>
+          <span style="color:#1860c0;font-size:12px">查看全部归档 →</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. 安静入口</h3>
+      <p>首页保留最近写作和年份入口，完整列表去独立归档页。首屏最克制，信息气质最稳定。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="progressive-archive" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="padding:18px;background:#faf4ec;border:1px solid #e7d9c9;border-radius:6px;font-family:ui-sans-serif,system-ui;color:#202126">
+        <div style="font-size:12px;margin-bottom:14px">rosu · quote stroke</div>
+        <div style="color:#1860c0;font-weight:700;margin-bottom:8px">最近写作</div>
+        <div style="display:grid;gap:8px">
+          <div style="border-top:1px solid #ded3c7;padding-top:8px;font-weight:700">年终总结的总结：2022-2025 <span style="float:right;font-weight:400;color:#65707a">2026/04/25</span></div>
+          <div style="border-top:1px solid #ded3c7;padding-top:8px">认知与接纳：2021年终总结</div>
+          <div style="border-top:1px solid #ded3c7;padding-top:8px">自定义布局其二...</div>
+        </div>
+        <div style="margin-top:22px;color:#8a5937;font-weight:700">全部归档</div>
+        <div style="margin-top:8px">
+          <span style="background:#f4dfd0;border:1px solid #dfbda9;border-radius:999px;padding:2px 9px;font-size:12px">2021</span>
+          <div style="margin-top:8px;border-top:1px solid #ded3c7;padding-top:8px">SparseArray 简介 <span style="float:right;color:#65707a">07/23</span></div>
+          <div style="border-top:1px solid #ded3c7;padding-top:8px">音视频基础概念... <span style="float:right;color:#65707a">05/26</span></div>
+          <button style="margin-top:10px;border:1px solid #d7c3b3;background:#fff8ef;border-radius:999px;padding:5px 10px;color:#8a5937">展开更早年份</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. 渐进归档</h3>
+      <p>首页仍有归档列表，但默认只展开近年或少量年份。保留当前位置的熟悉感，降低选择压力。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="full-index-polished" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="padding:18px;background:#faf4ec;border:1px solid #e7d9c9;border-radius:6px;font-family:ui-sans-serif,system-ui;color:#202126">
+        <div style="font-size:12px;margin-bottom:14px">rosu · quote stroke</div>
+        <div style="color:#1860c0;font-weight:700;margin-bottom:8px">最近写作</div>
+        <div style="display:grid;gap:8px">
+          <div style="border-top:1px solid #ded3c7;padding-top:8px;font-weight:700">年终总结的总结：2022-2025</div>
+          <div style="border-top:1px solid #ded3c7;padding-top:8px">认知与接纳：2021年终总结</div>
+        </div>
+        <div style="margin-top:22px;color:#8a5937;font-weight:700">全部归档</div>
+        <div style="margin-top:8px;display:grid;gap:10px">
+          <div><span style="background:#f4dfd0;border:1px solid #dfbda9;border-radius:999px;padding:2px 9px;font-size:12px">2021</span><div style="margin-top:6px;border-top:1px solid #ded3c7;padding-top:6px">SparseArray 简介</div></div>
+          <div><span style="background:#f4dfd0;border:1px solid #dfbda9;border-radius:999px;padding:2px 9px;font-size:12px">2020</span><div style="margin-top:6px;border-top:1px solid #ded3c7;padding-top:6px">将 ndk-build 关联到 Gradle</div></div>
+          <div><span style="background:#f4dfd0;border:1px solid #dfbda9;border-radius:999px;padding:2px 9px;font-size:12px">2019</span><div style="margin-top:6px;border-top:1px solid #ded3c7;padding-top:6px">2019-12 读书月报</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. 完整索引打磨</h3>
+      <p>保留当前完整归档，只把列表、日期、年份和分隔线统一成手绘纸感。改动最小，但 P2 只缓解一半。</p>
+    </div>
+  </div>
+</div>
