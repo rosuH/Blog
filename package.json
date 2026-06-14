@@ -19,15 +19,16 @@
     "@astrojs/mdx": "^4.0.0",
     "@astrojs/rss": "^4.0.0",
     "astro": "^5.0.0",
+    "heic-convert": "^2.1.0",
     "rehype-katex": "^7.0.0",
     "remark-math": "^6.0.0",
-    "sharp": "^0.34.5"
+    "sharp": "^0.35.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "typescript": "^5.8.0"
   },
   "overrides": {
-    "fast-xml-parser": "5.5.10"
+    "fast-xml-parser": "5.8.0"
   }
 }

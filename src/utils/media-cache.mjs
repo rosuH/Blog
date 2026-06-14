@@ -67,17 +67,15 @@ async function ensureFfmpeg() {
   }
 }
 
-// HEIC decode uses heif-convert (libheif + libde265 plugin). ffmpeg can't demux
-// .heic and sharp's bundled libheif lacks the HEVC decoder plugin.
-let _heifConvertPresent;
-async function ensureHeifConvert() {
-  if (_heifConvertPresent) return;
-  try {
-    await execFileP('heif-convert', ['--version']);
-    _heifConvertPresent = true;
-  } catch (err) {
-    throw new Error(`heif-convert not available (install libheif-examples + libde265): ${err.message}`);
-  }
+// HEIC decode uses heic-convert (bundled WASM libheif). ffmpeg can't demux .heic,
+// sharp's libheif lacks the HEVC decoder, and distro libheif is often too old or
+// strict for iPhone Live Photo HEICs — the bundled decoder is identical everywhere.
+let _heicConvert;
+async function getHeicConvert() {
+  if (_heicConvert) return _heicConvert;
+  const mod = await import('heic-convert');
+  _heicConvert = mod.default;
+  return _heicConvert;
 }
 
 // Stronger probe used only by processMov — H.264 transcode needs libx264.
@@ -138,7 +136,7 @@ async function withPublishLock(cacheKey, task) {
 }
 
 export async function processHeic(srcPath, cacheRoot) {
-  await ensureHeifConvert();
+  const convertHeic = await getHeicConvert();
   const sharp = await getSharp();
   const hash = await hashSource(srcPath);
   const key = cacheKeyFor(hash);
@@ -157,19 +155,9 @@ export async function processHeic(srcPath, cacheRoot) {
   bumpCounter();
   await mkdir(dir, { recursive: true });
 
-  // Decode HEIC (HEVC) → PNG via heif-convert. ffmpeg can't open .heic and
-  // sharp's bundled libheif can read the container but not decode the payload.
-  const pngPath = join(dir, 'source.png');
-  await execFileP('heif-convert', [srcPath, pngPath]);
-  // heif-convert suffixes the primary image with "-1" when the HEIC carries
-  // auxiliary images (common for iPhone Live Photos); accept either name.
-  let decodedPath = pngPath;
-  if (!(await exists(pngPath))) {
-    const primary = join(dir, 'source-1.png');
-    if (await exists(primary)) decodedPath = primary;
-  }
-
-  const img = sharp(decodedPath).rotate();
+  // Decode HEIC (HEVC) → PNG buffer via heic-convert (bundled WASM libheif).
+  const pngBuffer = await convertHeic({ buffer: await readFile(srcPath), format: 'PNG' });
+  const img = sharp(Buffer.from(pngBuffer)).rotate();
   const metadata = await img.metadata();
   const w1 = Math.min(metadata.width, 1600);
   // Emit 2x only when source has meaningfully more pixels than 1x (≥1.5×).

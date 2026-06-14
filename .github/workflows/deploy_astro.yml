@@ -33,21 +33,14 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --fund=false
 
-      - name: Install media tools (ffmpeg + libheif)
+      - name: Install ffmpeg
         run: |
           sudo apt-get update
-          # ffmpeg: MOV transcode (libx264).
+          # ffmpeg: MOV transcode (libx264) for Live Photo videos. HEIC stills are
+          # decoded in-process by heic-convert (bundled WASM libheif), no apt needed.
           sudo apt-get install -y --no-install-recommends ffmpeg
-          # libheif (heif-convert) + HEVC decoder plugin (libde265) to decode the
-          # Live Photo .heic still. Plugin package name varies across releases, so
-          # try the modern plugin, then the legacy runtime; the verify step below
-          # smoke-tests real decode capability and fails fast if it's still missing.
-          sudo apt-get install -y libheif-examples libheif-plugin-libde265 \
-            || sudo apt-get install -y libheif-examples libde265-0 \
-            || sudo apt-get install -y libheif-examples \
-            || true
           ffmpeg -version | head -1
-          heif-convert --version 2>&1 | head -1 || true
+          ffprobe -version | head -1
 
       - name: Cache generated image derivatives
         uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
@@ -64,19 +57,22 @@ jobs:
           # ffmpeg: required for MOV transcode (libx264).
           ffmpeg -hide_banner -codecs 2>&1 | grep -E 'libx264' >/dev/null \
             || (echo "ffmpeg missing libx264"; exit 1)
-          # heif-convert: decodes the Live Photo HEIC still (HEVC). Smoke-test a real
-          # decode so a missing decoder plugin fails here, fast, with a clear message.
-          # heif-convert may write the primary image as heic-probe-1.png when the
-          # HEIC carries auxiliary images, so accept any heic-probe*.png.
-          HEIC=$(find content/posts -iname '*.heic' | head -1)
-          if [ -n "$HEIC" ]; then
-            rm -f /tmp/heic-probe*.png
-            heif-convert "$HEIC" /tmp/heic-probe.png || echo "heif-convert exited $?"
-            if [ -z "$(find /tmp -maxdepth 1 -name 'heic-probe*.png' -size +0c 2>/dev/null)" ]; then
-              echo "heif-convert produced no PNG (HEVC decoder plugin missing or broken)"; exit 1
-            fi
-            echo "heif-convert decode OK: $(find /tmp -maxdepth 1 -name 'heic-probe*.png')"
-          fi
+          # heic-convert: decodes the Live Photo HEIC still (HEVC) via bundled WASM
+          # libheif. Smoke-test a real decode of the actual content HEIC so a broken
+          # dependency fails here, fast, with a clear message.
+          node -e "
+            import('heic-convert').then(async (m) => {
+              const { readFile, readdir } = await import('node:fs/promises');
+              const { join } = await import('node:path');
+              const root = 'content/posts';
+              const walk = async (d) => (await Promise.all((await readdir(d, { withFileTypes: true })).map(e => e.isDirectory() ? walk(join(d, e.name)) : [join(d, e.name)]))).flat();
+              const heic = (await walk(root)).find(f => f.toLowerCase().endsWith('.heic'));
+              if (!heic) return;
+              const png = await m.default({ buffer: await readFile(heic), format: 'PNG' });
+              if (!png || png.length < 1000) throw new Error('decoded output too small');
+              console.log('heic-convert decode OK:', heic, png.length, 'bytes');
+            }).catch(e => { console.error('heic-convert decode failed:', e.message); process.exit(1); });
+          "
           # sharp: required for AVIF/WebP/JPEG output. Sharp exposes AVIF via the heif format
           # with output.alias containing 'avif' — probe both pieces explicitly.
           node -e "import('sharp').then(s => { const o = s.default.format.heif?.output; const ok = !!o?.file && Array.isArray(o?.alias) && o.alias.includes('avif'); if (!ok) { console.error('sharp AVIF output missing'); process.exit(1); } })"
