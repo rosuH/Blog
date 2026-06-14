@@ -26,7 +26,7 @@ if (process.env.MEDIA_TEST_COUNTER === '1' && !globalThis.__mediaCounterHook) {
   });
 }
 
-export const PROCESSOR_VERSION = 3;
+export const PROCESSOR_VERSION = 2;
 
 export async function hashSource(absPath) {
   return new Promise((resolve, reject) => {
