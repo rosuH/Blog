@@ -1,6 +1,7 @@
 ---
 // src/layouts/Layout.astro
 import '../styles/global.css';
+import { Font } from 'astro:assets';
 import DarkMode from '../components/DarkMode.astro';
 import BambooShadow from '../components/BambooShadow.astro';
 
@@ -113,25 +114,16 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
       <script type="application/ld+json" set:html={serializeStructuredData(item)} />
     ))}
 
-    <!-- Fonts (non-render-blocking via print media swap) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-      />
-    </noscript>
+    <!-- Self-hosted, subset Latin fonts (see experimental.fonts in astro.config).
+         No preload: LCP text is Chinese (system CJK), so preloading Latin webfonts
+         would compete with LCP for glyphs that only style minor Latin runs. -->
+    <Font cssVariable="--font-outfit" />
+    <Font cssVariable="--font-ibm-plex-serif" />
+    <Font cssVariable="--font-jetbrains-mono" />
 
-    <!-- KaTeX CSS (math posts only) -->
+    <!-- KaTeX CSS (math posts only, self-hosted — no third-party render-blocking) -->
     {math && (
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+      <link rel="stylesheet" href="/katex/katex.min.css" />
     )}
 
     <!-- Deferred analytics bootstrap -->

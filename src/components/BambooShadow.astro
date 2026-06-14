@@ -54,6 +54,7 @@ const { article = false } = Astro.props;
     height: 100%;
     z-index: 1;
     opacity: 0.18;
+    color: rgb(58 54 46);
     mix-blend-mode: multiply;
     filter: blur(4px);
   }
@@ -69,6 +70,7 @@ const { article = false } = Astro.props;
 
   :global(html.dark) #bamboo-svg {
     opacity: 0.06;
+    color: rgb(176 186 204);
     mix-blend-mode: soft-light;
   }
 
@@ -180,6 +182,12 @@ const { article = false } = Astro.props;
     strength: number;
     travelMs: number;
   };
+
+  // Low-power devices (≤4GB RAM or Data Saver) get the static bamboo silhouette:
+  // the scene still renders once, but the continuous rAF wind loop never starts.
+  const conn = (navigator as any).connection;
+  const lowPower = ((navigator as any).deviceMemory && (navigator as any).deviceMemory <= 4)
+    || (conn && conn.saveData === true);
 
   let reducedMotion = motionQuery.matches;
   let scene: Scene | null = null;
@@ -455,8 +463,9 @@ const { article = false } = Astro.props;
     svg.setAttribute('height', String(sceneHeight));
     const fragment = document.createDocumentFragment();
 
-    const isDark = document.documentElement.classList.contains('dark');
-    const color = isDark ? 'rgb(176, 186, 204)' : 'rgb(58, 54, 46)';
+    // Stroke/fill inherit from the SVG's CSS `color` (switched by html.dark), so a
+    // theme toggle recolors the existing scene instantly — no geometry rebuild.
+    const color = 'currentColor';
 
     const root = ns('g');
     fragment.appendChild(root);
@@ -807,7 +816,7 @@ const { article = false } = Astro.props;
   }
 
   function startAnimation() {
-    if (reducedMotion || rafId || document.hidden) return;
+    if (reducedMotion || lowPower || rafId || document.hidden) return;
     lastTs = 0;
     rafId = requestAnimationFrame(tick);
   }
@@ -874,17 +883,8 @@ const { article = false } = Astro.props;
 
   document.addEventListener('visibilitychange', handleVisibility);
 
-  let lastRebuild = 0;
-  new MutationObserver(() => {
-    const now = performance.now();
-    if (now - lastRebuild > 500) { // Debounce: max 1 rebuild per 500ms
-      lastRebuild = now;
-      queueRebuild();
-    }
-  }).observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class'],
-  });
+  // Theme changes recolor the scene through CSS (`#bamboo-svg` color, switched by
+  // html.dark) via currentColor inheritance — no MutationObserver or rebuild needed.
 
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);

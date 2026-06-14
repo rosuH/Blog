@@ -1,6 +1,6 @@
 ---
 // src/components/Bio.astro
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import profilePic from '../images/profile-pic.png';
 
 interface Props {
@@ -11,8 +11,9 @@ const { compact = false } = Astro.props;
 ---
 
 <div class:list={['bio', { 'bio--compact': compact }]}>
-  <Image
+  <Picture
     src={profilePic}
+    formats={['avif', 'webp']}
     alt="rosu"
     width={compact ? 42 : 56}
     height={compact ? 42 : 56}
@@ -60,6 +61,11 @@ const { compact = false } = Astro.props;
   .bio--compact {
     gap: 0.75rem;
     margin-bottom: 0;
+  }
+
+  /* Picture wrapper is transparent to layout so the <img> stays the flex item. */
+  .bio :global(picture) {
+    display: contents;
   }
 
   .bio-avatar {

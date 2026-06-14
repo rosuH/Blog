@@ -26,7 +26,7 @@ if (process.env.MEDIA_TEST_COUNTER === '1' && !globalThis.__mediaCounterHook) {
   });
 }
 
-export const PROCESSOR_VERSION = 2;
+export const PROCESSOR_VERSION = 3;
 
 export async function hashSource(absPath) {
   return new Promise((resolve, reject) => {
@@ -193,6 +193,65 @@ export async function processHeic(srcPath, cacheRoot) {
   return result;
 }
 
+// Responsive widths for content raster images, mirroring Astro's markdown
+// breakpoints, capped so we never ship a multi-thousand-pixel master.
+const RASTER_WIDTHS = [640, 828, 1080, 1440];
+const RASTER_MAX = 1440;
+
+// Processes a local raster image (jpg/jpeg/png) into width-based responsive
+// AVIF + WebP tiers, mirroring (and adding AVIF to) Astro's built-in markdown
+// image optimization. Same content-addressed cache contract as processHeic.
+export async function processRaster(srcPath, cacheRoot) {
+  const sharp = await getSharp();
+  const hash = await hashSource(srcPath);
+  const key = cacheKeyFor(hash);
+  const dir = join(cacheRoot, key);
+  const metaPath = join(dir, 'meta.json');
+
+  if (await exists(metaPath)) {
+    const meta = JSON.parse(await readFile(metaPath, 'utf8'));
+    if (meta.cacheKey === key && meta.kind === 'raster') return meta;
+  }
+
+  bumpCounter();
+  await mkdir(dir, { recursive: true });
+
+  const img = sharp(srcPath, { failOn: 'none' }).rotate();
+  const metadata = await img.metadata();
+  const intrinsic = metadata.width || RASTER_MAX;
+  const cap = Math.min(intrinsic, RASTER_MAX);
+  // Breakpoints below the capped width, plus the cap itself (dedup + sorted).
+  const widths = [...new Set(RASTER_WIDTHS.filter((w) => w < cap).concat(cap))]
+    .sort((a, b) => a - b);
+
+  // Flat filename map so publishToPublic (which copies Object.values) works.
+  const products = {};
+  for (const w of widths) {
+    const base = img.clone().resize({ width: w, withoutEnlargement: true });
+    const avifName = `img-${w}w.avif`;
+    const webpName = `img-${w}w.webp`;
+    // AVIF q44 ≈ WebP q76 visually but ~25-35% smaller; effort 4 keeps builds sane.
+    await base.clone().avif({ quality: 44, effort: 4 }).toFile(join(dir, avifName));
+    await base.clone().webp({ quality: 76 }).toFile(join(dir, webpName));
+    products[`avif_${w}`] = avifName;
+    products[`webp_${w}`] = webpName;
+  }
+
+  const result = {
+    cacheKey: key,
+    hash,
+    kind: 'raster',
+    version: PROCESSOR_VERSION,
+    src_basename: basename(srcPath, extname(srcPath)),
+    dimensions: { width: metadata.width, height: metadata.height },
+    widths,
+    products,
+  };
+
+  await writeFile(metaPath, JSON.stringify(result, null, 2));
+  return result;
+}
+
 export async function processMov(srcPath, cacheRoot) {
   await ensureFfmpeg();
   const hash = await hashSource(srcPath);
@@ -331,6 +390,30 @@ export async function gcCache(cacheRoot, keepSet, { maxAgeDays = 60 } = {}) {
       if (s.mtimeMs < cutoff) {
         await rm(dirPath, { recursive: true, force: true });
       }
+    } catch {
+      // ignore individual failures
+    }
+  }
+}
+
+// Prunes published media dirs the current build did not reference. Unlike the
+// cache (which keeps recent entries to speed rebuilds), public/_media must hold
+// exactly the referenced set — otherwise stale version dirs (e.g. after a
+// PROCESSOR_VERSION bump) get copied into dist and bloat the deploy. Guarded to
+// never run on an image-less build so a partial render can't wipe valid assets.
+export function prunePublishedMediaSync(publishedRoot, keepSet) {
+  if (!keepSet || keepSet.size === 0) return;
+  let entries;
+  try {
+    entries = readdirSync(publishedRoot, { withFileTypes: true });
+  } catch {
+    return;
+  }
+  for (const ent of entries) {
+    if (!ent.isDirectory()) continue;
+    if (keepSet.has(ent.name)) continue;
+    try {
+      rmSync(join(publishedRoot, ent.name), { recursive: true, force: true });
     } catch {
       // ignore individual failures
     }

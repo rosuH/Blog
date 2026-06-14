@@ -97,6 +97,37 @@ function generatedPictureNode(payload, loading = 'lazy') {
   });
 }
 
+// Width-based responsive <picture> for content raster images: AVIF source +
+// WebP fallback img, mirroring Astro's srcset/sizes so delivery isn't regressed.
+function rasterPictureNode(payload, loading = 'lazy') {
+  const { key, widths, products, width, height, alt, title } = payload;
+  const base = `/_media/${key}`;
+  const avifSrcset = widths.map((w) => `${base}/${products[`avif_${w}`]} ${w}w`).join(', ');
+  const webpSrcset = widths.map((w) => `${base}/${products[`webp_${w}`]} ${w}w`).join(', ');
+  const sizes = '(min-width: 740px) 700px, 100vw';
+  const largest = widths[widths.length - 1];
+
+  const imgProps = {};
+  // title first so order matches Astro's output (and the responsive-markup test).
+  if (title) imgProps.title = title;
+  Object.assign(imgProps, {
+    src: `${base}/${products[`webp_${largest}`]}`,
+    srcset: webpSrcset,
+    sizes,
+    width,
+    height,
+    alt,
+    loading,
+    decoding: 'async',
+    style: `aspect-ratio: ${width} / ${height}`,
+  });
+
+  return h('picture', {}, [
+    h('source', { type: 'image/avif', srcset: avifSrcset, sizes }),
+    h('img', imgProps),
+  ]);
+}
+
 function isWhitespace(node) {
   return node.type === 'text' && /^\s*$/.test(node.value || '');
 }
@@ -170,10 +201,17 @@ export default function rehypeMedia() {
         };
         return;
       }
-      const picture = generatedPictureNode(payload, loading);
+      const picture = payload.kind === 'raster'
+        ? rasterPictureNode(payload, loading)
+        : generatedPictureNode(payload, loading);
+      // Raster content images keep the plain media-figure class (visual parity
+      // with pre-pipeline standalone images); HEIC stills stay --generated.
+      const figureClass = payload.kind === 'raster'
+        ? 'media-figure'
+        : 'media-figure media-figure--generated';
       const figure = payload.kind === 'livephoto'
         ? livePhotoNode({ ...payload, loading })
-        : figureNode([picture], payload.alt, 'media-figure media-figure--generated');
+        : figureNode([picture], payload.alt, figureClass);
       if (replaceStandaloneParagraph(parent, index, grandparent, parentIndex, figure)) return;
       parent.children[index] = picture;
     });
