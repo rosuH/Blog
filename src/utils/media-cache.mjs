@@ -161,8 +161,15 @@ export async function processHeic(srcPath, cacheRoot) {
   // sharp's bundled libheif can read the container but not decode the payload.
   const pngPath = join(dir, 'source.png');
   await execFileP('heif-convert', [srcPath, pngPath]);
+  // heif-convert suffixes the primary image with "-1" when the HEIC carries
+  // auxiliary images (common for iPhone Live Photos); accept either name.
+  let decodedPath = pngPath;
+  if (!(await exists(pngPath))) {
+    const primary = join(dir, 'source-1.png');
+    if (await exists(primary)) decodedPath = primary;
+  }
 
-  const img = sharp(pngPath).rotate();
+  const img = sharp(decodedPath).rotate();
   const metadata = await img.metadata();
   const w1 = Math.min(metadata.width, 1600);
   // Emit 2x only when source has meaningfully more pixels than 1x (≥1.5×).

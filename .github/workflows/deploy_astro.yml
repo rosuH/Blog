@@ -66,10 +66,16 @@ jobs:
             || (echo "ffmpeg missing libx264"; exit 1)
           # heif-convert: decodes the Live Photo HEIC still (HEVC). Smoke-test a real
           # decode so a missing decoder plugin fails here, fast, with a clear message.
+          # heif-convert may write the primary image as heic-probe-1.png when the
+          # HEIC carries auxiliary images, so accept any heic-probe*.png.
           HEIC=$(find content/posts -iname '*.heic' | head -1)
           if [ -n "$HEIC" ]; then
-            heif-convert "$HEIC" /tmp/heic-probe.png >/dev/null 2>&1 && test -s /tmp/heic-probe.png \
-              || (echo "heif-convert cannot decode HEVC HEIC (need libheif + libde265 plugin)"; exit 1)
+            rm -f /tmp/heic-probe*.png
+            heif-convert "$HEIC" /tmp/heic-probe.png || echo "heif-convert exited $?"
+            if [ -z "$(find /tmp -maxdepth 1 -name 'heic-probe*.png' -size +0c 2>/dev/null)" ]; then
+              echo "heif-convert produced no PNG (HEVC decoder plugin missing or broken)"; exit 1
+            fi
+            echo "heif-convert decode OK: $(find /tmp -maxdepth 1 -name 'heic-probe*.png')"
           fi
           # sharp: required for AVIF/WebP/JPEG output. Sharp exposes AVIF via the heif format
           # with output.alias containing 'avif' — probe both pieces explicitly.
