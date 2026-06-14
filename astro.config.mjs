@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -60,9 +61,11 @@ export default defineConfig({
       theme: 'github-dark',
       wrap: true,
     },
-    // 数学公式
-    remarkPlugins: [remarkMath, remarkMedia],
-    rehypePlugins: [rehypeMedia, [rehypeKatex, { strict: false }]],
+    // Astro 6: remark/rehype 插件经由 unified() 处理器传入（数学公式 + 媒体管线）
+    processor: unified({
+      remarkPlugins: [remarkMath, remarkMedia],
+      rehypePlugins: [rehypeMedia, [rehypeKatex, { strict: false }]],
+    }),
   },
 
   // 构建输出
