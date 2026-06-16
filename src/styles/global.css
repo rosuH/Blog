@@ -160,6 +160,8 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--fg);
   margin-top: 2rem;
   margin-bottom: 1rem;
+  /* Even out multi-line headings so no single word/char is stranded (Widow). */
+  text-wrap: balance;
 }
 
 h1 { font-size: var(--text-3xl); font-weight: 700; }
@@ -425,6 +427,8 @@ img {
 
 .prose p {
   margin-bottom: 1.85rem;
+  /* Avoid a lone trailing word/char on the last line (Widow/Orphan). */
+  text-wrap: pretty;
 }
 
 .prose a {
