@@ -73,7 +73,7 @@ html.dark {
   --bg:             var(--paper);
   --fg:             var(--ink);
   --fg-muted:       oklch(77% 0.012 88);
-  --fg-subtle:      oklch(64% 0.01 88);
+  --fg-subtle:      oklch(66% 0.012 88);
   --accent:         var(--avatar-blue);
   --accent-soft:    oklch(27% 0.065 245);
   --support:        oklch(72% 0.08 54);
