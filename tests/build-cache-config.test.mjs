@@ -10,6 +10,39 @@ test('Astro stores generated image assets in the project cache directory', async
   assert.match(config, /cacheDir:\s*['"]\.cache\/astro['"]/);
 });
 
+// Strip JS line comments so config-key assertions don't match documentation that
+// merely mentions a key by name (e.g. a comment explaining `compressHTML`).
+function stripLineComments(src) {
+  return src.replace(/^\s*\/\/.*$/gm, '');
+}
+
+test('Astro 7 migration intentionally keeps the unified Markdown processor', async () => {
+  // The Markdown processor decision is a deliberate, documented compatibility
+  // fallback (see docs/adr/0001-astro-7-markdown-pipeline.md): Satteri's visitor
+  // plugin API cannot carry the media pipeline and does not render KaTeX. Pin the
+  // config shape so an accidental removal of unified()/the media/math plugins is
+  // caught.
+  const config = await readFile(astroConfigPath, 'utf8');
+  assert.match(config, /from\s+['"]@astrojs\/markdown-remark['"]/);
+  assert.match(config, /processor:\s*unified\(/);
+  assert.match(config, /remarkMedia/);
+  assert.match(config, /rehypeMedia/);
+  assert.match(config, /rehypeKatex/);
+  // No `compressHTML:` key is set (the code is checked, ignoring comments).
+  assert.doesNotMatch(stripLineComments(config), /compressHTML\s*:/);
+});
+
+test('Astro 7 JSX whitespace default is a deliberate final choice', async () => {
+  // We adopt Astro 7's default `compressHTML: 'jsx'` (JSX whitespace semantics).
+  // There is no override because the templates have no inline "text <tag> text"
+  // JSX patterns that would collapse. If someone re-adds a compressHTML assignment
+  // it must be a new deliberate decision — this test makes a silent reintroduction
+  // explicit (only the code is checked, not the explanatory comments).
+  const config = await readFile(astroConfigPath, 'utf8');
+  assert.doesNotMatch(stripLineComments(config), /compressHTML\s*:/);
+});
+
+
 test('responsive image widths are defined in the media pipeline', async () => {
   // Astro 6 removed image.breakpoints config; our content images use the custom
   // raster pipeline whose widths live in media-cache.mjs.
