@@ -121,6 +121,10 @@ body {
   background-color: var(--bg);
   color: var(--fg);
   margin: 0;
+  /* Only animate intentional theme toggles — never first paint / late class apply. */
+}
+
+html.theme-animating body {
   transition:
     background-color var(--duration-fast) ease,
     color var(--duration-fast) ease;

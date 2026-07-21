@@ -132,15 +132,20 @@ test('theme and page background are initialized before stylesheet discovery', ()
   const firstStylesheet = html.indexOf('rel="stylesheet"');
   const themeInit = html.indexOf('data-critical-theme-init');
   const backgroundInit = html.indexOf('data-critical-page-background');
+  const headBeforeStyles = html.slice(0, firstStylesheet);
 
   assert.notEqual(firstStylesheet, -1);
   assert.notEqual(themeInit, -1);
   assert.notEqual(backgroundInit, -1);
   assert.ok(themeInit < firstStylesheet, 'theme init must run before stylesheet discovery');
   assert.ok(backgroundInit < firstStylesheet, 'critical background must be inline before stylesheet discovery');
-  assert.match(html.slice(0, firstStylesheet), /html\.dark/);
-  assert.match(html.slice(0, firstStylesheet), /background-color:\s*oklch\(97% 0\.012 78\)/);
-  assert.match(html.slice(0, firstStylesheet), /background-color:\s*oklch\(18\.5% 0\.012 252\)/);
+  assert.match(headBeforeStyles, /html\.dark/);
+  assert.match(headBeforeStyles, /background-color:\s*oklch\(97% 0\.012 78\)/);
+  assert.match(headBeforeStyles, /background-color:\s*oklch\(18\.5% 0\.012 252\)/);
+  // Cloudflare Rocket Loader rewrites scripts unless data-cfasync="false".
+  assert.match(headBeforeStyles, /data-critical-theme-init[^>]*data-cfasync="false"|data-cfasync="false"[^>]*data-critical-theme-init/);
+  assert.match(headBeforeStyles, /prefers-color-scheme:\s*dark/);
+  assert.match(headBeforeStyles, /style\.backgroundColor/);
 });
 
 test('bamboo shadow uses JS wind physics instead of global keyframe or SMIL transforms', () => {

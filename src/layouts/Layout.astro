@@ -45,29 +45,53 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
 
-    <!-- Theme and first-paint background must run before stylesheet discovery. -->
-    <script is:inline data-critical-theme-init>
+    <!-- Theme and first-paint background must run before stylesheet discovery.
+         data-cfasync="false" keeps Cloudflare Rocket Loader from rewriting/deferring
+         this script (it otherwise changes type to "*-text/javascript" and FOUCs dark mode). -->
+    <script is:inline data-critical-theme-init data-cfasync="false">
       (() => {
+        const root = document.documentElement;
+        const lightBg = 'oklch(97% 0.012 78)';
+        const darkBg = 'oklch(18.5% 0.012 252)';
+        const apply = (isDark) => {
+          root.classList.toggle('dark', isDark);
+          root.dataset.theme = isDark ? 'dark' : 'light';
+          root.style.colorScheme = isDark ? 'dark' : 'light';
+          // Inline bg covers the gap before the following critical <style> is applied.
+          root.style.backgroundColor = isDark ? darkBg : lightBg;
+        };
         try {
           const stored = window.localStorage?.getItem('theme');
           const theme = stored === 'dark' || stored === 'light'
             ? stored
             : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-          const isDark = theme === 'dark';
-          document.documentElement.classList.toggle('dark', isDark);
-          document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+          apply(theme === 'dark');
         } catch {
-          document.documentElement.style.colorScheme = 'light';
+          try {
+            apply(window.matchMedia('(prefers-color-scheme: dark)').matches);
+          } catch {
+            apply(false);
+          }
         }
       })();
     </script>
     <style is:inline data-critical-page-background>
       :root {
         background-color: oklch(97% 0.012 78);
+        color-scheme: light;
       }
 
-      html.dark {
-        background-color: oklch(18.5% 0.012 252);
+      /* Prefer system dark before/without JS (e.g. if a proxy defers the init script). */
+      @media (prefers-color-scheme: dark) {
+        html:not([data-theme='light']) {
+          background-color: oklch(18.5% 0.012 252);
+          color-scheme: dark;
+        }
+
+        html:not([data-theme='light']),
+        html:not([data-theme='light']) body {
+          background-color: oklch(18.5% 0.012 252);
+        }
       }
 
       html,
@@ -77,8 +101,17 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
       }
 
       html.dark,
-      html.dark body {
+      html[data-theme='dark'],
+      html.dark body,
+      html[data-theme='dark'] body {
         background-color: oklch(18.5% 0.012 252);
+        color-scheme: dark;
+      }
+
+      html[data-theme='light'],
+      html[data-theme='light'] body {
+        background-color: oklch(97% 0.012 78);
+        color-scheme: light;
       }
     </style>
 

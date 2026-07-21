@@ -136,14 +136,23 @@
   applyThemeLabel(isDark);
 
   toggle?.addEventListener('click', () => {
-    const nextIsDark = document.documentElement.classList.toggle('dark');
-    document.documentElement.style.colorScheme = nextIsDark ? 'dark' : 'light';
+    const root = document.documentElement;
+    root.classList.add('theme-animating');
+    const nextIsDark = root.classList.toggle('dark');
+    root.dataset.theme = nextIsDark ? 'dark' : 'light';
+    root.style.colorScheme = nextIsDark ? 'dark' : 'light';
+    root.style.backgroundColor = nextIsDark
+      ? 'oklch(18.5% 0.012 252)'
+      : 'oklch(97% 0.012 78)';
     localStorage.setItem('theme', nextIsDark ? 'dark' : 'light');
     applyThemeLabel(nextIsDark);
 
     toggle.classList.remove('is-toggling');
     void toggle.offsetWidth;
     toggle.classList.add('is-toggling');
-    setTimeout(() => toggle.classList.remove('is-toggling'), 320);
+    setTimeout(() => {
+      toggle.classList.remove('is-toggling');
+      root.classList.remove('theme-animating');
+    }, 320);
   });
 </script>
