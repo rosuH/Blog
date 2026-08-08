@@ -14,7 +14,13 @@ A personal blog for publishing long-form technical writing, reflections, and lif
 
 ## Brand Personality
 
-Scholarly, restrained, deliberate. Quiet confidence over self-promotion. The design should feel like a well-made notebook or letterpress book — not a magazine, not a startup landing page, not a generic Medium blog.
+Scholarly, restrained, deliberate. Quiet confidence over self-promotion. The only fixed ornament is the palm leaf shadow in the upper right (BambooShadow) — living, wind-driven foliage cast on the page. Full visual system is being redesigned from zero (see `docs/design-proposals/`); until a proposal lands, treat the site as transitional — not a magazine, not a startup landing page, not a generic Medium blog.
+
+## Design Language (in redesign)
+
+- **Palm shadow is sacred** — BambooShadow is the only site decoration; no moonlight wash, no yellow light blobs, no second foliage layer.
+- **Everything else is open** — color, type, borders, interaction physics: pick via design proposals, then pin here.
+- **Anti-slop** — no classical pastiche (seals, vertical scroll kitsch), no Medium cards, no neon crypto glow.
 
 ## Anti-references
 

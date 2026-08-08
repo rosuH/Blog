@@ -56,16 +56,15 @@ const structuredData = {
   }
 
   .archive-page__header {
-    margin: 1.5rem 0 2.5rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid color-mix(in oklab, var(--border) 74%, transparent);
+    margin: 1.5rem 0 3rem;
   }
 
   .archive-page__eyebrow {
     margin: 0 0 0.4rem;
-    color: color-mix(in oklab, var(--support) 70%, var(--fg-muted));
+    color: var(--fg-subtle);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
+    letter-spacing: 0.14em;
   }
 
   .archive-page__header h1 {
@@ -82,20 +81,36 @@ const structuredData = {
 
   .archive-groups {
     display: grid;
-    gap: 1.75rem;
+    gap: 3.5rem;
   }
 
+  /* 桌面端：年份钉在左列，滚动该年份的文章时它一直陪着 */
   .archive-group {
     display: grid;
-    gap: 0.65rem;
+    grid-template-columns: 4.5rem 1fr;
+    gap: 0 1.5rem;
+    scroll-margin-top: 2rem;
   }
 
   .archive-year-heading {
     margin: 0;
-    width: fit-content;
+    position: sticky;
+    top: 2rem;
+    align-self: start;
   }
 
   .archive-empty {
     color: var(--fg-muted);
+  }
+
+  @media (max-width: 640px) {
+    .archive-group {
+      grid-template-columns: 1fr;
+      gap: 0.4rem 0;
+    }
+
+    .archive-year-heading {
+      position: static;
+    }
   }
 </style>

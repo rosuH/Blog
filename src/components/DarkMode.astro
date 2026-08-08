@@ -23,8 +23,9 @@
 
 <style>
   .theme-toggle {
-    background: color-mix(in srgb, var(--bg) 88%, var(--accent) 12%);
-    border: 1px solid var(--border);
+    background: var(--control-paper);
+    border: none;
+    box-shadow: var(--lift-shadow);
     cursor: pointer;
     padding: 0;
     width: 2.75rem;
@@ -35,28 +36,19 @@
     justify-content: center;
     transition:
       color var(--duration-fast) ease,
-      border-color var(--duration-fast) ease,
-      background-color var(--duration-fast) ease;
+      transform var(--duration-fast) var(--ease-quiet);
     border-radius: 999px;
     overflow: hidden;
     position: relative;
   }
 
   .theme-toggle:hover {
-    color: var(--fg);
-    border-color: color-mix(in srgb, var(--accent) 22%, var(--border));
+    color: var(--sun);
+    transform: translateY(-2px);
   }
 
-  :global(.dark) .theme-toggle {
-    background: color-mix(in oklab, var(--bg) 91%, var(--support-soft) 9%);
-    border-color: color-mix(in oklab, var(--support-border) 62%, var(--border));
-    color: color-mix(in oklab, var(--support) 38%, var(--fg-muted));
-  }
-
-  :global(.dark) .theme-toggle:hover {
-    color: var(--fg);
-    border-color: color-mix(in oklab, var(--support) 22%, var(--border));
-    background: color-mix(in oklab, var(--bg) 88%, var(--support-soft) 12%);
+  .theme-toggle:active {
+    transform: translateY(0);
   }
 
   .theme-toggle:focus-visible {
@@ -143,7 +135,7 @@
     root.style.colorScheme = nextIsDark ? 'dark' : 'light';
     root.style.backgroundColor = nextIsDark
       ? 'oklch(18.5% 0.012 252)'
-      : 'oklch(97% 0.012 78)';
+      : 'oklch(98% 0.006 85)';
     localStorage.setItem('theme', nextIsDark ? 'dark' : 'light');
     applyThemeLabel(nextIsDark);
 

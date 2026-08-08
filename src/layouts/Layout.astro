@@ -3,7 +3,7 @@
 import '../styles/global.css';
 import { Font } from 'astro:assets';
 import DarkMode from '../components/DarkMode.astro';
-import BambooShadow from '../components/BambooShadow.astro';
+import DitherScene from '../components/DitherScene.astro';
 
 interface Props {
   title: string;
@@ -51,7 +51,7 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
     <script is:inline data-critical-theme-init data-cfasync="false">
       (() => {
         const root = document.documentElement;
-        const lightBg = 'oklch(97% 0.012 78)';
+        const lightBg = 'oklch(98% 0.006 85)';
         const darkBg = 'oklch(18.5% 0.012 252)';
         const apply = (isDark) => {
           root.classList.toggle('dark', isDark);
@@ -73,11 +73,16 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
             apply(false);
           }
         }
+
+        // 这面墙有时间：按读者本地时刻给 <html> 标注时段，CSS 据此微调光色。
+        const hour = new Date().getHours();
+        if (hour >= 5 && hour < 11) root.dataset.daytime = 'morning';
+        else if (hour >= 16 && hour < 19) root.dataset.daytime = 'dusk';
       })();
     </script>
     <style is:inline data-critical-page-background>
       :root {
-        background-color: oklch(97% 0.012 78);
+        background-color: oklch(98% 0.006 85);
         color-scheme: light;
       }
 
@@ -97,7 +102,7 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
       html,
       body {
         min-height: 100%;
-        background-color: oklch(97% 0.012 78);
+        background-color: oklch(98% 0.006 85);
       }
 
       html.dark,
@@ -110,7 +115,7 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
 
       html[data-theme='light'],
       html[data-theme='light'] body {
-        background-color: oklch(97% 0.012 78);
+        background-color: oklch(98% 0.006 85);
         color-scheme: light;
       }
     </style>
@@ -276,7 +281,7 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
 
   <body>
     <a href="#main-content" class="skip-link">跳转到内容</a>
-    <BambooShadow article={article} />
+    <DitherScene article={article} />
     <div class="site-wrap">
       <header class="site-header">
         <a href="/" class="site-logo">Blog.kt</a>
@@ -414,13 +419,11 @@ const serializeStructuredData = (item: Record<string, unknown>) =>
 
   .site-footer a {
     color: var(--fg-muted);
-    text-decoration: underline;
-    text-decoration-color: var(--border);
-    text-underline-offset: 3px;
+    text-decoration: none;
     transition: color 0.15s;
   }
 
   .site-footer a:hover {
-    color: var(--fg-muted);
+    color: var(--sun);
   }
 </style>

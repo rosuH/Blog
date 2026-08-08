@@ -64,7 +64,7 @@ test('homepage foregrounds recent writing in Chinese with archive grouping hooks
   assert.doesNotMatch(homeSource, /\.post-row--featured\s*\{[^}]*background:/s);
   assert.doesNotMatch(homeSource, /\.tagline\s*\{[^}]*background:/s);
   assert.doesNotMatch(homeSource, /\.tagline\s*\{[^}]*border-left:/s);
-  assert.match(homeSource, /\.tagline::before/);
+  assert.doesNotMatch(homeSource, /\.tagline::before/);
   assert.match(bioSource, /\.bio-link svg\s*\{[\s\S]*display:\s*block;/);
 });
 
@@ -140,7 +140,7 @@ test('theme and page background are initialized before stylesheet discovery', ()
   assert.ok(themeInit < firstStylesheet, 'theme init must run before stylesheet discovery');
   assert.ok(backgroundInit < firstStylesheet, 'critical background must be inline before stylesheet discovery');
   assert.match(headBeforeStyles, /html\.dark/);
-  assert.match(headBeforeStyles, /background-color:\s*oklch\(97% 0\.012 78\)/);
+  assert.match(headBeforeStyles, /background-color:\s*oklch\(98% 0\.006 85\)/);
   assert.match(headBeforeStyles, /background-color:\s*oklch\(18\.5% 0\.012 252\)/);
   // Cloudflare Rocket Loader rewrites scripts unless data-cfasync="false".
   assert.match(headBeforeStyles, /data-critical-theme-init[^>]*data-cfasync="false"|data-cfasync="false"[^>]*data-critical-theme-init/);
@@ -148,47 +148,59 @@ test('theme and page background are initialized before stylesheet discovery', ()
   assert.match(headBeforeStyles, /style\.backgroundColor/);
 });
 
-test('bamboo shadow uses JS wind physics instead of global keyframe or SMIL transforms', () => {
-  const source = readSource('src', 'components', 'BambooShadow.astro');
+test('dither scene uses prebaked frames with canvas ImageBitmap playback', () => {
+  const source = readSource('src', 'components', 'DitherScene.astro');
+  const layoutSource = readSource('src', 'layouts', 'Layout.astro');
 
+  assert.match(layoutSource, /DitherScene/);
+  assert.doesNotMatch(layoutSource, /BambooShadow/);
   assert.match(source, /requestAnimationFrame/);
-  assert.match(source, /visibilitychange/);
-  assert.match(source, /scheduleNextGust/);
-  assert.match(source, /gustEnvelope/);
-  assert.match(source, /class="bamboo-moonlight"/);
-  assert.match(source, /radial-gradient/);
+  assert.match(source, /createImageBitmap/);
+  assert.match(source, /\/dither\/cloud/);
+  assert.match(source, /\/dither\/tree/);
+  // Dark mode: full moon disc + soft-light wash from moon center
+  assert.match(source, /dither-moon/);
+  assert.match(source, /dither-moonlight/);
   assert.match(source, /mix-blend-mode:\s*soft-light/);
-  assert.doesNotMatch(source, /@keyframes bamboo-gust/);
+  // No img.src frame swapping (causes decode flicker)
+  assert.doesNotMatch(source, /\.src\s*=/);
   assert.doesNotMatch(source, /animateTransform/);
 });
 
-test('color system uses avatar blue with warm paper accents', () => {
+test('color system is a near-monochrome sunlit wall with a single sun amber', () => {
   const css = readSource('src', 'styles', 'global.css');
   const homeSource = readSource('src', 'pages', 'index.astro');
+  const layoutSource = readSource('src', 'layouts', 'Layout.astro');
 
-  assert.match(css, /--avatar-blue:\s+oklch\(49% 0\.19 255\)/);
-  assert.match(css, /--avatar-peach:\s+oklch\(86% 0\.055 50\)/);
-  assert.match(css, /--paper:\s+oklch\(97% 0\.012 78\)/);
-  assert.match(css, /--fg-subtle:\s+oklch\(52% 0\.012 250\)/);
-  assert.match(css, /--accent:\s+var\(--avatar-blue\)/);
-  assert.match(css, /--support:\s+oklch\(50% 0\.095 52\)/);
+  // 近单色：暖白纸 + 墨色 + 唯一的阳光琥珀
+  assert.match(css, /--sun:\s+oklch\(44% 0\.11 70\)/);
+  assert.match(css, /--paper:\s+oklch\(98% 0\.006 85\)/);
+  assert.match(css, /--accent:\s+var\(--sun\)/);
   assert.match(css, /--bg:\s+var\(--paper\)/);
-  assert.match(css, /--scribble-underline-mask:\s+url/);
-  assert.match(css, /--scribble-quote-mask:\s+url/);
-  assert.match(css, /--scribble-pill-fill-mask:\s+url/);
-  assert.match(css, /--scribble-pill-outline-mask:\s+url/);
-  assert.match(css, /mask-image:\s+var\(--scribble-underline-mask\)/);
-  assert.match(css, /mask-image:\s+var\(--scribble-quote-mask\)/);
-  assert.match(css, /clip-path:\s+inset\(0 100% 0 0\)/);
-  assert.match(homeSource, /mask-image:\s+var\(--scribble-underline-mask\)/);
-  assert.match(homeSource, /mask-image:\s+var\(--scribble-quote-mask\)/);
-  assert.match(homeSource, /transition:\s+clip-path var\(--duration-medium\) var\(--ease-quiet\)/);
-  assert.doesNotMatch(homeSource, /scaleX\(0\)/);
-  assert.match(css, /\.archive-year::before/);
-  assert.match(css, /\.archive-year::after/);
-  assert.match(css, /mask-image:\s+var\(--scribble-pill-fill-mask\)/);
-  assert.match(css, /mask-image:\s+var\(--scribble-pill-outline-mask\)/);
-  assert.match(css, /\.archive-year\s*\{[\s\S]*background:\s+transparent/);
+  assert.match(css, /--fg-subtle:\s+oklch\(52% 0\.012 250\)/);
+  // 唯一的装饰物理：升起 + 投向左下的影子
+  assert.match(css, /--lift-shadow:/);
+  assert.match(css, /--lift-shadow-text:/);
+  assert.match(css, /\.post-link:hover \.post-title,\s*\.post-link:focus-visible \.post-title\s*\{[\s\S]*?translateY\(-2px\)/);
+  assert.match(css, /\.post-link:hover \.post-title,\s*\.post-link:focus-visible \.post-title\s*\{[\s\S]*?text-shadow:\s*var\(--lift-shadow-text\)/);
+  // 禁止任何"画上去"的痕迹：涂鸦遮罩、列表分隔线、默认下划线、年份胶囊
+  assert.doesNotMatch(css, /scribble/);
+  assert.doesNotMatch(css, /mask-image/);
+  assert.doesNotMatch(css, /\.post-row\s*\{[^}]*border/);
+  assert.doesNotMatch(css, /\.archive-year::before/);
+  assert.doesNotMatch(css, /\.archive-year::after/);
+  assert.doesNotMatch(css, /\.prose a[^{]*\{[^}]*text-decoration:\s*underline/);
+  assert.doesNotMatch(homeSource, /mask-image/);
+  // 列表标题是衬线大字，条目间只有留白
+  assert.match(css, /\.post-title\s*\{[\s\S]*?font-family:\s*var\(--font-serif\)/);
+  assert.match(css, /\.post-row \+ \.post-row\s*\{[^}]*margin-top/);
+  // 年份是纯排版数字
+  assert.match(css, /\.archive-year\s*\{[\s\S]*?color:\s*var\(--sun\)/);
+  assert.match(css, /\.archive-year\s*\{[\s\S]*?font-family:\s*var\(--font-serif\)/);
+  // 这面墙有时间：光色随本地时刻微调
+  assert.match(layoutSource, /dataset\.daytime = 'morning'/);
+  assert.match(layoutSource, /dataset\.daytime = 'dusk'/);
+  assert.match(css, /html:not\(\.dark\)\[data-daytime='dusk'\]/);
   assert.match(homeSource, /home-section--recent/);
 });
 
@@ -201,9 +213,14 @@ test('quiet archive visual system uses shared list and year hooks', () => {
 
   assert.match(css, /--divider-soft:/);
   assert.match(css, /--control-paper:/);
-  assert.match(css, /\.post-row\s*\{[\s\S]*border-top:\s*1px solid var\(--divider-soft\)/);
-  assert.match(css, /\.archive-year::before/);
-  assert.match(css, /\.archive-year::after/);
+  // 列表没有分隔线，条目间只有留白
+  assert.doesNotMatch(css, /\.post-row\s*\{[^}]*border-top/);
+  assert.match(css, /\.post-row \+ \.post-row\s*\{[^}]*margin-top/);
+  // 年份是纯排版数字，不再是手绘胶囊
+  assert.doesNotMatch(css, /\.archive-year::before/);
+  assert.doesNotMatch(css, /\.archive-year::after/);
+  // 归档页年份钉在左列做路标
+  assert.match(archiveSource, /\.archive-year-heading\s*\{[\s\S]*?position:\s*sticky/);
   assert.match(postListSource, /post-list--featured/);
   assert.match(postListSource, /post-list--archive/);
   assert.match(yearPillSource, /class="archive-year"/);
@@ -255,10 +272,9 @@ test('motion system stays quiet and ink-like', () => {
 
   assert.match(css, /--ease-quiet:\s+cubic-bezier/);
   assert.match(homeSource, /@keyframes home-settle/);
-  assert.match(homeSource, /@keyframes ink-line-reveal/);
-  assert.match(homeSource, /@keyframes quote-stroke-reveal/);
-  assert.match(homeSource, /animation:\s+ink-line-reveal 560ms 120ms var\(--ease-quiet\) both/);
-  assert.match(homeSource, /animation:\s+quote-stroke-reveal 480ms 80ms var\(--ease-quiet\) both/);
+  assert.doesNotMatch(homeSource, /ink-line-reveal/);
+  assert.doesNotMatch(homeSource, /quote-stroke-reveal/);
+  assert.match(css, /transform var\(--duration-fast\) var\(--ease-quiet\)/);
   assert.doesNotMatch(articleSource, /prose\.style\.opacity/);
   assert.match(articleSource, /behavior:\s+prefersReducedMotion \? 'auto' : 'smooth'/);
   assert.match(darkModeSource, /transform:\s+scale\(1\.06\)/);
