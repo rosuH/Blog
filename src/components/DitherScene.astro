@@ -192,6 +192,10 @@ const TREE_H = 670;
     .dither-tree {
       height: 52vh;
     }
+    /* Article body needs room on phones: keep cloud, drop the sea/palm. */
+    #dither-scene[data-page-kind='article'] .dither-tree {
+      display: none;
+    }
     #dither-scene {
       --moon-x: 5vw;
       --moon-y: 1vh;
@@ -215,6 +219,12 @@ const TREE_H = 670;
     const treeEl = document.getElementById('dither-tree') as HTMLCanvasElement | null;
     if (!host || !cloudEl || !treeEl) return;
 
+    // Mobile article: cloud only — skip tree decode/fetch for bandwidth + quieter reading.
+    const enableTree = !(
+      host.dataset.pageKind === 'article' &&
+      window.matchMedia('(max-width: 720px)').matches
+    );
+
     const N = Number(host.dataset.frameCount) || 36;
     const FPS = Number(host.dataset.fps) || 12;
     const RING = Number(host.dataset.ring) || 2;
@@ -222,10 +232,11 @@ const TREE_H = 670;
     const TREE = { w: treeEl.width, h: treeEl.height, dir: '/dither/tree' };
 
     const cctx = cloudEl.getContext('2d', { alpha: true });
-    const tctx = treeEl.getContext('2d', { alpha: true });
-    if (!cctx || !tctx) return;
+    const tctx = enableTree ? treeEl.getContext('2d', { alpha: true }) : null;
+    if (!cctx) return;
+    if (enableTree && !tctx) return;
     cctx.imageSmoothingEnabled = false;
-    tctx.imageSmoothingEnabled = false;
+    if (tctx) tctx.imageSmoothingEnabled = false;
 
     const pad = (i: number) => String(i).padStart(2, '0');
     const frameUrl = (dir: string, i: number) => `${dir}/frame-${pad(i)}.webp`;
@@ -296,7 +307,7 @@ const TREE_H = 670;
     };
 
     const cloud = makeRing();
-    const tree = makeRing();
+    const tree = enableTree ? makeRing() : null;
     let cancelled = false;
     let raf = 0;
     let i = 0;
@@ -304,26 +315,37 @@ const TREE_H = 670;
     let last = 0;
     const dt = 1000 / FPS;
 
-    const paint = (cb: ImageBitmap, tb: ImageBitmap) => {
+    const paint = (cb: ImageBitmap, tb: ImageBitmap | null) => {
       // clear + draw in same task — no empty intermediate frame
       cctx.clearRect(0, 0, CLOUD.w, CLOUD.h);
       cctx.drawImage(cb, 0, 0);
-      tctx.clearRect(0, 0, TREE.w, TREE.h);
-      tctx.drawImage(tb, 0, 0);
+      if (tctx && tb) {
+        tctx.clearRect(0, 0, TREE.w, TREE.h);
+        tctx.drawImage(tb, 0, 0);
+      }
     };
 
     const paintIfReady = (idx: number) => {
       const cb = cloud.get(idx);
+      if (!cb) return;
+      if (!enableTree || !tree) {
+        paint(cb, null);
+        return;
+      }
       const tb = tree.get(idx);
-      if (cb && tb) paint(cb, tb);
+      if (tb) paint(cb, tb);
     };
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce) {
-      Promise.all([
-        loadBitmap('/dither/cloud.webp'),
-        loadBitmap('/dither/tree.webp'),
-      ]).then(([c, t]) => paint(c, t));
+      if (enableTree) {
+        Promise.all([
+          loadBitmap('/dither/cloud.webp'),
+          loadBitmap('/dither/tree.webp'),
+        ]).then(([c, t]) => paint(c, t));
+      } else {
+        loadBitmap('/dither/cloud.webp').then((c) => paint(c, null));
+      }
       return;
     }
 
@@ -340,11 +362,11 @@ const TREE_H = 670;
           dir = 1;
         }
         paintIfReady(i);
-        void Promise.all([cloud.warm(CLOUD.dir, i), tree.warm(TREE.dir, i)]).then(
-          () => {
-            if (!cancelled) paintIfReady(i);
-          },
-        );
+        const jobs = [cloud.warm(CLOUD.dir, i)];
+        if (tree) jobs.push(tree.warm(TREE.dir, i));
+        void Promise.all(jobs).then(() => {
+          if (!cancelled) paintIfReady(i);
+        });
       }
       raf = requestAnimationFrame(tick);
     };
@@ -359,19 +381,34 @@ const TREE_H = 670;
     const onVis = () => (document.hidden ? stop() : start());
     document.addEventListener('visibilitychange', onVis);
 
-    Promise.all([cloud.ensure(CLOUD.dir, 0), tree.ensure(TREE.dir, 0)])
-      .then(([c0, t0]) => {
-        if (c0 && t0) paint(c0, t0);
-        return Promise.all([cloud.warm(CLOUD.dir, 0), tree.warm(TREE.dir, 0)]);
-      })
+    const boot = enableTree && tree
+      ? Promise.all([cloud.ensure(CLOUD.dir, 0), tree.ensure(TREE.dir, 0)]).then(
+          ([c0, t0]) => {
+            if (c0 && t0) paint(c0, t0);
+            return Promise.all([
+              cloud.warm(CLOUD.dir, 0),
+              tree.warm(TREE.dir, 0),
+            ]);
+          },
+        )
+      : cloud.ensure(CLOUD.dir, 0).then((c0) => {
+          if (c0) paint(c0, null);
+          return cloud.warm(CLOUD.dir, 0);
+        });
+
+    boot
       .then(() => {
         if (!document.hidden) start();
       })
       .catch(() => {
-        Promise.all([
-          loadBitmap('/dither/cloud.webp'),
-          loadBitmap('/dither/tree.webp'),
-        ]).then(([c, t]) => paint(c, t));
+        if (enableTree) {
+          Promise.all([
+            loadBitmap('/dither/cloud.webp'),
+            loadBitmap('/dither/tree.webp'),
+          ]).then(([c, t]) => paint(c, t));
+        } else {
+          loadBitmap('/dither/cloud.webp').then((c) => paint(c, null));
+        }
       });
 
     // Astro may re-run; no React cleanup — page unload is enough.
@@ -379,12 +416,13 @@ const TREE_H = 670;
     (host as HTMLDivElement & { __dither?: unknown }).__dither = {
       cloud,
       tree,
+      enableTree,
       stop: () => {
         cancelled = true;
         stop();
         document.removeEventListener('visibilitychange', onVis);
         cloud.clear();
-        tree.clear();
+        tree?.clear();
       },
     };
   })();

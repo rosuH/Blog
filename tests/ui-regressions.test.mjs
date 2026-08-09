@@ -162,6 +162,13 @@ test('dither scene uses prebaked frames with canvas ImageBitmap playback', () =>
   assert.match(source, /dither-moon/);
   assert.match(source, /dither-moonlight/);
   assert.match(source, /mix-blend-mode:\s*soft-light/);
+  // Mobile article: hide tree, keep cloud (CSS + skip tree fetch)
+  assert.match(
+    source,
+    /#dither-scene\[data-page-kind='article'\] \.dither-tree\s*\{[\s\S]*?display:\s*none/,
+  );
+  assert.match(source, /enableTree/);
+  assert.match(source, /max-width:\s*720px/);
   // No img.src frame swapping (causes decode flicker)
   assert.doesNotMatch(source, /\.src\s*=/);
   assert.doesNotMatch(source, /animateTransform/);
