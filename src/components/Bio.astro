@@ -1,6 +1,6 @@
 ---
 // src/components/Bio.astro
-import { Picture } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import profilePic from '../images/profile-pic.png';
 
 interface Props {
@@ -8,20 +8,30 @@ interface Props {
 }
 
 const { compact = false } = Astro.props;
+
+// Display size is small (56/42), but line-art avatars look soft if we only
+// ship 1× pixels. Bake 3× WebP once from a lossless PNG master and let CSS
+// scale it down — sharp on retina, no AVIF mush, no double-lossy chain.
+const display = compact ? 42 : 56;
+const avatar = await getImage({
+  src: profilePic,
+  width: display * 3,
+  height: display * 3,
+  format: 'webp',
+  quality: 100,
+});
 ---
 
 <div class:list={['bio', { 'bio--compact': compact }]}>
-  <Picture
-    src={profilePic}
-    formats={['avif', 'webp']}
+  <img
+    src={avatar.src}
+    width={display}
+    height={display}
     alt="rosu"
-    width={compact ? 42 : 56}
-    height={compact ? 42 : 56}
-    layout="fixed"
-    densities={[1, 2, 3]}
     class="bio-avatar"
     loading="eager"
-    quality={95}
+    decoding="async"
+    fetchpriority="high"
   />
   <div class="bio-copy">
     <p class="bio-line">
@@ -63,12 +73,9 @@ const { compact = false } = Astro.props;
     margin-bottom: 0;
   }
 
-  /* Picture wrapper is transparent to layout so the <img> stays the flex item. */
-  .bio :global(picture) {
-    display: contents;
-  }
-
   .bio-avatar {
+    width: 3.5rem;
+    height: 3.5rem;
     border-radius: 50%;
     flex-shrink: 0;
     object-fit: cover;
@@ -79,6 +86,11 @@ const { compact = false } = Astro.props;
     transition:
       box-shadow var(--duration-fast) ease,
       transform var(--duration-fast) var(--ease-quiet);
+  }
+
+  .bio--compact .bio-avatar {
+    width: 2.625rem;
+    height: 2.625rem;
   }
 
   .bio-avatar:hover {
